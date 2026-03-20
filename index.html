@@ -280,6 +280,28 @@ tr:last-child td{border-bottom:none}
       </div>
     </div>
 
+    <!-- PV Trend Panel -->
+    <div class="panel" style="grid-column:1/-1">
+      <div class="panel-hdr">
+        <div class="panel-hdr-top">
+          <span class="panel-title">Trend PV ze zgodą TCF &mdash; WPM</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <div class="vtabs" id="pvtrendtabs"></div>
+            <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+            <button class="vtab on" id="pvtrend-zgoda" onclick="setPvTrendMetric('zgoda')">Ze zgodą</button>
+            <button class="vtab" id="pvtrend-total" onclick="setPvTrendMetric('total')">Łącznie</button>
+            <button class="vtab" id="pvtrend-both" onclick="setPvTrendMetric('both')">Oba</button>
+            <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+            <button class="vtab on" id="pvtrend-ma7" onclick="setPvTrendMA(7)">Śr. 7d</button>
+            <button class="vtab" id="pvtrend-ma1" onclick="setPvTrendMA(1)">Dziennie</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div style="position:relative;height:260px"><canvas id="pvTrendChart"></canvas></div>
+      </div>
+    </div>
+
     <!-- PV Panel -->
     <div class="panel" style="grid-column:1/-1">
       <div class="panel-hdr">
@@ -309,2542 +331,2542 @@ window.PV_DATA = [
   {
     "date": "2024-01-01",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 15112002,
+    "pv_zgoda": 13387957,
+    "pv_bez": 1724045,
     "pv_total": 15112002
   },
   {
     "date": "2024-01-01",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 77863370,
+    "pv_zgoda": 72402919,
+    "pv_bez": 5460451,
     "pv_total": 77863370
   },
   {
     "date": "2024-01-01",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 62751368,
+    "pv_zgoda": 59014962,
+    "pv_bez": 3736406,
     "pv_total": 62751368
   },
   {
     "date": "2024-01-02",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 24757546,
+    "pv_zgoda": 22271283,
+    "pv_bez": 2486263,
     "pv_total": 24757546
   },
   {
     "date": "2024-01-02",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 82086882,
+    "pv_zgoda": 76174449,
+    "pv_bez": 5912433,
     "pv_total": 82086882
   },
   {
     "date": "2024-01-02",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 57329336,
+    "pv_zgoda": 53903166,
+    "pv_bez": 3426170,
     "pv_total": 57329336
   },
   {
     "date": "2024-01-03",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 25199444,
+    "pv_zgoda": 22766769,
+    "pv_bez": 2432675,
     "pv_total": 25199444
   },
   {
     "date": "2024-01-03",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 82336130,
+    "pv_zgoda": 76619232,
+    "pv_bez": 5716898,
     "pv_total": 82336130
   },
   {
     "date": "2024-01-03",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 57136686,
+    "pv_zgoda": 53852463,
+    "pv_bez": 3284223,
     "pv_total": 57136686
   },
   {
     "date": "2024-01-04",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 25231095,
+    "pv_zgoda": 22754745,
+    "pv_bez": 2476350,
     "pv_total": 25231095
   },
   {
     "date": "2024-01-04",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 81061776,
+    "pv_zgoda": 75356635,
+    "pv_bez": 5705141,
     "pv_total": 81061776
   },
   {
     "date": "2024-01-04",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 55830681,
+    "pv_zgoda": 52601890,
+    "pv_bez": 3228791,
     "pv_total": 55830681
   },
   {
     "date": "2024-01-05",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 23325140,
+    "pv_zgoda": 21047977,
+    "pv_bez": 2277163,
     "pv_total": 23325140
   },
   {
     "date": "2024-01-05",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 76898183,
+    "pv_zgoda": 71551218,
+    "pv_bez": 5346965,
     "pv_total": 76898183
   },
   {
     "date": "2024-01-05",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 53573043,
+    "pv_zgoda": 50503241,
+    "pv_bez": 3069802,
     "pv_total": 53573043
   },
   {
     "date": "2024-01-06",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 14867364,
+    "pv_zgoda": 13167509,
+    "pv_bez": 1699855,
     "pv_total": 14867364
   },
   {
     "date": "2024-01-06",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 66415006,
+    "pv_zgoda": 61690744,
+    "pv_bez": 4724262,
     "pv_total": 66415006
   },
   {
     "date": "2024-01-06",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 51547642,
+    "pv_zgoda": 48523235,
+    "pv_bez": 3024407,
     "pv_total": 51547642
   },
   {
     "date": "2024-01-07",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 16460666,
+    "pv_zgoda": 14616418,
+    "pv_bez": 1844248,
     "pv_total": 16460666
   },
   {
     "date": "2024-01-07",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 73720712,
+    "pv_zgoda": 68451877,
+    "pv_bez": 5268835,
     "pv_total": 73720712
   },
   {
     "date": "2024-01-07",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 57260046,
+    "pv_zgoda": 53835459,
+    "pv_bez": 3424587,
     "pv_total": 57260046
   },
   {
     "date": "2024-01-08",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 25994973,
+    "pv_zgoda": 23465961,
+    "pv_bez": 2529012,
     "pv_total": 25994973
   },
   {
     "date": "2024-01-08",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 82242433,
+    "pv_zgoda": 76382075,
+    "pv_bez": 5860358,
     "pv_total": 82242433
   },
   {
     "date": "2024-01-08",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 56247460,
+    "pv_zgoda": 52916114,
+    "pv_bez": 3331346,
     "pv_total": 56247460
   },
   {
     "date": "2024-01-09",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 29097216,
+    "pv_zgoda": 26340540,
+    "pv_bez": 2756676,
     "pv_total": 29097216
   },
   {
     "date": "2024-01-09",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 95380699,
+    "pv_zgoda": 89088419,
+    "pv_bez": 6292280,
     "pv_total": 95380699
   },
   {
     "date": "2024-01-09",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 66283483,
+    "pv_zgoda": 62747879,
+    "pv_bez": 3535604,
     "pv_total": 66283483
   },
   {
     "date": "2024-01-10",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 28949824,
+    "pv_zgoda": 26196670,
+    "pv_bez": 2753154,
     "pv_total": 28949824
   },
   {
     "date": "2024-01-10",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 93793351,
+    "pv_zgoda": 87559226,
+    "pv_bez": 6234125,
     "pv_total": 93793351
   },
   {
     "date": "2024-01-10",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 64843527,
+    "pv_zgoda": 61362556,
+    "pv_bez": 3480971,
     "pv_total": 64843527
   },
   {
     "date": "2024-01-11",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 28319483,
+    "pv_zgoda": 25591796,
+    "pv_bez": 2727687,
     "pv_total": 28319483
   },
   {
     "date": "2024-01-11",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 93011459,
+    "pv_zgoda": 86775689,
+    "pv_bez": 6235770,
     "pv_total": 93011459
   },
   {
     "date": "2024-01-11",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 64691976,
+    "pv_zgoda": 61183893,
+    "pv_bez": 3508083,
     "pv_total": 64691976
   },
   {
     "date": "2024-01-12",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 24994333,
+    "pv_zgoda": 22625861,
+    "pv_bez": 2368472,
     "pv_total": 24994333
   },
   {
     "date": "2024-01-12",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 83497705,
+    "pv_zgoda": 77964011,
+    "pv_bez": 5533694,
     "pv_total": 83497705
   },
   {
     "date": "2024-01-12",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 58503372,
+    "pv_zgoda": 55338150,
+    "pv_bez": 3165222,
     "pv_total": 58503372
   },
   {
     "date": "2024-01-13",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 15333990,
+    "pv_zgoda": 13633153,
+    "pv_bez": 1700837,
     "pv_total": 15333990
   },
   {
     "date": "2024-01-13",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 67424754,
+    "pv_zgoda": 62756357,
+    "pv_bez": 4668397,
     "pv_total": 67424754
   },
   {
     "date": "2024-01-13",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 52090764,
+    "pv_zgoda": 49123204,
+    "pv_bez": 2967560,
     "pv_total": 52090764
   },
   {
     "date": "2024-01-14",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 15271238,
+    "pv_zgoda": 13539489,
+    "pv_bez": 1731749,
     "pv_total": 15271238
   },
   {
     "date": "2024-01-14",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 69263415,
+    "pv_zgoda": 64310811,
+    "pv_bez": 4952604,
     "pv_total": 69263415
   },
   {
     "date": "2024-01-14",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 53992177,
+    "pv_zgoda": 50771322,
+    "pv_bez": 3220855,
     "pv_total": 53992177
   },
   {
     "date": "2024-01-15",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 25888932,
+    "pv_zgoda": 23394885,
+    "pv_bez": 2494047,
     "pv_total": 25888932
   },
   {
     "date": "2024-01-15",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 81580127,
+    "pv_zgoda": 75878491,
+    "pv_bez": 5701636,
     "pv_total": 81580127
   },
   {
     "date": "2024-01-15",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 55691195,
+    "pv_zgoda": 52483606,
+    "pv_bez": 3207589,
     "pv_total": 55691195
   },
   {
     "date": "2024-01-16",
     "ver": "Desktop",
-    "pv_zgoda": 515113,
-    "pv_bez": 25221248,
+    "pv_zgoda": 23240925,
+    "pv_bez": 2495436,
     "pv_total": 25736361
   },
   {
     "date": "2024-01-16",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1207271,
-    "pv_bez": 81672020,
+    "pv_zgoda": 77043613,
+    "pv_bez": 5835678,
     "pv_total": 82879291
   },
   {
     "date": "2024-01-16",
     "ver": "Mobile",
-    "pv_zgoda": 692158,
-    "pv_bez": 56450772,
+    "pv_zgoda": 53802688,
+    "pv_bez": 3340242,
     "pv_total": 57142930
   },
   {
     "date": "2024-01-17",
     "ver": "Desktop",
-    "pv_zgoda": 485753,
-    "pv_bez": 24652395,
+    "pv_zgoda": 22692532,
+    "pv_bez": 2445616,
     "pv_total": 25138148
   },
   {
     "date": "2024-01-17",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1193823,
-    "pv_bez": 82696611,
+    "pv_zgoda": 78122161,
+    "pv_bez": 5768273,
     "pv_total": 83890434
   },
   {
     "date": "2024-01-17",
     "ver": "Mobile",
-    "pv_zgoda": 708070,
-    "pv_bez": 58044216,
+    "pv_zgoda": 55429629,
+    "pv_bez": 3322657,
     "pv_total": 58752286
   },
   {
     "date": "2024-01-18",
     "ver": "Desktop",
-    "pv_zgoda": 501156,
-    "pv_bez": 25772054,
+    "pv_zgoda": 23722683,
+    "pv_bez": 2550527,
     "pv_total": 26273210
   },
   {
     "date": "2024-01-18",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1220592,
-    "pv_bez": 84818015,
+    "pv_zgoda": 80119662,
+    "pv_bez": 5918945,
     "pv_total": 86038607
   },
   {
     "date": "2024-01-18",
     "ver": "Mobile",
-    "pv_zgoda": 719436,
-    "pv_bez": 59045961,
+    "pv_zgoda": 56396979,
+    "pv_bez": 3368418,
     "pv_total": 59765397
   },
   {
     "date": "2024-01-19",
     "ver": "Desktop",
-    "pv_zgoda": 482546,
-    "pv_bez": 23741590,
+    "pv_zgoda": 21825890,
+    "pv_bez": 2398246,
     "pv_total": 24224136
   },
   {
     "date": "2024-01-19",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1139518,
-    "pv_bez": 77992231,
+    "pv_zgoda": 73598459,
+    "pv_bez": 5533290,
     "pv_total": 79131749
   },
   {
     "date": "2024-01-19",
     "ver": "Mobile",
-    "pv_zgoda": 656972,
-    "pv_bez": 54250641,
+    "pv_zgoda": 51772569,
+    "pv_bez": 3135044,
     "pv_total": 54907613
   },
   {
     "date": "2024-01-20",
     "ver": "Desktop",
-    "pv_zgoda": 284045,
-    "pv_bez": 14566292,
+    "pv_zgoda": 13185781,
+    "pv_bez": 1664556,
     "pv_total": 14850337
   },
   {
     "date": "2024-01-20",
     "ver": "Desktop + mob",
-    "pv_zgoda": 923869,
-    "pv_bez": 66484586,
+    "pv_zgoda": 62581841,
+    "pv_bez": 4826614,
     "pv_total": 67408455
   },
   {
     "date": "2024-01-20",
     "ver": "Mobile",
-    "pv_zgoda": 639824,
-    "pv_bez": 51918294,
+    "pv_zgoda": 49396060,
+    "pv_bez": 3162058,
     "pv_total": 52558118
   },
   {
     "date": "2024-01-21",
     "ver": "Desktop",
-    "pv_zgoda": 322678,
-    "pv_bez": 15012485,
+    "pv_zgoda": 13619154,
+    "pv_bez": 1716009,
     "pv_total": 15335163
   },
   {
     "date": "2024-01-21",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1056034,
-    "pv_bez": 70635385,
+    "pv_zgoda": 66546437,
+    "pv_bez": 5144982,
     "pv_total": 71691419
   },
   {
     "date": "2024-01-21",
     "ver": "Mobile",
-    "pv_zgoda": 733356,
-    "pv_bez": 55622900,
+    "pv_zgoda": 52927283,
+    "pv_bez": 3428973,
     "pv_total": 56356256
   },
   {
     "date": "2024-01-22",
     "ver": "Desktop",
-    "pv_zgoda": 522790,
-    "pv_bez": 24708401,
+    "pv_zgoda": 22780401,
+    "pv_bez": 2450790,
     "pv_total": 25231191
   },
   {
     "date": "2024-01-22",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1218019,
-    "pv_bez": 81257947,
+    "pv_zgoda": 76641256,
+    "pv_bez": 5834710,
     "pv_total": 82475966
   },
   {
     "date": "2024-01-22",
     "ver": "Mobile",
-    "pv_zgoda": 695229,
-    "pv_bez": 56549546,
+    "pv_zgoda": 53860855,
+    "pv_bez": 3383920,
     "pv_total": 57244775
   },
   {
     "date": "2024-01-23",
     "ver": "Desktop",
-    "pv_zgoda": 509024,
-    "pv_bez": 25021428,
+    "pv_zgoda": 23058116,
+    "pv_bez": 2472336,
     "pv_total": 25530452
   },
   {
     "date": "2024-01-23",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1192552,
-    "pv_bez": 83486286,
+    "pv_zgoda": 79003546,
+    "pv_bez": 5675292,
     "pv_total": 84678838
   },
   {
     "date": "2024-01-23",
     "ver": "Mobile",
-    "pv_zgoda": 683528,
-    "pv_bez": 58464858,
+    "pv_zgoda": 55945430,
+    "pv_bez": 3202956,
     "pv_total": 59148386
   },
   {
     "date": "2024-01-24",
     "ver": "Desktop",
-    "pv_zgoda": 541658,
-    "pv_bez": 26720536,
+    "pv_zgoda": 24637195,
+    "pv_bez": 2624999,
     "pv_total": 27262194
   },
   {
     "date": "2024-01-24",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1274571,
-    "pv_bez": 86857445,
+    "pv_zgoda": 82204902,
+    "pv_bez": 5927114,
     "pv_total": 88132016
   },
   {
     "date": "2024-01-24",
     "ver": "Mobile",
-    "pv_zgoda": 732913,
-    "pv_bez": 60136909,
+    "pv_zgoda": 57567707,
+    "pv_bez": 3302115,
     "pv_total": 60869822
   },
   {
     "date": "2024-01-25",
     "ver": "Desktop",
-    "pv_zgoda": 502978,
-    "pv_bez": 25276861,
+    "pv_zgoda": 23288875,
+    "pv_bez": 2490964,
     "pv_total": 25779839
   },
   {
     "date": "2024-01-25",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1167727,
-    "pv_bez": 81510686,
+    "pv_zgoda": 77036229,
+    "pv_bez": 5642184,
     "pv_total": 82678413
   },
   {
     "date": "2024-01-25",
     "ver": "Mobile",
-    "pv_zgoda": 664749,
-    "pv_bez": 56233825,
+    "pv_zgoda": 53747354,
+    "pv_bez": 3151220,
     "pv_total": 56898574
   },
   {
     "date": "2024-01-26",
     "ver": "Desktop",
-    "pv_zgoda": 447383,
-    "pv_bez": 22836402,
+    "pv_zgoda": 20992676,
+    "pv_bez": 2291109,
     "pv_total": 23283785
   },
   {
     "date": "2024-01-26",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1096475,
-    "pv_bez": 76740240,
+    "pv_zgoda": 72404693,
+    "pv_bez": 5432022,
     "pv_total": 77836715
   },
   {
     "date": "2024-01-26",
     "ver": "Mobile",
-    "pv_zgoda": 649092,
-    "pv_bez": 53903838,
+    "pv_zgoda": 51412017,
+    "pv_bez": 3140913,
     "pv_total": 54552930
   },
   {
     "date": "2024-01-27",
     "ver": "Desktop",
-    "pv_zgoda": 287096,
-    "pv_bez": 14407995,
+    "pv_zgoda": 13012048,
+    "pv_bez": 1683043,
     "pv_total": 14695091
   },
   {
     "date": "2024-01-27",
     "ver": "Desktop + mob",
-    "pv_zgoda": 940881,
-    "pv_bez": 66869157,
+    "pv_zgoda": 63008890,
+    "pv_bez": 4801148,
     "pv_total": 67810038
   },
   {
     "date": "2024-01-27",
     "ver": "Mobile",
-    "pv_zgoda": 653785,
-    "pv_bez": 52461162,
+    "pv_zgoda": 49996842,
+    "pv_bez": 3118105,
     "pv_total": 53114947
   },
   {
     "date": "2024-01-28",
     "ver": "Desktop",
-    "pv_zgoda": 310938,
-    "pv_bez": 15054689,
+    "pv_zgoda": 13587283,
+    "pv_bez": 1778344,
     "pv_total": 15365627
   },
   {
     "date": "2024-01-28",
     "ver": "Desktop + mob",
-    "pv_zgoda": 987489,
-    "pv_bez": 71534562,
+    "pv_zgoda": 67412249,
+    "pv_bez": 5109802,
     "pv_total": 72522051
   },
   {
     "date": "2024-01-28",
     "ver": "Mobile",
-    "pv_zgoda": 676551,
-    "pv_bez": 56479873,
+    "pv_zgoda": 53824966,
+    "pv_bez": 3331458,
     "pv_total": 57156424
   },
   {
     "date": "2024-01-29",
     "ver": "Desktop",
-    "pv_zgoda": 491097,
-    "pv_bez": 24434778,
+    "pv_zgoda": 22466848,
+    "pv_bez": 2459027,
     "pv_total": 24925875
   },
   {
     "date": "2024-01-29",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1147473,
-    "pv_bez": 79117898,
+    "pv_zgoda": 74642880,
+    "pv_bez": 5622491,
     "pv_total": 80265371
   },
   {
     "date": "2024-01-29",
     "ver": "Mobile",
-    "pv_zgoda": 656376,
-    "pv_bez": 54683120,
+    "pv_zgoda": 52176032,
+    "pv_bez": 3163464,
     "pv_total": 55339496
   },
   {
     "date": "2024-01-30",
     "ver": "Desktop",
-    "pv_zgoda": 458134,
-    "pv_bez": 23538363,
+    "pv_zgoda": 21587685,
+    "pv_bez": 2408812,
     "pv_total": 23996497
   },
   {
     "date": "2024-01-30",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1091025,
-    "pv_bez": 76640484,
+    "pv_zgoda": 72295747,
+    "pv_bez": 5435762,
     "pv_total": 77731509
   },
   {
     "date": "2024-01-30",
     "ver": "Mobile",
-    "pv_zgoda": 632891,
-    "pv_bez": 53102121,
+    "pv_zgoda": 50708062,
+    "pv_bez": 3026950,
     "pv_total": 53735012
   },
   {
     "date": "2024-01-31",
     "ver": "Desktop",
-    "pv_zgoda": 476620,
-    "pv_bez": 23729686,
+    "pv_zgoda": 21767457,
+    "pv_bez": 2438849,
     "pv_total": 24206306
   },
   {
     "date": "2024-01-31",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1087200,
-    "pv_bez": 76438910,
+    "pv_zgoda": 72052503,
+    "pv_bez": 5473607,
     "pv_total": 77526110
   },
   {
     "date": "2024-01-31",
     "ver": "Mobile",
-    "pv_zgoda": 610580,
-    "pv_bez": 52709224,
+    "pv_zgoda": 50285046,
+    "pv_bez": 3034758,
     "pv_total": 53319804
   },
   {
     "date": "2024-02-01",
     "ver": "Desktop",
-    "pv_zgoda": 470487,
-    "pv_bez": 22637948,
+    "pv_zgoda": 20800909,
+    "pv_bez": 2307526,
     "pv_total": 23108435
   },
   {
     "date": "2024-02-01",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1035512,
-    "pv_bez": 71725109,
+    "pv_zgoda": 67595386,
+    "pv_bez": 5165235,
     "pv_total": 72760621
   },
   {
     "date": "2024-02-01",
     "ver": "Mobile",
-    "pv_zgoda": 565025,
-    "pv_bez": 49087161,
+    "pv_zgoda": 46794477,
+    "pv_bez": 2857709,
     "pv_total": 49652186
   },
   {
     "date": "2024-02-02",
     "ver": "Desktop",
-    "pv_zgoda": 443017,
-    "pv_bez": 21592187,
+    "pv_zgoda": 19822785,
+    "pv_bez": 2212419,
     "pv_total": 22035204
   },
   {
     "date": "2024-02-02",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1016976,
-    "pv_bez": 70159842,
+    "pv_zgoda": 66111034,
+    "pv_bez": 5065784,
     "pv_total": 71176818
   },
   {
     "date": "2024-02-02",
     "ver": "Mobile",
-    "pv_zgoda": 573959,
-    "pv_bez": 48567655,
+    "pv_zgoda": 46288249,
+    "pv_bez": 2853365,
     "pv_total": 49141614
   },
   {
     "date": "2024-02-03",
     "ver": "Desktop",
-    "pv_zgoda": 270664,
-    "pv_bez": 13713150,
+    "pv_zgoda": 12377356,
+    "pv_bez": 1606458,
     "pv_total": 13983814
   },
   {
     "date": "2024-02-03",
     "ver": "Desktop + mob",
-    "pv_zgoda": 824415,
-    "pv_bez": 60020122,
+    "pv_zgoda": 56417991,
+    "pv_bez": 4426546,
     "pv_total": 60844537
   },
   {
     "date": "2024-02-03",
     "ver": "Mobile",
-    "pv_zgoda": 553751,
-    "pv_bez": 46306972,
+    "pv_zgoda": 44040635,
+    "pv_bez": 2820088,
     "pv_total": 46860723
   },
   {
     "date": "2024-02-04",
     "ver": "Desktop",
-    "pv_zgoda": 324524,
-    "pv_bez": 14355705,
+    "pv_zgoda": 12980071,
+    "pv_bez": 1700158,
     "pv_total": 14680229
   },
   {
     "date": "2024-02-04",
     "ver": "Desktop + mob",
-    "pv_zgoda": 974930,
-    "pv_bez": 65078995,
+    "pv_zgoda": 61298619,
+    "pv_bez": 4755306,
     "pv_total": 66053925
   },
   {
     "date": "2024-02-04",
     "ver": "Mobile",
-    "pv_zgoda": 650406,
-    "pv_bez": 50723290,
+    "pv_zgoda": 48318548,
+    "pv_bez": 3055148,
     "pv_total": 51373696
   },
   {
     "date": "2024-02-05",
     "ver": "Desktop",
-    "pv_zgoda": 509322,
-    "pv_bez": 23770205,
+    "pv_zgoda": 21998715,
+    "pv_bez": 2280812,
     "pv_total": 24279527
   },
   {
     "date": "2024-02-05",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1165772,
-    "pv_bez": 75763057,
+    "pv_zgoda": 71681290,
+    "pv_bez": 5247539,
     "pv_total": 76928829
   },
   {
     "date": "2024-02-05",
     "ver": "Mobile",
-    "pv_zgoda": 656450,
-    "pv_bez": 51992852,
+    "pv_zgoda": 49682575,
+    "pv_bez": 2966727,
     "pv_total": 52649302
   },
   {
     "date": "2024-02-06",
     "ver": "Desktop",
-    "pv_zgoda": 499408,
-    "pv_bez": 24008840,
+    "pv_zgoda": 22010539,
+    "pv_bez": 2497709,
     "pv_total": 24508248
   },
   {
     "date": "2024-02-06",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1140057,
-    "pv_bez": 76585907,
+    "pv_zgoda": 72203794,
+    "pv_bez": 5522170,
     "pv_total": 77725964
   },
   {
     "date": "2024-02-06",
     "ver": "Mobile",
-    "pv_zgoda": 640649,
-    "pv_bez": 52577067,
+    "pv_zgoda": 50193255,
+    "pv_bez": 3024461,
     "pv_total": 53217716
   },
   {
     "date": "2024-02-07",
     "ver": "Desktop",
-    "pv_zgoda": 554258,
-    "pv_bez": 23696781,
+    "pv_zgoda": 21809685,
+    "pv_bez": 2441354,
     "pv_total": 24251039
   },
   {
     "date": "2024-02-07",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1261671,
-    "pv_bez": 77862599,
+    "pv_zgoda": 73532749,
+    "pv_bez": 5591521,
     "pv_total": 79124270
   },
   {
     "date": "2024-02-07",
     "ver": "Mobile",
-    "pv_zgoda": 707413,
-    "pv_bez": 54165818,
+    "pv_zgoda": 51723064,
+    "pv_bez": 3150167,
     "pv_total": 54873231
   },
   {
     "date": "2024-02-08",
     "ver": "Desktop",
-    "pv_zgoda": 548274,
-    "pv_bez": 22219713,
+    "pv_zgoda": 20471741,
+    "pv_bez": 2296246,
     "pv_total": 22767987
   },
   {
     "date": "2024-02-08",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1213455,
-    "pv_bez": 71533886,
+    "pv_zgoda": 67547454,
+    "pv_bez": 5199887,
     "pv_total": 72747341
   },
   {
     "date": "2024-02-08",
     "ver": "Mobile",
-    "pv_zgoda": 665181,
-    "pv_bez": 49314173,
+    "pv_zgoda": 47075713,
+    "pv_bez": 2903641,
     "pv_total": 49979354
   },
   {
     "date": "2024-02-09",
     "ver": "Desktop",
-    "pv_zgoda": 513652,
-    "pv_bez": 22036368,
+    "pv_zgoda": 20280155,
+    "pv_bez": 2269865,
     "pv_total": 22550020
   },
   {
     "date": "2024-02-09",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1121499,
-    "pv_bez": 70870655,
+    "pv_zgoda": 66865619,
+    "pv_bez": 5126535,
     "pv_total": 71992154
   },
   {
     "date": "2024-02-09",
     "ver": "Mobile",
-    "pv_zgoda": 607847,
-    "pv_bez": 48834287,
+    "pv_zgoda": 46585464,
+    "pv_bez": 2856670,
     "pv_total": 49442134
   },
   {
     "date": "2024-02-10",
     "ver": "Desktop",
-    "pv_zgoda": 290321,
-    "pv_bez": 13277010,
+    "pv_zgoda": 12013121,
+    "pv_bez": 1554210,
     "pv_total": 13567331
   },
   {
     "date": "2024-02-10",
     "ver": "Desktop + mob",
-    "pv_zgoda": 846571,
-    "pv_bez": 58943598,
+    "pv_zgoda": 55542460,
+    "pv_bez": 4247709,
     "pv_total": 59790169
   },
   {
     "date": "2024-02-10",
     "ver": "Mobile",
-    "pv_zgoda": 556250,
-    "pv_bez": 45666588,
+    "pv_zgoda": 43529339,
+    "pv_bez": 2693499,
     "pv_total": 46222838
   },
   {
     "date": "2024-02-11",
     "ver": "Desktop",
-    "pv_zgoda": 366651,
-    "pv_bez": 14985968,
+    "pv_zgoda": 13582043,
+    "pv_bez": 1770576,
     "pv_total": 15352619
   },
   {
     "date": "2024-02-11",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1035504,
-    "pv_bez": 67181765,
+    "pv_zgoda": 63394574,
+    "pv_bez": 4822695,
     "pv_total": 68217269
   },
   {
     "date": "2024-02-11",
     "ver": "Mobile",
-    "pv_zgoda": 668853,
-    "pv_bez": 52195797,
+    "pv_zgoda": 49812531,
+    "pv_bez": 3052119,
     "pv_total": 52864650
   },
   {
     "date": "2024-02-12",
     "ver": "Desktop",
-    "pv_zgoda": 556012,
-    "pv_bez": 23732460,
+    "pv_zgoda": 21835606,
+    "pv_bez": 2452866,
     "pv_total": 24288472
   },
   {
     "date": "2024-02-12",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1221837,
-    "pv_bez": 75296708,
+    "pv_zgoda": 70997894,
+    "pv_bez": 5520651,
     "pv_total": 76518545
   },
   {
     "date": "2024-02-12",
     "ver": "Mobile",
-    "pv_zgoda": 665825,
-    "pv_bez": 51564248,
+    "pv_zgoda": 49162288,
+    "pv_bez": 3067785,
     "pv_total": 52230073
   },
   {
     "date": "2024-02-13",
     "ver": "Desktop",
-    "pv_zgoda": 510854,
-    "pv_bez": 22876437,
+    "pv_zgoda": 21071536,
+    "pv_bez": 2315755,
     "pv_total": 23387291
   },
   {
     "date": "2024-02-13",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1160753,
-    "pv_bez": 73663646,
+    "pv_zgoda": 69665885,
+    "pv_bez": 5158514,
     "pv_total": 74824399
   },
   {
     "date": "2024-02-13",
     "ver": "Mobile",
-    "pv_zgoda": 649899,
-    "pv_bez": 50787209,
+    "pv_zgoda": 48594349,
+    "pv_bez": 2842759,
     "pv_total": 51437108
   },
   {
     "date": "2024-02-14",
     "ver": "Desktop",
-    "pv_zgoda": 505422,
-    "pv_bez": 22274226,
+    "pv_zgoda": 20473776,
+    "pv_bez": 2305872,
     "pv_total": 22779648
   },
   {
     "date": "2024-02-14",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1123429,
-    "pv_bez": 71749699,
+    "pv_zgoda": 67674486,
+    "pv_bez": 5198642,
     "pv_total": 72873128
   },
   {
     "date": "2024-02-14",
     "ver": "Mobile",
-    "pv_zgoda": 618007,
-    "pv_bez": 49475473,
+    "pv_zgoda": 47200710,
+    "pv_bez": 2892770,
     "pv_total": 50093480
   },
   {
     "date": "2024-02-15",
     "ver": "Desktop",
-    "pv_zgoda": 518651,
-    "pv_bez": 22452299,
+    "pv_zgoda": 20638196,
+    "pv_bez": 2332754,
     "pv_total": 22970950
   },
   {
     "date": "2024-02-15",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1169816,
-    "pv_bez": 72661199,
+    "pv_zgoda": 68603566,
+    "pv_bez": 5227449,
     "pv_total": 73831015
   },
   {
     "date": "2024-02-15",
     "ver": "Mobile",
-    "pv_zgoda": 651165,
-    "pv_bez": 50208900,
+    "pv_zgoda": 47965370,
+    "pv_bez": 2894695,
     "pv_total": 50860065
   },
   {
     "date": "2024-02-16",
     "ver": "Desktop",
-    "pv_zgoda": 468417,
-    "pv_bez": 21797491,
+    "pv_zgoda": 20046421,
+    "pv_bez": 2219487,
     "pv_total": 22265908
   },
   {
     "date": "2024-02-16",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1077014,
-    "pv_bez": 73058114,
+    "pv_zgoda": 69048530,
+    "pv_bez": 5086598,
     "pv_total": 74135128
   },
   {
     "date": "2024-02-16",
     "ver": "Mobile",
-    "pv_zgoda": 608597,
-    "pv_bez": 51260623,
+    "pv_zgoda": 49002109,
+    "pv_bez": 2867111,
     "pv_total": 51869220
   },
   {
     "date": "2024-02-17",
     "ver": "Desktop",
-    "pv_zgoda": 311580,
-    "pv_bez": 14072395,
+    "pv_zgoda": 12739627,
+    "pv_bez": 1644348,
     "pv_total": 14383975
   },
   {
     "date": "2024-02-17",
     "ver": "Desktop + mob",
-    "pv_zgoda": 914446,
-    "pv_bez": 65262732,
+    "pv_zgoda": 61519689,
+    "pv_bez": 4657489,
     "pv_total": 66177178
   },
   {
     "date": "2024-02-17",
     "ver": "Mobile",
-    "pv_zgoda": 602866,
-    "pv_bez": 51190337,
+    "pv_zgoda": 48780062,
+    "pv_bez": 3013141,
     "pv_total": 51793203
   },
   {
     "date": "2024-02-18",
     "ver": "Desktop",
-    "pv_zgoda": 359649,
-    "pv_bez": 14490713,
+    "pv_zgoda": 13110347,
+    "pv_bez": 1740015,
     "pv_total": 14850362
   },
   {
     "date": "2024-02-18",
     "ver": "Desktop + mob",
-    "pv_zgoda": 977439,
-    "pv_bez": 65014597,
+    "pv_zgoda": 61164816,
+    "pv_bez": 4827220,
     "pv_total": 65992036
   },
   {
     "date": "2024-02-18",
     "ver": "Mobile",
-    "pv_zgoda": 617790,
-    "pv_bez": 50523884,
+    "pv_zgoda": 48054469,
+    "pv_bez": 3087205,
     "pv_total": 51141674
   },
   {
     "date": "2024-02-19",
     "ver": "Desktop",
-    "pv_zgoda": 582199,
-    "pv_bez": 24825359,
+    "pv_zgoda": 22814651,
+    "pv_bez": 2592907,
     "pv_total": 25407558
   },
   {
     "date": "2024-02-19",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1266506,
-    "pv_bez": 78549077,
+    "pv_zgoda": 74100869,
+    "pv_bez": 5714714,
     "pv_total": 79815583
   },
   {
     "date": "2024-02-19",
     "ver": "Mobile",
-    "pv_zgoda": 684307,
-    "pv_bez": 53723718,
+    "pv_zgoda": 51286218,
+    "pv_bez": 3121807,
     "pv_total": 54408025
   },
   {
     "date": "2024-02-20",
     "ver": "Desktop",
-    "pv_zgoda": 561076,
-    "pv_bez": 24510470,
+    "pv_zgoda": 22589064,
+    "pv_bez": 2482482,
     "pv_total": 25071546
   },
   {
     "date": "2024-02-20",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1300230,
-    "pv_bez": 81393021,
+    "pv_zgoda": 76933832,
+    "pv_bez": 5759419,
     "pv_total": 82693251
   },
   {
     "date": "2024-02-20",
     "ver": "Mobile",
-    "pv_zgoda": 739154,
-    "pv_bez": 56882551,
+    "pv_zgoda": 54344768,
+    "pv_bez": 3276937,
     "pv_total": 57621705
   },
   {
     "date": "2024-02-21",
     "ver": "Desktop",
-    "pv_zgoda": 539491,
-    "pv_bez": 24159398,
+    "pv_zgoda": 22171377,
+    "pv_bez": 2527512,
     "pv_total": 24698889
   },
   {
     "date": "2024-02-21",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1283334,
-    "pv_bez": 80358089,
+    "pv_zgoda": 75873618,
+    "pv_bez": 5767805,
     "pv_total": 81641423
   },
   {
     "date": "2024-02-21",
     "ver": "Mobile",
-    "pv_zgoda": 743843,
-    "pv_bez": 56198691,
+    "pv_zgoda": 53702241,
+    "pv_bez": 3240293,
     "pv_total": 56942534
   },
   {
     "date": "2024-02-22",
     "ver": "Desktop",
-    "pv_zgoda": 524171,
-    "pv_bez": 23311353,
+    "pv_zgoda": 21384155,
+    "pv_bez": 2451369,
     "pv_total": 23835524
   },
   {
     "date": "2024-02-22",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1146645,
-    "pv_bez": 74641324,
+    "pv_zgoda": 70371880,
+    "pv_bez": 5416089,
     "pv_total": 75787969
   },
   {
     "date": "2024-02-22",
     "ver": "Mobile",
-    "pv_zgoda": 622474,
-    "pv_bez": 51329971,
+    "pv_zgoda": 48987725,
+    "pv_bez": 2964720,
     "pv_total": 51952445
   },
   {
     "date": "2024-02-23",
     "ver": "Desktop",
-    "pv_zgoda": 493232,
-    "pv_bez": 22710723,
+    "pv_zgoda": 20813115,
+    "pv_bez": 2390840,
     "pv_total": 23203955
   },
   {
     "date": "2024-02-23",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1114002,
-    "pv_bez": 75048533,
+    "pv_zgoda": 70759059,
+    "pv_bez": 5403476,
     "pv_total": 76162535
   },
   {
     "date": "2024-02-23",
     "ver": "Mobile",
-    "pv_zgoda": 620770,
-    "pv_bez": 52337810,
+    "pv_zgoda": 49945944,
+    "pv_bez": 3012636,
     "pv_total": 52958580
   },
   {
     "date": "2024-02-24",
     "ver": "Desktop",
-    "pv_zgoda": 281724,
-    "pv_bez": 13478606,
+    "pv_zgoda": 12116104,
+    "pv_bez": 1644226,
     "pv_total": 13760330
   },
   {
     "date": "2024-02-24",
     "ver": "Desktop + mob",
-    "pv_zgoda": 808973,
-    "pv_bez": 59972988,
+    "pv_zgoda": 56443162,
+    "pv_bez": 4338799,
     "pv_total": 60781961
   },
   {
     "date": "2024-02-24",
     "ver": "Mobile",
-    "pv_zgoda": 527249,
-    "pv_bez": 46494382,
+    "pv_zgoda": 44327058,
+    "pv_bez": 2694573,
     "pv_total": 47021631
   },
   {
     "date": "2024-02-25",
     "ver": "Desktop",
-    "pv_zgoda": 334773,
-    "pv_bez": 14144413,
+    "pv_zgoda": 12753843,
+    "pv_bez": 1725343,
     "pv_total": 14479186
   },
   {
     "date": "2024-02-25",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1001643,
-    "pv_bez": 66579615,
+    "pv_zgoda": 62911432,
+    "pv_bez": 4669826,
     "pv_total": 67581258
   },
   {
     "date": "2024-02-25",
     "ver": "Mobile",
-    "pv_zgoda": 666870,
-    "pv_bez": 52435202,
+    "pv_zgoda": 50157589,
+    "pv_bez": 2944483,
     "pv_total": 53102072
   },
   {
     "date": "2024-02-26",
     "ver": "Desktop",
-    "pv_zgoda": 523483,
-    "pv_bez": 23393646,
+    "pv_zgoda": 21485483,
+    "pv_bez": 2431646,
     "pv_total": 23917129
   },
   {
     "date": "2024-02-26",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1153175,
-    "pv_bez": 74816219,
+    "pv_zgoda": 70506641,
+    "pv_bez": 5462753,
     "pv_total": 75969394
   },
   {
     "date": "2024-02-26",
     "ver": "Mobile",
-    "pv_zgoda": 629692,
-    "pv_bez": 51422573,
+    "pv_zgoda": 49021158,
+    "pv_bez": 3031107,
     "pv_total": 52052265
   },
   {
     "date": "2024-02-27",
     "ver": "Desktop",
-    "pv_zgoda": 514105,
-    "pv_bez": 23409033,
+    "pv_zgoda": 21488026,
+    "pv_bez": 2435112,
     "pv_total": 23923138
   },
   {
     "date": "2024-02-27",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1131875,
-    "pv_bez": 75736832,
+    "pv_zgoda": 71371261,
+    "pv_bez": 5497446,
     "pv_total": 76868707
   },
   {
     "date": "2024-02-27",
     "ver": "Mobile",
-    "pv_zgoda": 617770,
-    "pv_bez": 52327799,
+    "pv_zgoda": 49883235,
+    "pv_bez": 3062334,
     "pv_total": 52945569
   },
   {
     "date": "2024-02-28",
     "ver": "Desktop",
-    "pv_zgoda": 508266,
-    "pv_bez": 23074292,
+    "pv_zgoda": 21191993,
+    "pv_bez": 2390565,
     "pv_total": 23582558
   },
   {
     "date": "2024-02-28",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1110722,
-    "pv_bez": 73440762,
+    "pv_zgoda": 69362520,
+    "pv_bez": 5188964,
     "pv_total": 74551484
   },
   {
     "date": "2024-02-28",
     "ver": "Mobile",
-    "pv_zgoda": 602456,
-    "pv_bez": 50366470,
+    "pv_zgoda": 48170527,
+    "pv_bez": 2798399,
     "pv_total": 50968926
   },
   {
     "date": "2024-02-29",
     "ver": "Desktop",
-    "pv_zgoda": 488500,
-    "pv_bez": 22276767,
+    "pv_zgoda": 20421075,
+    "pv_bez": 2344192,
     "pv_total": 22765267
   },
   {
     "date": "2024-02-29",
     "ver": "Desktop + mob",
-    "pv_zgoda": 1062147,
-    "pv_bez": 70477567,
+    "pv_zgoda": 66535770,
+    "pv_bez": 5003944,
     "pv_total": 71539714
   },
   {
     "date": "2024-02-29",
     "ver": "Mobile",
-    "pv_zgoda": 573647,
-    "pv_bez": 48200800,
+    "pv_zgoda": 46114695,
+    "pv_bez": 2659752,
     "pv_total": 48774447
   },
   {
     "date": "2024-03-01",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 21755273,
+    "pv_zgoda": 19565667,
+    "pv_bez": 2189606,
     "pv_total": 21755273
   },
   {
     "date": "2024-03-01",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 73168132,
+    "pv_zgoda": 68210953,
+    "pv_bez": 4957179,
     "pv_total": 73168132
   },
   {
     "date": "2024-03-01",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 51412859,
+    "pv_zgoda": 48645286,
+    "pv_bez": 2767573,
     "pv_total": 51412859
   },
   {
     "date": "2024-03-02",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 12856228,
+    "pv_zgoda": 11328138,
+    "pv_bez": 1528090,
     "pv_total": 12856228
   },
   {
     "date": "2024-03-02",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 60353189,
+    "pv_zgoda": 56216927,
+    "pv_bez": 4136262,
     "pv_total": 60353189
   },
   {
     "date": "2024-03-02",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 47496961,
+    "pv_zgoda": 44888789,
+    "pv_bez": 2608172,
     "pv_total": 47496961
   },
   {
     "date": "2024-03-03",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 14139100,
+    "pv_zgoda": 12485133,
+    "pv_bez": 1653967,
     "pv_total": 14139100
   },
   {
     "date": "2024-03-03",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 66921996,
+    "pv_zgoda": 62385478,
+    "pv_bez": 4536518,
     "pv_total": 66921996
   },
   {
     "date": "2024-03-03",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 52782896,
+    "pv_zgoda": 49900345,
+    "pv_bez": 2882551,
     "pv_total": 52782896
   },
   {
     "date": "2024-03-04",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 22180190,
+    "pv_zgoda": 19938756,
+    "pv_bez": 2241434,
     "pv_total": 22180190
   },
   {
     "date": "2024-03-04",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 71146063,
+    "pv_zgoda": 66222653,
+    "pv_bez": 4923410,
     "pv_total": 71146063
   },
   {
     "date": "2024-03-04",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 48965873,
+    "pv_zgoda": 46283897,
+    "pv_bez": 2681976,
     "pv_total": 48965873
   },
   {
     "date": "2024-03-05",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 23311230,
+    "pv_zgoda": 20980150,
+    "pv_bez": 2331080,
     "pv_total": 23311230
   },
   {
     "date": "2024-03-05",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 75783137,
+    "pv_zgoda": 70545299,
+    "pv_bez": 5237838,
     "pv_total": 75783137
   },
   {
     "date": "2024-03-05",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 52471907,
+    "pv_zgoda": 49565149,
+    "pv_bez": 2906758,
     "pv_total": 52471907
   },
   {
     "date": "2024-03-06",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 22859328,
+    "pv_zgoda": 20578110,
+    "pv_bez": 2281218,
     "pv_total": 22859328
   },
   {
     "date": "2024-03-06",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 74689725,
+    "pv_zgoda": 69562183,
+    "pv_bez": 5127542,
     "pv_total": 74689725
   },
   {
     "date": "2024-03-06",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 51830397,
+    "pv_zgoda": 48984073,
+    "pv_bez": 2846324,
     "pv_total": 51830397
   },
   {
     "date": "2024-03-07",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 21206510,
+    "pv_zgoda": 19059315,
+    "pv_bez": 2147195,
     "pv_total": 21206510
   },
   {
     "date": "2024-03-07",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 70426217,
+    "pv_zgoda": 65509163,
+    "pv_bez": 4917054,
     "pv_total": 70426217
   },
   {
     "date": "2024-03-07",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 49219707,
+    "pv_zgoda": 46449848,
+    "pv_bez": 2769859,
     "pv_total": 49219707
   },
   {
     "date": "2024-03-08",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 19818647,
+    "pv_zgoda": 17819207,
+    "pv_bez": 1999440,
     "pv_total": 19818647
   },
   {
     "date": "2024-03-08",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 65536803,
+    "pv_zgoda": 61003080,
+    "pv_bez": 4533723,
     "pv_total": 65536803
   },
   {
     "date": "2024-03-08",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 45718156,
+    "pv_zgoda": 43183873,
+    "pv_bez": 2534283,
     "pv_total": 45718156
   },
   {
     "date": "2024-03-09",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 12484343,
+    "pv_zgoda": 11028931,
+    "pv_bez": 1455412,
     "pv_total": 12484343
   },
   {
     "date": "2024-03-09",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 56983474,
+    "pv_zgoda": 52969817,
+    "pv_bez": 4013657,
     "pv_total": 56983474
   },
   {
     "date": "2024-03-09",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 44499131,
+    "pv_zgoda": 41940886,
+    "pv_bez": 2558245,
     "pv_total": 44499131
   },
   {
     "date": "2024-03-10",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 13970311,
+    "pv_zgoda": 12358628,
+    "pv_bez": 1611683,
     "pv_total": 13970311
   },
   {
     "date": "2024-03-10",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 63633393,
+    "pv_zgoda": 59230269,
+    "pv_bez": 4403124,
     "pv_total": 63633393
   },
   {
     "date": "2024-03-10",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 49663082,
+    "pv_zgoda": 46871641,
+    "pv_bez": 2791441,
     "pv_total": 49663082
   },
   {
     "date": "2024-03-11",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 24340631,
+    "pv_zgoda": 21926090,
+    "pv_bez": 2414541,
     "pv_total": 24340631
   },
   {
     "date": "2024-03-11",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 74708258,
+    "pv_zgoda": 69582930,
+    "pv_bez": 5125328,
     "pv_total": 74708258
   },
   {
     "date": "2024-03-11",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 50367627,
+    "pv_zgoda": 47656840,
+    "pv_bez": 2710787,
     "pv_total": 50367627
   },
   {
     "date": "2024-03-12",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 23289403,
+    "pv_zgoda": 20960745,
+    "pv_bez": 2328658,
     "pv_total": 23289403
   },
   {
     "date": "2024-03-12",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 72589750,
+    "pv_zgoda": 67648889,
+    "pv_bez": 4940861,
     "pv_total": 72589750
   },
   {
     "date": "2024-03-12",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 49300347,
+    "pv_zgoda": 46688144,
+    "pv_bez": 2612203,
     "pv_total": 49300347
   },
   {
     "date": "2024-03-13",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 17651097,
+    "pv_zgoda": 15821851,
+    "pv_bez": 1829246,
     "pv_total": 17651097
   },
   {
     "date": "2024-03-13",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 56326893,
+    "pv_zgoda": 52404096,
+    "pv_bez": 3922797,
     "pv_total": 56326893
   },
   {
     "date": "2024-03-13",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 38675796,
+    "pv_zgoda": 36582245,
+    "pv_bez": 2093551,
     "pv_total": 38675796
   },
   {
     "date": "2024-03-14",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 21115295,
+    "pv_zgoda": 18946693,
+    "pv_bez": 2168602,
     "pv_total": 21115295
   },
   {
     "date": "2024-03-14",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 69003234,
+    "pv_zgoda": 64222441,
+    "pv_bez": 4780793,
     "pv_total": 69003234
   },
   {
     "date": "2024-03-14",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 47887939,
+    "pv_zgoda": 45275748,
+    "pv_bez": 2612191,
     "pv_total": 47887939
   },
   {
     "date": "2024-03-15",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 19538006,
+    "pv_zgoda": 17488247,
+    "pv_bez": 2049759,
     "pv_total": 19538006
   },
   {
     "date": "2024-03-15",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 64239798,
+    "pv_zgoda": 59748265,
+    "pv_bez": 4491533,
     "pv_total": 64239798
   },
   {
     "date": "2024-03-15",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 44701792,
+    "pv_zgoda": 42260018,
+    "pv_bez": 2441774,
     "pv_total": 44701792
   },
   {
     "date": "2024-03-16",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 13018246,
+    "pv_zgoda": 11478439,
+    "pv_bez": 1539807,
     "pv_total": 13018246
   },
   {
     "date": "2024-03-16",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 58218335,
+    "pv_zgoda": 54247919,
+    "pv_bez": 3970416,
     "pv_total": 58218335
   },
   {
     "date": "2024-03-16",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 45200089,
+    "pv_zgoda": 42769480,
+    "pv_bez": 2430609,
     "pv_total": 45200089
   },
   {
     "date": "2024-03-17",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 15023145,
+    "pv_zgoda": 13236270,
+    "pv_bez": 1786875,
     "pv_total": 15023145
   },
   {
     "date": "2024-03-17",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 70364127,
+    "pv_zgoda": 65619345,
+    "pv_bez": 4744782,
     "pv_total": 70364127
   },
   {
     "date": "2024-03-17",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 55340982,
+    "pv_zgoda": 52383075,
+    "pv_bez": 2957907,
     "pv_total": 55340982
   },
   {
     "date": "2024-03-18",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 22831424,
+    "pv_zgoda": 20541015,
+    "pv_bez": 2290409,
     "pv_total": 22831424
   },
   {
     "date": "2024-03-18",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 73347317,
+    "pv_zgoda": 68303672,
+    "pv_bez": 5043645,
     "pv_total": 73347317
   },
   {
     "date": "2024-03-18",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 50515893,
+    "pv_zgoda": 47762657,
+    "pv_bez": 2753236,
     "pv_total": 50515893
   },
   {
     "date": "2024-03-19",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 22574681,
+    "pv_zgoda": 20323892,
+    "pv_bez": 2250789,
     "pv_total": 22574681
   },
   {
     "date": "2024-03-19",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 72615705,
+    "pv_zgoda": 67649937,
+    "pv_bez": 4965768,
     "pv_total": 72615705
   },
   {
     "date": "2024-03-19",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 50041024,
+    "pv_zgoda": 47326045,
+    "pv_bez": 2714979,
     "pv_total": 50041024
   },
   {
     "date": "2024-03-20",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 22824097,
+    "pv_zgoda": 20552958,
+    "pv_bez": 2271139,
     "pv_total": 22824097
   },
   {
     "date": "2024-03-20",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 71548057,
+    "pv_zgoda": 66687557,
+    "pv_bez": 4860500,
     "pv_total": 71548057
   },
   {
     "date": "2024-03-20",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 48723960,
+    "pv_zgoda": 46134599,
+    "pv_bez": 2589361,
     "pv_total": 48723960
   },
   {
     "date": "2024-03-21",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 22128677,
+    "pv_zgoda": 19934172,
+    "pv_bez": 2194505,
     "pv_total": 22128677
   },
   {
     "date": "2024-03-21",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 72694093,
+    "pv_zgoda": 67874889,
+    "pv_bez": 4819204,
     "pv_total": 72694093
   },
   {
     "date": "2024-03-21",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 50565416,
+    "pv_zgoda": 47940717,
+    "pv_bez": 2624699,
     "pv_total": 50565416
   },
   {
     "date": "2024-03-22",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 21578769,
+    "pv_zgoda": 19348033,
+    "pv_bez": 2230736,
     "pv_total": 21578769
   },
   {
     "date": "2024-03-22",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 74988014,
+    "pv_zgoda": 69962762,
+    "pv_bez": 5025252,
     "pv_total": 74988014
   },
   {
     "date": "2024-03-22",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 53409245,
+    "pv_zgoda": 50614729,
+    "pv_bez": 2794516,
     "pv_total": 53409245
   },
   {
     "date": "2024-03-23",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 14208787,
+    "pv_zgoda": 12561541,
+    "pv_bez": 1647246,
     "pv_total": 14208787
   },
   {
     "date": "2024-03-23",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 69684169,
+    "pv_zgoda": 65049626,
+    "pv_bez": 4634543,
     "pv_total": 69684169
   },
   {
     "date": "2024-03-23",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 55475382,
+    "pv_zgoda": 52488085,
+    "pv_bez": 2987297,
     "pv_total": 55475382
   },
   {
     "date": "2024-03-24",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 15075320,
+    "pv_zgoda": 13348109,
+    "pv_bez": 1727211,
     "pv_total": 15075320
   },
   {
     "date": "2024-03-24",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 73213888,
+    "pv_zgoda": 68424154,
+    "pv_bez": 4789734,
     "pv_total": 73213888
   },
   {
     "date": "2024-03-24",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 58138568,
+    "pv_zgoda": 55076045,
+    "pv_bez": 3062523,
     "pv_total": 58138568
   },
   {
     "date": "2024-03-25",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 23620502,
+    "pv_zgoda": 21300851,
+    "pv_bez": 2319651,
     "pv_total": 23620502
   },
   {
     "date": "2024-03-25",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 77265574,
+    "pv_zgoda": 72079999,
+    "pv_bez": 5185575,
     "pv_total": 77265574
   },
   {
     "date": "2024-03-25",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 53645072,
+    "pv_zgoda": 50779148,
+    "pv_bez": 2865924,
     "pv_total": 53645072
   },
   {
     "date": "2024-03-26",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 21938204,
+    "pv_zgoda": 19710018,
+    "pv_bez": 2228186,
     "pv_total": 21938204
   },
   {
     "date": "2024-03-26",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 75661262,
+    "pv_zgoda": 70669482,
+    "pv_bez": 4991780,
     "pv_total": 75661262
   },
   {
     "date": "2024-03-26",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 53723058,
+    "pv_zgoda": 50959464,
+    "pv_bez": 2763594,
     "pv_total": 53723058
   },
   {
     "date": "2024-03-27",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 23374106,
+    "pv_zgoda": 21041248,
+    "pv_bez": 2332858,
     "pv_total": 23374106
   },
   {
     "date": "2024-03-27",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 77794961,
+    "pv_zgoda": 72731396,
+    "pv_bez": 5063565,
     "pv_total": 77794961
   },
   {
     "date": "2024-03-27",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 54420855,
+    "pv_zgoda": 51690148,
+    "pv_bez": 2730707,
     "pv_total": 54420855
   },
   {
     "date": "2024-03-28",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 20391020,
+    "pv_zgoda": 18316254,
+    "pv_bez": 2074766,
     "pv_total": 20391020
   },
   {
     "date": "2024-03-28",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 68691238,
+    "pv_zgoda": 64116462,
+    "pv_bez": 4574776,
     "pv_total": 68691238
   },
   {
     "date": "2024-03-28",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 48300218,
+    "pv_zgoda": 45800208,
+    "pv_bez": 2500010,
     "pv_total": 48300218
   },
   {
     "date": "2024-03-29",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 16511392,
+    "pv_zgoda": 14778615,
+    "pv_bez": 1732777,
     "pv_total": 16511392
   },
   {
     "date": "2024-03-29",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 63550844,
+    "pv_zgoda": 59453899,
+    "pv_bez": 4096945,
     "pv_total": 63550844
   },
   {
     "date": "2024-03-29",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 47039452,
+    "pv_zgoda": 44675284,
+    "pv_bez": 2364168,
     "pv_total": 47039452
   },
   {
     "date": "2024-03-30",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 10621417,
+    "pv_zgoda": 9311628,
+    "pv_bez": 1309789,
     "pv_total": 10621417
   },
   {
     "date": "2024-03-30",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 55188932,
+    "pv_zgoda": 51528639,
+    "pv_bez": 3660293,
     "pv_total": 55188932
   },
   {
     "date": "2024-03-30",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 44567515,
+    "pv_zgoda": 42217011,
+    "pv_bez": 2350504,
     "pv_total": 44567515
   },
   {
     "date": "2024-03-31",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 8753284,
+    "pv_zgoda": 7611341,
+    "pv_bez": 1141943,
     "pv_total": 8753284
   },
   {
     "date": "2024-03-31",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 52636571,
+    "pv_zgoda": 49090611,
+    "pv_bez": 3545960,
     "pv_total": 52636571
   },
   {
     "date": "2024-03-31",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 43883287,
+    "pv_zgoda": 41479270,
+    "pv_bez": 2404017,
     "pv_total": 43883287
   },
   {
     "date": "2024-04-01",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 11597641,
+    "pv_zgoda": 10192756,
+    "pv_bez": 1404885,
     "pv_total": 11597641
   },
   {
     "date": "2024-04-01",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 62337487,
+    "pv_zgoda": 58289159,
+    "pv_bez": 4048328,
     "pv_total": 62337487
   },
   {
     "date": "2024-04-01",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 50739846,
+    "pv_zgoda": 48096403,
+    "pv_bez": 2643443,
     "pv_total": 50739846
   },
   {
     "date": "2024-04-02",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 23374204,
+    "pv_zgoda": 21073477,
+    "pv_bez": 2300727,
     "pv_total": 23374204
   },
   {
     "date": "2024-04-02",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 75767682,
+    "pv_zgoda": 70749213,
+    "pv_bez": 5018469,
     "pv_total": 75767682
   },
   {
     "date": "2024-04-02",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 52393478,
+    "pv_zgoda": 49675736,
+    "pv_bez": 2717742,
     "pv_total": 52393478
   },
   {
     "date": "2024-04-03",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 22591147,
+    "pv_zgoda": 20693569,
+    "pv_bez": 1897578,
     "pv_total": 22591147
   },
   {
     "date": "2024-04-03",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 73054609,
+    "pv_zgoda": 68634852,
+    "pv_bez": 4419757,
     "pv_total": 73054609
   },
   {
     "date": "2024-04-03",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 50463462,
+    "pv_zgoda": 47941283,
+    "pv_bez": 2522179,
     "pv_total": 50463462
   },
   {
     "date": "2024-04-04",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 21898303,
+    "pv_zgoda": 20395289,
+    "pv_bez": 1503014,
     "pv_total": 21898303
   },
   {
     "date": "2024-04-04",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 71144025,
+    "pv_zgoda": 67172351,
+    "pv_bez": 3971674,
     "pv_total": 71144025
   },
   {
     "date": "2024-04-04",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 49245722,
+    "pv_zgoda": 46777062,
+    "pv_bez": 2468660,
     "pv_total": 49245722
   },
   {
     "date": "2024-04-05",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 19775016,
+    "pv_zgoda": 18424909,
+    "pv_bez": 1350107,
     "pv_total": 19775016
   },
   {
     "date": "2024-04-05",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 66466500,
+    "pv_zgoda": 62784119,
+    "pv_bez": 3682381,
     "pv_total": 66466500
   },
   {
     "date": "2024-04-05",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 46691484,
+    "pv_zgoda": 44359210,
+    "pv_bez": 2332274,
     "pv_total": 46691484
   },
   {
     "date": "2024-04-06",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 11573303,
+    "pv_zgoda": 10623429,
+    "pv_bez": 949874,
     "pv_total": 11573303
   },
   {
     "date": "2024-04-06",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 55059925,
+    "pv_zgoda": 51940844,
+    "pv_bez": 3119081,
     "pv_total": 55059925
   },
   {
     "date": "2024-04-06",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 43486622,
+    "pv_zgoda": 41317415,
+    "pv_bez": 2169207,
     "pv_total": 43486622
   },
   {
     "date": "2024-04-07",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 13402900,
+    "pv_zgoda": 12293809,
+    "pv_bez": 1109091,
     "pv_total": 13402900
   },
   {
     "date": "2024-04-07",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 67140880,
+    "pv_zgoda": 63411531,
+    "pv_bez": 3729349,
     "pv_total": 67140880
   },
   {
     "date": "2024-04-07",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 53737980,
+    "pv_zgoda": 51117722,
+    "pv_bez": 2620258,
     "pv_total": 53737980
   },
   {
     "date": "2024-04-08",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 21661034,
+    "pv_zgoda": 20179016,
+    "pv_bez": 1482018,
     "pv_total": 21661034
   },
   {
     "date": "2024-04-08",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 74028550,
+    "pv_zgoda": 70040965,
+    "pv_bez": 3987585,
     "pv_total": 74028550
   },
   {
     "date": "2024-04-08",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 52367516,
+    "pv_zgoda": 49861949,
+    "pv_bez": 2505567,
     "pv_total": 52367516
   },
   {
     "date": "2024-04-09",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 20641556,
+    "pv_zgoda": 19194217,
+    "pv_bez": 1447339,
     "pv_total": 20641556
   },
   {
     "date": "2024-04-09",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 68410852,
+    "pv_zgoda": 64701546,
+    "pv_bez": 3709306,
     "pv_total": 68410852
   },
   {
     "date": "2024-04-09",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 47769296,
+    "pv_zgoda": 45507329,
+    "pv_bez": 2261967,
     "pv_total": 47769296
   },
   {
     "date": "2024-04-10",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 21470237,
+    "pv_zgoda": 19913423,
+    "pv_bez": 1556814,
     "pv_total": 21470237
   },
   {
     "date": "2024-04-10",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 70757151,
+    "pv_zgoda": 66908073,
+    "pv_bez": 3849078,
     "pv_total": 70757151
   },
   {
     "date": "2024-04-10",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 49286914,
+    "pv_zgoda": 46994650,
+    "pv_bez": 2292264,
     "pv_total": 49286914
   },
   {
     "date": "2024-04-11",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 20277319,
+    "pv_zgoda": 18802586,
+    "pv_bez": 1474733,
     "pv_total": 20277319
   },
   {
     "date": "2024-04-11",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 67750792,
+    "pv_zgoda": 64057035,
+    "pv_bez": 3693757,
     "pv_total": 67750792
   },
   {
     "date": "2024-04-11",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 47473473,
+    "pv_zgoda": 45254449,
+    "pv_bez": 2219024,
     "pv_total": 47473473
   },
   {
     "date": "2024-04-12",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 19651113,
+    "pv_zgoda": 18244446,
+    "pv_bez": 1406667,
     "pv_total": 19651113
   },
   {
     "date": "2024-04-12",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 65945681,
+    "pv_zgoda": 62308316,
+    "pv_bez": 3637365,
     "pv_total": 65945681
   },
   {
     "date": "2024-04-12",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 46294568,
+    "pv_zgoda": 44063870,
+    "pv_bez": 2230698,
     "pv_total": 46294568
   },
   {
     "date": "2024-04-13",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 11290139,
+    "pv_zgoda": 10302067,
+    "pv_bez": 988072,
     "pv_total": 11290139
   },
   {
     "date": "2024-04-13",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 53953563,
+    "pv_zgoda": 50875675,
+    "pv_bez": 3077888,
     "pv_total": 53953563
   },
   {
     "date": "2024-04-13",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 42663424,
+    "pv_zgoda": 40573608,
+    "pv_bez": 2089816,
     "pv_total": 42663424
   },
   {
     "date": "2024-04-14",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 14011908,
+    "pv_zgoda": 12812161,
+    "pv_bez": 1199747,
     "pv_total": 14011908
   },
   {
     "date": "2024-04-14",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 68199046,
+    "pv_zgoda": 64498715,
+    "pv_bez": 3700331,
     "pv_total": 68199046
   },
   {
     "date": "2024-04-14",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 54187138,
+    "pv_zgoda": 51686554,
+    "pv_bez": 2500584,
     "pv_total": 54187138
   },
   {
     "date": "2024-04-15",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 22174433,
+    "pv_zgoda": 20606068,
+    "pv_bez": 1568365,
     "pv_total": 22174433
   },
   {
     "date": "2024-04-15",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 68310376,
+    "pv_zgoda": 64502290,
+    "pv_bez": 3808086,
     "pv_total": 68310376
   },
   {
     "date": "2024-04-15",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 46135943,
+    "pv_zgoda": 43896222,
+    "pv_bez": 2239721,
     "pv_total": 46135943
   },
   {
     "date": "2024-04-16",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 20241316,
+    "pv_zgoda": 18802326,
+    "pv_bez": 1438990,
     "pv_total": 20241316
   },
   {
     "date": "2024-04-16",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 66824295,
+    "pv_zgoda": 63123689,
+    "pv_bez": 3700606,
     "pv_total": 66824295
   },
   {
     "date": "2024-04-16",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 46582979,
+    "pv_zgoda": 44321363,
+    "pv_bez": 2261616,
     "pv_total": 46582979
   },
   {
     "date": "2024-04-17",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 22131836,
+    "pv_zgoda": 20630689,
+    "pv_bez": 1501147,
     "pv_total": 22131836
   },
   {
     "date": "2024-04-17",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 70520537,
+    "pv_zgoda": 66733702,
+    "pv_bez": 3786835,
     "pv_total": 70520537
   },
   {
     "date": "2024-04-17",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 48388701,
+    "pv_zgoda": 46103013,
+    "pv_bez": 2285688,
     "pv_total": 48388701
   },
   {
     "date": "2024-04-18",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 21183646,
+    "pv_zgoda": 19748831,
+    "pv_bez": 1434815,
     "pv_total": 21183646
   },
   {
     "date": "2024-04-18",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 68114794,
+    "pv_zgoda": 64420070,
+    "pv_bez": 3694724,
     "pv_total": 68114794
   },
   {
     "date": "2024-04-18",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 46931148,
+    "pv_zgoda": 44671239,
+    "pv_bez": 2259909,
     "pv_total": 46931148
   },
   {
     "date": "2024-04-19",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 20770615,
+    "pv_zgoda": 19376501,
+    "pv_bez": 1394114,
     "pv_total": 20770615
   },
   {
     "date": "2024-04-19",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 66773602,
+    "pv_zgoda": 63149921,
+    "pv_bez": 3623681,
     "pv_total": 66773602
   },
   {
     "date": "2024-04-19",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 46002987,
+    "pv_zgoda": 43773420,
+    "pv_bez": 2229567,
     "pv_total": 46002987
   },
   {
     "date": "2024-04-20",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 12812001,
+    "pv_zgoda": 11789942,
+    "pv_bez": 1022059,
     "pv_total": 12812001
   },
   {
     "date": "2024-04-20",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 57693286,
+    "pv_zgoda": 54492917,
+    "pv_bez": 3200369,
     "pv_total": 57693286
   },
   {
     "date": "2024-04-20",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 44881285,
+    "pv_zgoda": 42702975,
+    "pv_bez": 2178310,
     "pv_total": 44881285
   },
   {
     "date": "2024-04-21",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 15130481,
+    "pv_zgoda": 13916933,
+    "pv_bez": 1213548,
     "pv_total": 15130481
   },
   {
     "date": "2024-04-21",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 70831057,
+    "pv_zgoda": 66967395,
+    "pv_bez": 3863662,
     "pv_total": 70831057
   },
   {
     "date": "2024-04-21",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 55700576,
+    "pv_zgoda": 53050462,
+    "pv_bez": 2650114,
     "pv_total": 55700576
   },
   {
     "date": "2024-04-22",
     "ver": "Desktop",
-    "pv_zgoda": 0,
-    "pv_bez": 23219054,
+    "pv_zgoda": 21672289,
+    "pv_bez": 1546765,
     "pv_total": 23219054
   },
   {
     "date": "2024-04-22",
     "ver": "Desktop + mob",
-    "pv_zgoda": 0,
-    "pv_bez": 72506566,
+    "pv_zgoda": 68657416,
+    "pv_bez": 3849150,
     "pv_total": 72506566
   },
   {
     "date": "2024-04-22",
     "ver": "Mobile",
-    "pv_zgoda": 0,
-    "pv_bez": 49287512,
+    "pv_zgoda": 46985127,
+    "pv_bez": 2302385,
     "pv_total": 49287512
   },
   {
     "date": "2024-04-23",
     "ver": "Desktop",
-    "pv_zgoda": 18944084,
-    "pv_bez": 1634462,
+    "pv_zgoda": 19183498,
+    "pv_bez": 1395048,
     "pv_total": 20578546
   },
   {
     "date": "2024-04-23",
     "ver": "Desktop + mob",
-    "pv_zgoda": 60459274,
-    "pv_bez": 4997357,
+    "pv_zgoda": 61889336,
+    "pv_bez": 3567295,
     "pv_total": 65456631
   },
   {
     "date": "2024-04-23",
     "ver": "Mobile",
-    "pv_zgoda": 41515190,
-    "pv_bez": 3362895,
+    "pv_zgoda": 42705838,
+    "pv_bez": 2172247,
     "pv_total": 44878085
   },
   {
     "date": "2024-04-24",
     "ver": "Desktop",
-    "pv_zgoda": 19833770,
-    "pv_bez": 1727415,
+    "pv_zgoda": 20084258,
+    "pv_bez": 1476927,
     "pv_total": 21561185
   },
   {
     "date": "2024-04-24",
     "ver": "Desktop + mob",
-    "pv_zgoda": 62394836,
-    "pv_bez": 5249663,
+    "pv_zgoda": 63905576,
+    "pv_bez": 3738923,
     "pv_total": 67644499
   },
   {
     "date": "2024-04-24",
     "ver": "Mobile",
-    "pv_zgoda": 42561066,
-    "pv_bez": 3522248,
+    "pv_zgoda": 43821318,
+    "pv_bez": 2261996,
     "pv_total": 46083314
   },
   {
     "date": "2024-04-25",
     "ver": "Desktop",
-    "pv_zgoda": 18367178,
-    "pv_bez": 1626547,
+    "pv_zgoda": 18598338,
+    "pv_bez": 1395387,
     "pv_total": 19993725
   },
   {
     "date": "2024-04-25",
     "ver": "Desktop + mob",
-    "pv_zgoda": 60146087,
-    "pv_bez": 5089625,
+    "pv_zgoda": 61635951,
+    "pv_bez": 3599761,
     "pv_total": 65235712
   },
   {
     "date": "2024-04-25",
     "ver": "Mobile",
-    "pv_zgoda": 41778909,
-    "pv_bez": 3463078,
+    "pv_zgoda": 43037613,
+    "pv_bez": 2204374,
     "pv_total": 45241987
   },
   {
     "date": "2024-04-26",
     "ver": "Desktop",
-    "pv_zgoda": 18005950,
-    "pv_bez": 1596171,
+    "pv_zgoda": 18256794,
+    "pv_bez": 1345327,
     "pv_total": 19602121
   },
   {
     "date": "2024-04-26",
     "ver": "Desktop + mob",
-    "pv_zgoda": 59087514,
-    "pv_bez": 5019077,
+    "pv_zgoda": 60591202,
+    "pv_bez": 3515389,
     "pv_total": 64106591
   },
   {
     "date": "2024-04-26",
     "ver": "Mobile",
-    "pv_zgoda": 41081564,
-    "pv_bez": 3422906,
+    "pv_zgoda": 42334408,
+    "pv_bez": 2170062,
     "pv_total": 44504470
   },
   {
     "date": "2024-04-27",
     "ver": "Desktop",
-    "pv_zgoda": 10037509,
-    "pv_bez": 1111195,
+    "pv_zgoda": 10224464,
+    "pv_bez": 924240,
     "pv_total": 11148704
   },
   {
     "date": "2024-04-27",
     "ver": "Desktop + mob",
-    "pv_zgoda": 49397927,
-    "pv_bez": 4400792,
+    "pv_zgoda": 50790606,
+    "pv_bez": 3008113,
     "pv_total": 53798719
   },
   {
     "date": "2024-04-27",
     "ver": "Mobile",
-    "pv_zgoda": 39360418,
-    "pv_bez": 3289597,
+    "pv_zgoda": 40566142,
+    "pv_bez": 2083873,
     "pv_total": 42650015
   },
   {
     "date": "2024-04-28",
     "ver": "Desktop",
-    "pv_zgoda": 10674843,
-    "pv_bez": 1206684,
+    "pv_zgoda": 10869700,
+    "pv_bez": 1011827,
     "pv_total": 11881527
   },
   {
     "date": "2024-04-28",
     "ver": "Desktop + mob",
-    "pv_zgoda": 54477898,
-    "pv_bez": 4911098,
+    "pv_zgoda": 56026062,
+    "pv_bez": 3362934,
     "pv_total": 59388996
   },
   {
     "date": "2024-04-28",
     "ver": "Mobile",
-    "pv_zgoda": 43803055,
-    "pv_bez": 3704414,
+    "pv_zgoda": 45156362,
+    "pv_bez": 2351107,
     "pv_total": 47507469
   },
   {
     "date": "2024-04-29",
     "ver": "Desktop",
-    "pv_zgoda": 16706102,
-    "pv_bez": 1485350,
+    "pv_zgoda": 16926423,
+    "pv_bez": 1265029,
     "pv_total": 18191452
   },
   {
     "date": "2024-04-29",
     "ver": "Desktop + mob",
-    "pv_zgoda": 56285391,
-    "pv_bez": 4801977,
+    "pv_zgoda": 57685676,
+    "pv_bez": 3401692,
     "pv_total": 61087368
   },
   {
     "date": "2024-04-29",
     "ver": "Mobile",
-    "pv_zgoda": 39579289,
-    "pv_bez": 3316627,
+    "pv_zgoda": 40759253,
+    "pv_bez": 2136663,
     "pv_total": 42895916
   },
   {
     "date": "2024-04-30",
     "ver": "Desktop",
-    "pv_zgoda": 15066333,
-    "pv_bez": 1944739,
+    "pv_zgoda": 15252298,
+    "pv_bez": 1758774,
     "pv_total": 17011072
   },
   {
     "date": "2024-04-30",
     "ver": "Desktop + mob",
-    "pv_zgoda": 53435170,
-    "pv_bez": 5680990,
+    "pv_zgoda": 54764239,
+    "pv_bez": 4351921,
     "pv_total": 59116160
   },
   {
     "date": "2024-04-30",
     "ver": "Mobile",
-    "pv_zgoda": 38368837,
-    "pv_bez": 3736251,
+    "pv_zgoda": 39511941,
+    "pv_bez": 2593147,
     "pv_total": 42105088
   },
   {
@@ -17931,6 +17953,114 @@ function refreshAge(updStr){
   return diffD+' dni temu';
 }
 
+// ---- PV Trend Line ----
+var pvTrendChart = null;
+var pvTrendVer = 'Desktop + mob';
+var pvTrendMetric = 'zgoda'; // 'zgoda' | 'total' | 'both'
+var pvTrendMA = 7;
+
+function buildPvTrendTabs() {
+  document.getElementById('pvtrendtabs').innerHTML = ['Desktop + mob','Desktop','Mobile'].map(function(v){
+    return '<button class="vtab'+(v===pvTrendVer?' on':'')+'" onclick="setPvTrendVer(\''+v+'\')">'+v+'</button>';
+  }).join('');
+}
+function setPvTrendVer(v){ pvTrendVer=v; buildPvTrendTabs(); renderPvTrend(); }
+function setPvTrendMetric(m){
+  pvTrendMetric=m;
+  ['zgoda','total','both'].forEach(function(x){ var el=document.getElementById('pvtrend-'+x); if(el) el.className='vtab'+(x===m?' on':''); });
+  renderPvTrend();
+}
+function setPvTrendMA(n){
+  pvTrendMA=n;
+  [7,1].forEach(function(x){ var el=document.getElementById('pvtrend-ma'+x); if(el) el.className='vtab'+(x===n?' on':''); });
+  renderPvTrend();
+}
+
+function maSmooth(arr, n) {
+  if(n<=1) return arr.slice();
+  return arr.map(function(_,i){
+    var start=Math.max(0,i-n+1), slice=arr.slice(start,i+1);
+    var vals=slice.filter(function(v){return v!==null;});
+    return vals.length ? vals.reduce(function(a,b){return a+b;},0)/vals.length : null;
+  });
+}
+
+function renderPvTrend() {
+  var pvData = window.PV_DATA;
+  if(!pvData||!pvData.length){ return; }
+  var filtered = pvData.filter(function(r){return r.ver===pvTrendVer;}).sort(function(a,b){return a.date<b.date?-1:1;});
+
+  var cs = getComputedStyle(document.documentElement);
+  var textCol  = cs.getPropertyValue('--text').trim()||'#e2e8f0';
+  var mutedCol = cs.getPropertyValue('--muted').trim()||'#64748b';
+  var gridCol  = cs.getPropertyValue('--chart-grid').trim()||'rgba(255,255,255,0.07)';
+
+  var labels = filtered.map(function(r){return r.date;});
+  var rawZgoda = filtered.map(function(r){return r.pv_zgoda/1e6;});
+  var rawTotal = filtered.map(function(r){return r.pv_total/1e6;});
+  var smZgoda = maSmooth(rawZgoda, pvTrendMA);
+  var smTotal = maSmooth(rawTotal, pvTrendMA);
+
+  var datasets = [];
+  if(pvTrendMetric==='zgoda'||pvTrendMetric==='both'){
+    datasets.push({
+      label:'PV ze zgodą TCF'+(pvTrendMA>1?' (śr. '+pvTrendMA+'d)':''),
+      data: smZgoda,
+      borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.08)',
+      borderWidth:2, pointRadius:0, fill:true, tension:0.3, spanGaps:true
+    });
+  }
+  if(pvTrendMetric==='total'||pvTrendMetric==='both'){
+    datasets.push({
+      label:'PV łącznie'+(pvTrendMA>1?' (śr. '+pvTrendMA+'d)':''),
+      data: smTotal,
+      borderColor:'#94a3b8', backgroundColor:'rgba(148,163,184,0.05)',
+      borderWidth:1.5, pointRadius:0, fill:pvTrendMetric==='total', tension:0.3, spanGaps:true,
+      borderDash: pvTrendMetric==='both'?[4,3]:[]
+    });
+  }
+
+  var cfg = {
+    type:'line',
+    data:{ labels:labels, datasets:datasets },
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{
+        legend:{ display:datasets.length>1, position:'top', labels:{color:textCol, boxWidth:12, font:{size:11}, padding:16} },
+        tooltip:{
+          mode:'index', intersect:false,
+          callbacks:{
+            title:function(items){
+              var ts=items[0].parsed&&items[0].parsed.x;
+              var dt=ts?new Date(ts):new Date(items[0].label||'');
+              if(isNaN(dt)) return items[0].label||'';
+              return dt.toLocaleDateString('pl-PL',{day:'numeric',month:'short',year:'numeric'});
+            },
+            label:function(item){ return item.dataset.label+': '+item.raw.toFixed(2)+'M PV'; }
+          }
+        }
+      },
+      scales:{
+        x:{
+          type:'time',
+          time:{unit:'month', displayFormats:{month:'MMM yy'}},
+          grid:{color:gridCol},
+          ticks:{color:mutedCol, font:{size:10}, maxRotation:0}
+        },
+        y:{
+          grid:{color:gridCol},
+          ticks:{color:mutedCol, font:{size:10}, callback:function(v){return v.toFixed(0)+'M';}},
+          title:{display:true, text:'PV (mln)', color:mutedCol, font:{size:10}}
+        }
+      }
+    }
+  };
+
+  var canvas = document.getElementById('pvTrendChart');
+  if(pvTrendChart){ pvTrendChart.destroy(); }
+  pvTrendChart = new Chart(canvas, cfg);
+}
+
 // ---- PV Chart ----
 var pvChart = null;
 var pvVer = 'Desktop + mob';
@@ -18086,7 +18216,7 @@ function renderPvTable() {
     byYM[ym].pv_zgoda+=r.pv_zgoda; byYM[ym].pv_total+=r.pv_total;
   });
   var years=['2024','2025','2026'];
-  var INCOMPLETE_BEFORE = '2024-05';
+  var INCOMPLETE_BEFORE = '2024-01'; // wszystkie dane kompletne
   function isIncomplete(ym){ return ym < INCOMPLETE_BEFORE; }
   function cell(ym){
     var d=byYM[ym];
@@ -18094,7 +18224,7 @@ function renderPvTable() {
     var pct=(d.pv_zgoda/d.pv_total*100).toFixed(1);
     var val=(d.pv_zgoda/1e6).toFixed(1);
     var inc=isIncomplete(ym);
-    var style='text-align:center;padding:5px 12px'+(inc?';opacity:0.45':'');
+    var style='text-align:right;padding:5px 12px'+(inc?';opacity:0.45':'');
     var star=inc?'<span title="dane niekompletne" style="color:#f59e0b;margin-left:2px">*</span>':'';
     return '<td style="'+style+'"><b>'+val+'M</b><span style="color:var(--muted);font-size:11px;margin-left:4px">('+pct+'%)</span>'+star+'</td>';
   }
@@ -18104,13 +18234,13 @@ function renderPvTable() {
     if(isIncomplete(ym1)||isIncomplete(ym2)) return '<td style="color:var(--muted);text-align:center;padding:5px 12px;opacity:0.45">n/d*</td>';
     var p1=d1.pv_zgoda/d1.pv_total*100, p2=d2.pv_zgoda/d2.pv_total*100, diff=p2-p1;
     var col=diff>=0?'#10b981':'#f87171';
-    return '<td style="text-align:center;padding:5px 12px;color:'+col+';font-weight:600">'+(diff>=0?'+':'')+diff.toFixed(1)+'pp</td>';
+    return '<td style="text-align:right;padding:5px 12px;color:'+col+';font-weight:600">'+(diff>=0?'+':'')+diff.toFixed(1)+'pp</td>';
   }
   var html='<table style="width:100%;border-collapse:collapse;font-size:12px">'
     +'<thead><tr style="border-bottom:1px solid var(--border)">'
     +'<th style="text-align:left;padding:6px 12px;color:var(--muted)">Miesiąc</th>';
-  years.forEach(function(y){html+='<th style="text-align:center;padding:6px 12px;color:var(--muted)">'+y+' <span style="font-weight:400;font-size:10px">(PV ze zgodą)</span></th>';});
-  html+='<th style="text-align:center;padding:6px 12px;color:var(--muted)">Δ 24→25</th><th style="text-align:center;padding:6px 12px;color:var(--muted)">Δ 25→26</th></tr></thead><tbody>';
+  years.forEach(function(y){html+='<th style="text-align:right;padding:6px 12px;color:var(--muted)">'+y+' <span style="font-weight:400;font-size:10px">(PV ze zgodą)</span></th>';});
+  html+='<th style="text-align:right;padding:6px 12px;color:var(--muted)">Δ 24→25</th><th style="text-align:right;padding:6px 12px;color:var(--muted)">Δ 25→26</th></tr></thead><tbody>';
   ['01','02','03','04','05','06','07','08','09','10','11','12'].forEach(function(m,i){
     html+='<tr'+(i%2?'':' style="background:var(--chart-grid)"')+'><td style="padding:5px 12px;color:var(--muted)">'+MSH[i]+'</td>';
     years.forEach(function(y){html+=cell(y+'-'+m);});
@@ -18135,6 +18265,7 @@ function renderPvTable() {
     buildBarTabs(); renderBar1(); renderBar2();
     buildRankTabs(); renderRanking();
     buildHmTabs(); renderHeatmap();
+    buildPvTrendTabs(); renderPvTrend();
     buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable();
   }catch(e){
     document.getElementById('loading').innerHTML=
