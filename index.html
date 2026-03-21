@@ -18159,13 +18159,17 @@ function renderPV() {
 
   document.getElementById('pvNote').textContent = '';
 
+  var curYM = (new Date()).toISOString().substring(0,7);
+  var bgZgoda = labels.map(function(l){ return l.substring(0,7)===curYM?'rgba(16,185,129,0.30)':'rgba(16,185,129,0.80)'; });
+  var bgBez   = labels.map(function(l){ return l.substring(0,7)===curYM?'rgba(239,68,68,0.25)':'rgba(239,68,68,0.65)'; });
+
   var cfg = {
     type:'bar',
     data:{
       labels:labels,
       datasets:[
-        {label:'Ze zgodą TCF', data:zgoda, backgroundColor:'rgba(16,185,129,0.80)', borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
-        {label:'Bez zgody TCF', data:bez, backgroundColor:'rgba(239,68,68,0.65)', borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
+        {label:'Ze zgodą TCF', data:zgoda, backgroundColor:bgZgoda, borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
+        {label:'Bez zgody TCF', data:bez, backgroundColor:bgBez, borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
         {label:'TCF %', data:tcfLine, type:'line', borderColor:'#f59e0b', backgroundColor:'transparent', borderWidth:2.5, pointRadius:0, yAxisID:'yTCF', order:1, tension:0.3, spanGaps:true}
       ]
     },
@@ -18180,8 +18184,11 @@ function renderPV() {
               var ts=items[0].parsed&&items[0].parsed.x;
               var dt=ts?new Date(ts):new Date(items[0].label||'');
               if(isNaN(dt)) return items[0].label||'';
-              if(pvGran==='monthly') return dt.toLocaleDateString('pl-PL',{month:'long',year:'numeric'});
-              return dt.toLocaleDateString('pl-PL',{day:'numeric',month:'short',year:'numeric'});
+              var lbl;
+              if(pvGran==='monthly') lbl=dt.toLocaleDateString('pl-PL',{month:'long',year:'numeric'});
+              else lbl=dt.toLocaleDateString('pl-PL',{day:'numeric',month:'short',year:'numeric'});
+              if((items[0].label||'').substring(0,7)===curYM) lbl+=' * (dane niepełne)';
+              return lbl;
             },
             label:function(item){
               if(item.dataset.yAxisID==='yTCF') return 'TCF %: '+(item.raw!==null?(item.raw*100).toFixed(2)+'%':'brak');
