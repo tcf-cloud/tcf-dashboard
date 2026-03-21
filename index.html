@@ -17882,17 +17882,21 @@ function renderBar1(){
   var site='WPM (bez poczty wp i o2)';
   var C=chartColors(), yrs=availYears();
   var avgs=monthlyAvgs(site,S.barVer);
+  var nowYM=new Date().toISOString().substring(0,7);
   var datasets=yrs.map(function(y){
-    var data=[];
+    var data=[],bgColors=[];
+    var col=YCOL[y]||{line:'#888',fill:'rgba(136,136,136,.5)'};
+    var baseBg=col.fill.replace(/[\d.]+\)$/,'0.75)');
+    var dimBg=col.fill.replace(/[\d.]+\)$/,'0.25)');
     for(var m=1;m<=12;m++){
       var k=y+'-'+(m<10?'0':'')+m;
       data.push(avgs[k]!=null?avgs[k]:null);
+      bgColors.push(k===nowYM?dimBg:baseBg);
     }
     if(!data.some(function(x){return x!=null;})) return null;
-    var col=YCOL[y]||{line:'#888',fill:'rgba(136,136,136,.5)'};
     return {
       label:'Rok '+y, data:data,
-      backgroundColor:col.fill.replace(/[\d.]+\)$/,'0.75)'),
+      backgroundColor:bgColors,
       borderColor:col.line, borderWidth:1.5, borderRadius:3
     };
   }).filter(Boolean);
