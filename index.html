@@ -18274,7 +18274,8 @@ function renderPV() {
   var pvData = window.PV_DATA;
   if (!pvData||!pvData.length){ document.getElementById('pvNote').textContent='Brak danych PV'; return; }
   var filtered = pvData.filter(function(r){return r.ver===pvVer;}).sort(function(a,b){return a.date<b.date?-1:1;});
-  var points = pvGran==='monthly' ? aggPvMonthly(filtered) : filtered;
+  var nowYM = new Date().toISOString().substring(0,7);
+  var points = pvGran==='monthly' ? aggPvMonthly(filtered) : filtered.map(function(r){return Object.assign({},r,{ym:r.date.substring(0,7)});});
   var labels = points.map(function(r){return r.date;});
   var zgoda  = points.map(function(r){return +(r.pv_zgoda/1e6).toFixed(3);});
   var bez    = points.map(function(r){return +(r.pv_bez/1e6).toFixed(3);});
@@ -18295,8 +18296,8 @@ function renderPV() {
     data:{
       labels:labels,
       datasets:[
-        {label:'Ze zgodą TCF', data:zgoda, backgroundColor:'rgba(16,185,129,0.80)', borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
-        {label:'Bez zgody TCF', data:bez, backgroundColor:'rgba(239,68,68,0.65)', borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
+        {label:'Ze zgodą TCF', data:zgoda, backgroundColor:points.map(function(r){return r.ym===nowYM?'rgba(16,185,129,0.25)':'rgba(16,185,129,0.80)';}), borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
+        {label:'Bez zgody TCF', data:bez, backgroundColor:points.map(function(r){return r.ym===nowYM?'rgba(239,68,68,0.20)':'rgba(239,68,68,0.65)';}), borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
         {label:'TCF %', data:tcfLine, type:'line', borderColor:'#f59e0b', backgroundColor:'transparent', borderWidth:2.5, pointRadius:0, yAxisID:'yTCF', order:1, tension:0.3, spanGaps:true}
       ]
     },
