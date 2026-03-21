@@ -18157,8 +18157,7 @@ function renderPV() {
   var validTcf = tcfLine.filter(function(v){return v!==null;});
   var tcfMin = validTcf.length ? Math.max(0, Math.floor(Math.min.apply(null,validTcf)*20-1)/20) : 0;
 
-  document.getElementById('pvNote').textContent = points.some(function(r){return r.date<'2024-05-01';})
-    ? 'Uwaga: dane sty–kwi 2024 — kolumna TCF niekompletna w źródle historycznym (oznaczone * w tabeli)' : '';
+  document.getElementById('pvNote').textContent = '';
 
   var cfg = {
     type:'bar',
@@ -18225,13 +18224,12 @@ function renderPvTable() {
     var val=(d.pv_zgoda/1e6).toFixed(1);
     var inc=isIncomplete(ym);
     var style='text-align:right;padding:5px 12px'+(inc?';opacity:0.45':'');
-    var star=inc?'<span title="dane niekompletne" style="color:#f59e0b;margin-left:2px">*</span>':'';
-    return '<td style="'+style+'"><b>'+val+'M</b><span style="color:var(--muted);font-size:11px;margin-left:4px">('+pct+'%)</span>'+star+'</td>';
+    return '<td style="'+style+'"><b>'+val+'M</b><span style="color:var(--muted);font-size:11px;margin-left:4px">('+pct+'%)</span></td>';
   }
   function dCell(ym1,ym2){
     var d1=byYM[ym1],d2=byYM[ym2];
     if(!d1||!d2||!d1.pv_total||!d2.pv_total) return '<td style="color:var(--muted);text-align:center;padding:5px 12px">—</td>';
-    if(isIncomplete(ym1)||isIncomplete(ym2)) return '<td style="color:var(--muted);text-align:center;padding:5px 12px;opacity:0.45">n/d*</td>';
+    if(isIncomplete(ym1)||isIncomplete(ym2)) return '<td style="color:var(--muted);text-align:center;padding:5px 12px;opacity:0.45">n/d</td>';
     var p1=d1.pv_zgoda/d1.pv_total*100, p2=d2.pv_zgoda/d2.pv_total*100, diff=p2-p1;
     var col=diff>=0?'#10b981':'#f87171';
     return '<td style="text-align:right;padding:5px 12px;color:'+col+';font-weight:600">'+(diff>=0?'+':'')+diff.toFixed(1)+'pp</td>';
@@ -18246,8 +18244,7 @@ function renderPvTable() {
     years.forEach(function(y){html+=cell(y+'-'+m);});
     html+=dCell('2024-'+m,'2025-'+m)+dCell('2025-'+m,'2026-'+m)+'</tr>';
   });
-  html+='</tbody></table>'
-    +'<div style="font-size:11px;color:var(--muted);margin-top:6px"><span style="color:#f59e0b">*</span> sty–kwi 2024: kolumna TCF niekompletna w źródle historycznym — dane nieporównywalne</div>';
+  html+='</tbody></table>';
   document.getElementById('pvTable').innerHTML=html;
 }
 
