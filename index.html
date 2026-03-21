@@ -18160,8 +18160,8 @@ function renderPV() {
   document.getElementById('pvNote').textContent = '';
 
   var curYM = (new Date()).toISOString().substring(0,7);
-  var bgZgoda = labels.map(function(l){ return l.substring(0,7)===curYM?'rgba(16,185,129,0.30)':'rgba(16,185,129,0.80)'; });
-  var bgBez   = labels.map(function(l){ return l.substring(0,7)===curYM?'rgba(239,68,68,0.25)':'rgba(239,68,68,0.65)'; });
+  var bgZgoda = labels.map(function(l){ return (pvGran==='monthly'&&l.substring(0,7)===curYM)?'rgba(16,185,129,0.30)':'rgba(16,185,129,0.80)'; });
+  var bgBez   = labels.map(function(l){ return (pvGran==='monthly'&&l.substring(0,7)===curYM)?'rgba(239,68,68,0.25)':'rgba(239,68,68,0.65)'; });
 
   var cfg = {
     type:'bar',
