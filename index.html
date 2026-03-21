@@ -18296,8 +18296,8 @@ function renderPV() {
     data:{
       labels:labels,
       datasets:[
-        {label:'Ze zgodą TCF', data:zgoda, backgroundColor:points.map(function(r){return r.ym===nowYM?'rgba(16,185,129,0.25)':'rgba(16,185,129,0.80)';}), borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
-        {label:'Bez zgody TCF', data:bez, backgroundColor:points.map(function(r){return r.ym===nowYM?'rgba(239,68,68,0.20)':'rgba(239,68,68,0.65)';}), borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
+        {label:'Ze zgodą TCF', data:zgoda, backgroundColor:pvGran==='monthly'?points.map(function(r){return r.ym===nowYM?'rgba(16,185,129,0.25)':'rgba(16,185,129,0.80)';}):'rgba(16,185,129,0.80)', borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
+        {label:'Bez zgody TCF', data:bez, backgroundColor:pvGran==='monthly'?points.map(function(r){return r.ym===nowYM?'rgba(239,68,68,0.20)':'rgba(239,68,68,0.65)';}):'rgba(239,68,68,0.65)', borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
         {label:'TCF %', data:tcfLine, type:'line', borderColor:'#f59e0b', backgroundColor:'transparent', borderWidth:2.5, pointRadius:0, yAxisID:'yTCF', order:1, tension:0.3, spanGaps:true}
       ]
     },
