@@ -57251,9 +57251,18 @@ function renderPvKPIs() {
 function renderPvSparklines(filtered) {
   pvSparkCharts.forEach(function(c){c.destroy();});
   pvSparkCharts = [];
-  var monthly = aggPvMonthly(filtered).slice(-12);
-  if (!monthly.length) return;
-  var labels = monthly.map(function(r){return r.ym;});
+  var curYM = new Date().toISOString().substring(0,7);
+  var daily = filtered.filter(function(r){return r.date.startsWith(curYM);})
+    .sort(function(a,b){return a.date<b.date?-1:1;});
+  // aggregate per date (multiple rows possible when multi-source)
+  var byDate = {};
+  daily.forEach(function(r){
+    if(!byDate[r.date]) byDate[r.date]={pv_zgoda:0,pv_total:0};
+    byDate[r.date].pv_zgoda+=r.pv_zgoda; byDate[r.date].pv_total+=r.pv_total;
+  });
+  var dates = Object.keys(byDate).sort();
+  if (!dates.length) return;
+  var labels = dates.map(function(d){return parseInt(d.substring(8,10),10)+'';});
   var isDk = document.documentElement.getAttribute('data-theme')==='dark';
   var gridCol = isDk?'rgba(255,255,255,.06)':'rgba(0,0,0,.12)';
   var tickCol = isDk?'#c8d2e1':'#334155';
@@ -57262,9 +57271,9 @@ function renderPvSparklines(filtered) {
   var muCol   = isDk?'#94a3b8':'#475569';
   var bdCol   = isDk?'#2d3450':'#cbd5e1';
   var series = [
-    {data: monthly.map(function(r){return +(r.pv_total/1e6).toFixed(2);}),  col:{line:'#3b82f6',fill:'rgba(59,130,246,.15)'},  isPct:false},
-    {data: monthly.map(function(r){return +(r.pv_zgoda/1e6).toFixed(2);}),  col:{line:'#10b981',fill:'rgba(16,185,129,.15)'},  isPct:false},
-    {data: monthly.map(function(r){return r.pv_total>0?+(r.pv_zgoda/r.pv_total*100).toFixed(3):null;}), col:{line:'#f59e0b',fill:'rgba(245,158,11,.15)'}, isPct:true}
+    {data: dates.map(function(d){return +(byDate[d].pv_total/1e6).toFixed(2);}),  col:{line:'#3b82f6',fill:'rgba(59,130,246,.15)'},  isPct:false},
+    {data: dates.map(function(d){return +(byDate[d].pv_zgoda/1e6).toFixed(2);}),  col:{line:'#10b981',fill:'rgba(16,185,129,.15)'},  isPct:false},
+    {data: dates.map(function(d){var t=byDate[d].pv_total; return t>0?+(byDate[d].pv_zgoda/t*100).toFixed(3):null;}), col:{line:'#f59e0b',fill:'rgba(245,158,11,.15)'}, isPct:true}
   ];
   series.forEach(function(s, i){
     var canvas = document.getElementById('pv-spark-'+i);
@@ -57279,15 +57288,14 @@ function renderPvSparklines(filtered) {
           backgroundColor:bgCol, titleColor:txCol, bodyColor:muCol,
           borderColor:bdCol, borderWidth:1, padding:6,
           callbacks:{
-            title:function(it){return it[0].label;},
+            title:function(it){return curYM+'-'+(it[0].label.length<2?'0':'')+it[0].label;},
             label:function(it){return it.parsed.y!=null?(isPct?it.parsed.y.toFixed(2)+'%':it.parsed.y.toFixed(2)+'M'):null;}
           }}},
         scales:{
-          x:{display:true, ticks:{font:{size:9}, color:tickCol, maxRotation:0, maxTicksLimit:6,
+          x:{display:true, ticks:{font:{size:9}, color:tickCol, maxRotation:0, maxTicksLimit:7,
             callback:function(val,idx){
-              var lbl=labels[idx]; if(!lbl) return '';
-              var mn=['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
-              return mn[parseInt(lbl.substring(5,7))-1];
+              var d=parseInt(labels[idx],10);
+              return (d===1||d%5===0)?d+'':'';
             }}, grid:{display:false}},
           y:{display:true, position:'right',
             ticks:{font:{size:11,weight:'600'}, color:tickCol, maxTicksLimit:3,
