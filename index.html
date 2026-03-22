@@ -57300,9 +57300,11 @@ function renderPV() {
 }
 
 function renderPvTable() {
-  var pvData = window.PV_DATA;
-  if (!pvData||!pvData.length) return;
-  var filtered = pvData.filter(function(r){return r.ver===pvVer;});
+  var active = getActiveSources();
+  if (!active.length) return;
+  // Połącz dane ze wszystkich aktywnych źródeł
+  var filtered = [];
+  active.forEach(function(src){ filtered = filtered.concat(getPvRows(src.key)); });
   var byYM={};
   filtered.forEach(function(r){
     var ym=r.date.substring(0,7);
