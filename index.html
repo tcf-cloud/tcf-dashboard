@@ -56454,6 +56454,7 @@ function renderDaily(ctx){
     vers.forEach(function(v){
       for(var i=0;i<yrs.length-1;i++){
         var y1=yrs[i], y2=yrs[i+1];
+        if(parseInt(y2)-parseInt(y1)!==1) continue;
         var m1=maps[s][v][y1], m2=maps[s][v][y2];
         var d1=Object.keys(m1).sort(), d2=Object.keys(m2).sort();
         if(!d1.length||!d2.length) continue;
