@@ -57036,7 +57036,37 @@ var pvChart = null;
 var pvVer = 'Desktop + mob';
 var pvGran = 'monthly';
 
-// Year filter â€” multi-select
+// Source filter — multi-select
+var pvSrcState = {wpm:true, wp:false, o2:false, total:false};
+var PV_SRC_CFG = [
+  {key:'wpm', label:'WPM', color:'#10b981'},
+  {key:'wp', label:'poczta.wp', color:'#a78bfa'},
+  {key:'o2', label:'poczta.o2', color:'#2dd4bf'},
+  {key:'total', label:'Total', color:'#f59e0b'}
+];
+
+function buildPvSourceFilters() {
+  document.getElementById('pv-source-filters').innerHTML = PV_SRC_CFG.map(function(c) {
+    var on = pvSrcState[c.key];
+    return '<button class=”vtab'+(on?' on':'')+'” onclick=”togglePvSrc(\''+c.key+'\')”'+(on?' style=”border-color:'+c.color+';color:'+c.color+';”':'')+'>'+c.label+'</button>';
+  }).join('');
+}
+
+function togglePvSrc(key) {
+  var isActive = pvSrcState[key];
+  var anyOtherActive = Object.keys(pvSrcState).some(function(k){return k!==key && pvSrcState[k];});
+  if (isActive && anyOtherActive) {
+    Object.keys(pvSrcState).forEach(function(k){pvSrcState[k]=false;});
+    pvSrcState[key] = true;
+  } else if (!isActive) { pvSrcState[key] = true; }
+  buildPvSourceFilters(); renderPvKPIs(); renderPV(); renderPvTable();
+}
+
+function getActiveSources() {
+  return PV_SRC_CFG.filter(function(c){return pvSrcState[c.key];});
+}
+
+// Year filter — multi-select
 var pvYearState = {'2024':true,'2025':true,'2026':true};
 
 function buildPvYearFilters() {
