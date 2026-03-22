@@ -289,6 +289,7 @@ tr:last-child td{border-bottom:none}
             <div class="vtabs" id="pvtrendtabs"></div>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
             <button class="vtab on" id="pvtrend-zgoda" onclick="setPvTrendMetric('zgoda')">Ze zgodą</button>
+            <button class="vtab" id="pvtrend-bez" onclick="setPvTrendMetric('bez')">Bez zgody</button>
             <button class="vtab" id="pvtrend-total" onclick="setPvTrendMetric('total')">Łącznie</button>
             <button class="vtab" id="pvtrend-both" onclick="setPvTrendMetric('both')">Oba</button>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
@@ -56962,7 +56963,7 @@ function buildPvTrendTabs() {
 function setPvTrendVer(v){ pvTrendVer=v; buildPvTrendTabs(); renderPvTrend(); }
 function setPvTrendMetric(m){
   pvTrendMetric=m;
-  ['zgoda','total','both'].forEach(function(x){ var el=document.getElementById('pvtrend-'+x); if(el) el.className='vtab'+(x===m?' on':''); });
+  ['zgoda','bez','total','both'].forEach(function(x){ var el=document.getElementById('pvtrend-'+x); if(el) el.className='vtab'+(x===m?' on':''); });
   renderPvTrend();
 }
 function setPvTrendMA(n){
@@ -56992,26 +56993,37 @@ function renderPvTrend() {
 
   var labels = filtered.map(function(r){return r.date;});
   var rawZgoda = filtered.map(function(r){return r.pv_zgoda/1e6;});
+  var rawBez   = filtered.map(function(r){return r.pv_bez/1e6;});
   var rawTotal = filtered.map(function(r){return r.pv_total/1e6;});
   var smZgoda = maSmooth(rawZgoda, pvTrendMA);
+  var smBez   = maSmooth(rawBez,   pvTrendMA);
   var smTotal = maSmooth(rawTotal, pvTrendMA);
+  var sfx = pvTrendMA>1?' (śr. '+pvTrendMA+'d)':'';
 
   var datasets = [];
   if(pvTrendMetric==='zgoda'||pvTrendMetric==='both'){
     datasets.push({
-      label:'PV ze zgodą TCF'+(pvTrendMA>1?' (śr. '+pvTrendMA+'d)':''),
+      label:'PV ze zgodą TCF'+sfx,
       data: smZgoda,
       borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.08)',
-      borderWidth:2, pointRadius:0, fill:true, tension:0.3, spanGaps:true
+      borderWidth:2, pointRadius:0, fill:pvTrendMetric==='zgoda', tension:0.3, spanGaps:true
     });
   }
-  if(pvTrendMetric==='total'||pvTrendMetric==='both'){
+  if(pvTrendMetric==='bez'||pvTrendMetric==='both'){
     datasets.push({
-      label:'PV łącznie'+(pvTrendMA>1?' (śr. '+pvTrendMA+'d)':''),
+      label:'PV bez zgody TCF'+sfx,
+      data: smBez,
+      borderColor:'#f87171', backgroundColor:'rgba(248,113,113,0.08)',
+      borderWidth:2, pointRadius:0, fill:pvTrendMetric==='bez', tension:0.3, spanGaps:true,
+      borderDash: pvTrendMetric==='both'?[4,3]:[]
+    });
+  }
+  if(pvTrendMetric==='total'){
+    datasets.push({
+      label:'PV łącznie'+sfx,
       data: smTotal,
       borderColor:'#94a3b8', backgroundColor:'rgba(148,163,184,0.05)',
-      borderWidth:1.5, pointRadius:0, fill:pvTrendMetric==='total', tension:0.3, spanGaps:true,
-      borderDash: pvTrendMetric==='both'?[4,3]:[]
+      borderWidth:1.5, pointRadius:0, fill:true, tension:0.3, spanGaps:true
     });
   }
 
