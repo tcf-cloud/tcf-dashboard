@@ -182,7 +182,7 @@ tr:last-child td{border-bottom:none}
       </div>
       <div class="hdr-right">
         <div class="meta">Dane do: <b id="upd">&#8212;</b> &bull; <span class="refresh-age" id="refreshAge"></span></div>
-        <button class="btn-copy" id="btnCopy" onclick="copySpLink()">Link Netlify</button>
+        <button class="btn-copy" id="btnCopy" onclick="copySpLink()">Link GitHub</button>
         <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Zmien motyw">&#9728;</button>
       </div>
     </div>
@@ -56917,13 +56917,13 @@ function renderDOW_REMOVED(){
   document.getElementById('dow-hm').innerHTML=html+'</tbody></table>';
 }
 
-// ---- Copy Netlify link ----
+// ---- Copy GitHub Pages link ----
 function copySpLink(){
-  var url='https://tcf-dashboard-wp.netlify.app';
+  var url='https://tcf-cloud.github.io/tcf-dashboard/';
   navigator.clipboard.writeText(url).then(function(){
     var btn=document.getElementById('btnCopy');
     btn.textContent='Skopiowano!'; btn.classList.add('ok');
-    setTimeout(function(){btn.textContent='Link Netlify';btn.classList.remove('ok');},2000);
+    setTimeout(function(){btn.textContent='Link GitHub';btn.classList.remove('ok');},2000);
   }).catch(function(){
     prompt('Skopiuj link:',url);
   });
