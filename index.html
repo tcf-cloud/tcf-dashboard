@@ -310,6 +310,8 @@ tr:last-child td{border-bottom:none}
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
             <div id="pv-source-filters" style="display:flex;gap:4px;align-items:center"></div>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+            <div id="pv-year-filters" style="display:flex;gap:3px;align-items:center"></div>
+            <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
             <div class="vtabs" id="pvtabs"></div>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
             <button class="vtab on" id="pvgran-monthly" onclick="setPvGran('monthly')">Mies.</button>
@@ -57034,6 +57036,25 @@ var pvChart = null;
 var pvVer = 'Desktop + mob';
 var pvGran = 'monthly';
 
+// Year filter
+var pvYear = 'all';
+
+function buildPvYearFilters() {
+  var years = ['all','2024','2025','2026'];
+  document.getElementById('pv-year-filters').innerHTML = years.map(function(y) {
+    var on = pvYear === y;
+    var lbl = y === 'all' ? 'Wszystkie' : y;
+    return '<button class="vtab'+(on?' on':'')+'" onclick="setPvYear(\''+y+'\')">'+lbl+'</button>';
+  }).join('');
+}
+
+function setPvYear(y) {
+  pvYear = y;
+  buildPvYearFilters();
+  renderPV();
+  renderPvTable();
+}
+
 // Source checkboxes: wpm / wp / o2 / total
 var pvSrcState = {wpm:true, wp:false, o2:false, total:false};
 var PV_SRC_CFG = [
@@ -57076,10 +57097,15 @@ function getActiveSources() {
   return PV_SRC_CFG.filter(function(s){return pvSrcState[s.key];});
 }
 
+function filterByYear(rows) {
+  if (pvYear === 'all') return rows;
+  return rows.filter(function(r){return r.date.startsWith(pvYear);});
+}
+
 function getPvRows(key) {
   var ver = pvVer;
   if (key === 'wpm') {
-    return (window.PV_DATA||[]).filter(function(r){return r.ver===ver;});
+    return filterByYear((window.PV_DATA||[]).filter(function(r){return r.ver===ver;}));
   }
   if (key === 'total') {
     var wpm = (window.PV_DATA||[]).filter(function(r){return r.ver===ver;});
@@ -57092,10 +57118,10 @@ function getPvRows(key) {
       });
     }
     addRows(wpm); addRows(poczty);
-    return Object.values(byDate).sort(function(a,b){return a.date<b.date?-1:1;});
+    return filterByYear(Object.values(byDate).sort(function(a,b){return a.date<b.date?-1:1;}));
   }
   var siteName = key==='wp'?'poczta.wp.pl':'poczta.o2.pl';
-  return (window.PV_POCZTY_DATA||[]).filter(function(r){return r.site===siteName && r.ver===ver;});
+  return filterByYear((window.PV_POCZTY_DATA||[]).filter(function(r){return r.site===siteName && r.ver===ver;}));
 }
 
 function buildPvTabs() {
@@ -57361,7 +57387,7 @@ function renderPvTable() {
     buildRankTabs(); renderRanking();
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); renderPvTrend();
-    buildPvSourceFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable();
+    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable();
   }catch(e){
     document.getElementById('loading').innerHTML=
       '<div class="err"><b>Blad:</b> '+e.message+'<br><small>'+e.stack+'</small></div>';
