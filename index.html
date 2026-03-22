@@ -57219,7 +57219,7 @@ function renderPV() {
       options:{
         responsive:true, maintainAspectRatio:false, animation:false,
         plugins:{
-          legend:{display:true, position:'top', labels:{color:textCol, boxWidth:12, font:{size:11}, padding:16}},
+          legend:{display:true, position:'top', onClick:function(){}, labels:{color:textCol, boxWidth:12, font:{size:11}, padding:16}},
           tooltip:{mode:'index', intersect:false, callbacks:{
             title:function(items){
               var ts=items[0].parsed&&items[0].parsed.x;
@@ -57279,7 +57279,7 @@ function renderPV() {
       options:{
         responsive:true, maintainAspectRatio:false, animation:false,
         plugins:{
-          legend:{display:true, position:'top', labels:{color:textCol, boxWidth:12, font:{size:11}, padding:16}},
+          legend:{display:true, position:'top', onClick:function(){}, labels:{color:textCol, boxWidth:12, font:{size:11}, padding:16}},
           tooltip:{mode:'index', intersect:false, callbacks:{
             title:function(items){
               var ts=items[0].parsed&&items[0].parsed.x;
