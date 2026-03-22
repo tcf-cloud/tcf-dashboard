@@ -57190,6 +57190,8 @@ function getTcfForPv(labels) {
   return labels.map(function(d){ return byDate[d]!==undefined?byDate[d]:null; });
 }
 
+var pvSparkCharts = [];
+
 function renderPvKPIs() {
   var pvData = window.PV_DATA;
   if (!pvData||!pvData.length) return;
@@ -57207,19 +57209,67 @@ function renderPvKPIs() {
   function fmt(n){return (n/1e6).toFixed(1)+'M';}
   function fmtD(n){return (n>=0?'+':'')+(n/1e6).toFixed(1)+'M';}
   function fmtPp(n){return (n>=0?'+':'')+n.toFixed(1)+'pp';}
-  function card(title,val,sub,pos){
+  function card(title,val,sub,pos,idx){
     var col=pos?'#10b981':'#f87171';
     return '<div style="background:var(--panel-bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px">'
       +'<div style="font-size:11px;color:var(--muted);margin-bottom:4px">'+title+'</div>'
       +'<div style="font-size:22px;font-weight:700">'+val+'</div>'
-      +(sub?'<div style="font-size:11px;color:'+col+';font-weight:600;margin-top:2px">'+sub+'</div>':'')+'</div>';
+      +(sub?'<div style="font-size:11px;color:'+col+';font-weight:600;margin-top:2px">'+sub+'</div>':'')
+      +'<canvas class="kpi-spark" id="pv-spark-'+idx+'"></canvas>'
+      +'</div>';
   }
   var html='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">';
-  html+=card('PV łącznie — bm', fmt(cur.pv_total), prev.pv_total>0?fmtD(cur.pv_total-pN.pv_total)+' vs '+prevYM:null, cur.pv_total>=pN.pv_total);
-  html+=card('PV ze zgodą TCF — bm', fmt(cur.pv_zgoda), prev.pv_zgoda>0?fmtD(cur.pv_zgoda-pN.pv_zgoda)+' vs '+prevYM:null, cur.pv_zgoda>=pN.pv_zgoda);
-  html+=card('% PV ze zgodą — bm', curPct.toFixed(1)+'%', prevPct>0?fmtPp(curPct-prevPct)+' vs '+prevYM:null, curPct>=prevPct);
+  html+=card('PV łącznie — bm', fmt(cur.pv_total), prev.pv_total>0?fmtD(cur.pv_total-pN.pv_total)+' vs '+prevYM:null, cur.pv_total>=pN.pv_total, 0);
+  html+=card('PV ze zgodą TCF — bm', fmt(cur.pv_zgoda), prev.pv_zgoda>0?fmtD(cur.pv_zgoda-pN.pv_zgoda)+' vs '+prevYM:null, cur.pv_zgoda>=pN.pv_zgoda, 1);
+  html+=card('% PV ze zgodą — bm', curPct.toFixed(1)+'%', prevPct>0?fmtPp(curPct-prevPct)+' vs '+prevYM:null, curPct>=prevPct, 2);
   html+='</div>';
   document.getElementById('pvKPIs').innerHTML=html;
+  renderPvSparklines(filtered);
+}
+
+function renderPvSparklines(filtered) {
+  pvSparkCharts.forEach(function(c){c.destroy();});
+  pvSparkCharts = [];
+  var monthly = aggPvMonthly(filtered).slice(-12);
+  if (!monthly.length) return;
+  var labels = monthly.map(function(r){return r.ym;});
+  var isDk = document.documentElement.getAttribute('data-theme')==='dark';
+  var gridCol = isDk?'rgba(255,255,255,.06)':'rgba(0,0,0,.12)';
+  var tickCol = isDk?'#c8d2e1':'#334155';
+  var bgCol   = isDk?'rgba(30,38,60,.95)':'rgba(255,255,255,.97)';
+  var txCol   = isDk?'#e2e8f0':'#1e293b';
+  var muCol   = isDk?'#94a3b8':'#475569';
+  var bdCol   = isDk?'#2d3450':'#cbd5e1';
+  var series = [
+    {data: monthly.map(function(r){return +(r.pv_total/1e6).toFixed(2);}),  col:{line:'#3b82f6',fill:'rgba(59,130,246,.15)'},  isPct:false},
+    {data: monthly.map(function(r){return +(r.pv_zgoda/1e6).toFixed(2);}),  col:{line:'#10b981',fill:'rgba(16,185,129,.15)'},  isPct:false},
+    {data: monthly.map(function(r){return r.pv_total>0?+(r.pv_zgoda/r.pv_total*100).toFixed(3):null;}), col:{line:'#f59e0b',fill:'rgba(245,158,11,.15)'}, isPct:true}
+  ];
+  series.forEach(function(s, i){
+    var canvas = document.getElementById('pv-spark-'+i);
+    if (!canvas) return;
+    var isPct = s.isPct;
+    pvSparkCharts.push(new Chart(canvas.getContext('2d'), {type:'line',
+      data:{labels:labels, datasets:[{data:s.data, borderColor:s.col.line, backgroundColor:s.col.fill,
+        borderWidth:1.5, pointRadius:0, pointHoverRadius:4, fill:true, tension:0.4, spanGaps:true}]},
+      options:{responsive:false, animation:false,
+        interaction:{mode:'index', intersect:false},
+        plugins:{legend:{display:false}, tooltip:{enabled:true,
+          backgroundColor:bgCol, titleColor:txCol, bodyColor:muCol,
+          borderColor:bdCol, borderWidth:1, padding:6,
+          callbacks:{
+            title:function(it){return it[0].label;},
+            label:function(it){return it.parsed.y!=null?(isPct?it.parsed.y.toFixed(2)+'%':it.parsed.y.toFixed(2)+'M'):null;}
+          }}},
+        scales:{x:{display:false}, y:{display:true, position:'right',
+          ticks:{font:{size:11,weight:'600'}, color:tickCol, maxTicksLimit:3,
+            callback:function(v){return isPct?v.toFixed(0)+'%':v.toFixed(0)+'M';}},
+          grid:{color:gridCol, drawBorder:false},
+          afterDataLimits:function(ax){var r=ax.max-ax.min||0.1; ax.min-=r*.2; ax.max+=r*.1;}
+        }}
+      }
+    }));
+  });
 }
 
 function renderPV() {
