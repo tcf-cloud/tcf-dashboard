@@ -57609,7 +57609,7 @@ function renderPvDecomp() {
     buildRankTabs(); renderRanking();
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); renderPvTrend();
-    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable();
+    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
   }catch(e){
     document.getElementById('loading').innerHTML=
       '<div class="err"><b>Blad:</b> '+e.message+'<br><small>'+e.stack+'</small></div>';
