@@ -57196,7 +57196,7 @@ function renderPV() {
     var labels = points.map(function(r){return r.date;});
     var zgoda  = points.map(function(r){return +(r.pv_zgoda/1e6).toFixed(3);});
     var bez    = points.map(function(r){return +(r.pv_bez/1e6).toFixed(3);});
-    var tcfLine= getTcfForPv(labels);
+    var tcfLine= points.map(function(r){return r.pv_total>0?r.pv_zgoda/r.pv_total:null;});
     var validTcf = tcfLine.filter(function(v){return v!==null;});
     var tcfMin = validTcf.length ? Math.max(0, Math.floor(Math.min.apply(null,validTcf)*20-1)/20) : 0;
     var col = src.color;
