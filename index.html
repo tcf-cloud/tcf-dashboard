@@ -57581,8 +57581,8 @@ function renderPvDecomp() {
       insightEl.innerHTML =
         '<div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.6">'
         +'<b style="font-size:12px">&#128161; Kluczowy wniosek</b> <span style="color:var(--muted);font-size:10px">(średnia: '+months+')</span><br>'
-        +'Wdrożenie POK generuje ok. <b style="color:#10b981">+'+(avgZ>0?'+':'')+avgZ.toFixed(0)+'M PV ze zgodą miesięcznie</b>, '
-        +'jednak spadek ogólnego ruchu na stronie niweluje ok. <b style="color:#f87171">'+pctOfZ+'% tego efektu</b> '
+        +'Wdrożenie POK generuje ok. <b style="color:#10b981">+'+avgZ.toFixed(0)+'M PV ze zgodą miesięcznie</b>, '
+        +'jednak spadek ogólnego ruchu w serwisach WPM niweluje ok. <b style="color:#f87171">'+pctOfZ+'% tego efektu</b> '
         +'(<b style="color:#f87171">'+(avgR>=0?'+':'')+avgR.toFixed(0)+'M</b>). '
         +'Wynik netto: <b style="color:#3b82f6">'+(avgN>=0?'+':'')+avgN.toFixed(0)+'M miesięcznie</b>.'
         +'</div>';
