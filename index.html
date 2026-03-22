@@ -57080,10 +57080,7 @@ function togglePvSrc(key) {
     Object.keys(pvSrcState).forEach(function(k){pvSrcState[k]=false;});
     pvSrcState[key] = true;
   } else if (!isActive) { pvSrcState[key] = true; }
-  buildPvSourceFilters();
-  try { renderPvKPIs(); } catch(e) { document.getElementById('pvNote').textContent='ERR KPIs: '+e.message; }
-  try { renderPV(); } catch(e) { document.getElementById('pvNote').textContent='ERR PV: '+e.message; }
-  try { renderPvTable(); } catch(e) { document.getElementById('pvNote').textContent='ERR Table: '+e.message; }
+  buildPvSourceFilters(); renderPvKPIs(); renderPV(); renderPvTable();
 }
 
 function getActiveSources() {
@@ -57102,8 +57099,7 @@ function togglePvYear(y) {
   } else if (!isActive) {
     pvYearState[y] = true;
   }
-  buildPvYearFilters();
-  try { renderPV(); } catch(e) { document.getElementById('pvNote').textContent='ERR Year PV: '+e.message; }
+  buildPvYearFilters(); renderPV();
 }
 
 function filterByYear(rows) {
