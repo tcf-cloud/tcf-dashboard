@@ -57193,9 +57193,22 @@ function getTcfForPv(labels) {
 var pvSparkCharts = [];
 
 function renderPvKPIs() {
-  var pvData = window.PV_DATA;
-  if (!pvData||!pvData.length) return;
-  var filtered = pvData.filter(function(r){ return r.ver===pvVer; });
+  if (!window.PV_DATA||!window.PV_DATA.length) return;
+  var activeSrcs = getActiveSources();
+  var filtered;
+  if (activeSrcs.length === 1) {
+    filtered = getPvRows(activeSrcs[0].key);
+  } else {
+    // multiple sources — merge by date
+    var byDate = {};
+    activeSrcs.forEach(function(src) {
+      getPvRows(src.key).forEach(function(r) {
+        if (!byDate[r.date]) byDate[r.date] = {date:r.date, ver:r.ver, pv_zgoda:0, pv_bez:0, pv_total:0};
+        byDate[r.date].pv_zgoda += r.pv_zgoda; byDate[r.date].pv_bez += r.pv_bez; byDate[r.date].pv_total += r.pv_total;
+      });
+    });
+    filtered = Object.values(byDate).sort(function(a,b){return a.date<b.date?-1:1;});
+  }
   var today = new Date();
   var curYM = today.toISOString().substring(0,7);
   var ly = new Date(today); ly.setFullYear(ly.getFullYear()-1);
