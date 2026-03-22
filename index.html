@@ -57055,10 +57055,17 @@ function buildPvSourceFilters() {
 }
 
 function togglePvSrc(key) {
-  pvSrcState[key] = !pvSrcState[key];
-  // Zapewnij że przynajmniej jedno jest zaznaczone
-  var any = Object.keys(pvSrcState).some(function(k){return pvSrcState[k];});
-  if (!any) pvSrcState[key] = true;
+  var isActive = pvSrcState[key];
+  var anyOtherActive = Object.keys(pvSrcState).some(function(k){return k!==key && pvSrcState[k];});
+  if (isActive && anyOtherActive) {
+    // Kliknięcie aktywnego gdy są inne aktywne → zostaw tylko ten
+    Object.keys(pvSrcState).forEach(function(k){pvSrcState[k]=false;});
+    pvSrcState[key] = true;
+  } else if (!isActive) {
+    // Kliknięcie nieaktywnego → dodaj do widoku
+    pvSrcState[key] = true;
+  }
+  // Kliknięcie jedynego aktywnego → nic nie rób (nie można odwrócić)
   buildPvSourceFilters();
   renderPvKPIs();
   renderPV();
