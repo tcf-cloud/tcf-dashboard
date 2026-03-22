@@ -57328,9 +57328,11 @@ function renderPV() {
 function renderPvTable() {
   var active = getActiveSources();
   if (!active.length) return;
-  // Połącz dane ze wszystkich aktywnych źródeł
+  // Tabela zawsze pokazuje wszystkie lata — ignoruje filtr roku
+  var savedYear = pvYear; pvYear = 'all';
   var filtered = [];
   active.forEach(function(src){ filtered = filtered.concat(getPvRows(src.key)); });
+  pvYear = savedYear;
   var byYM={};
   filtered.forEach(function(r){
     var ym=r.date.substring(0,7);
