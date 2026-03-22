@@ -57517,8 +57517,10 @@ var pvDecompChart = null;
 function renderPvDecomp() {
   try {
   var pvData = window.PV_DATA;
+  console.log('pvDecomp: pvData len', pvData&&pvData.length, 'pvVer', pvVer);
   if (!pvData || !pvData.length) return;
   var canvas = document.getElementById('pvDecompChart');
+  console.log('pvDecomp: canvas', canvas, 'parent h', canvas&&canvas.parentElement&&canvas.parentElement.offsetHeight);
   if (!canvas) return;
 
   // Agreguj per year-month dla wybranej wersji
@@ -57564,6 +57566,7 @@ function renderPvDecomp() {
       borderWidth:2, pointRadius:3, pointHoverRadius:5, tension:0.3, spanGaps:false, yAxisID:'y', order:1});
   });
 
+  console.log('pvDecomp: byYM keys', Object.keys(byYM).length, 'datasets[0] data sample', datasets[0]&&datasets[0].data.slice(0,3));
   if (pvDecompChart) { pvDecompChart.destroy(); pvDecompChart=null; }
   pvDecompChart = new Chart(canvas, {
     type:'bar',
