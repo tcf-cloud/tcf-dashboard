@@ -326,13 +326,14 @@ tr:last-child td{border-bottom:none}
         <div id="pvNote" style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center"></div>
         <div id="pvTable" style="margin-top:20px;overflow-x:auto"></div>
         <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
-          <div style="margin-bottom:10px">
+          <div style="margin-bottom:12px">
             <div style="font-size:13px;font-weight:700;color:var(--text)">Co wpłynęło na zmianę PV ze zgodą TCF? <span style="font-weight:400;color:var(--muted)">(miesięcznie, rok do roku)</span></div>
-            <div style="font-size:11px;color:var(--muted);margin-top:3px">Każdy miesiąc 2026 vs ten sam miesiąc 2025 — ile zmiany wynika ze wzrostu/spadku ruchu, a ile z lepszych zgód</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px">Każdy miesiąc 2026 vs ten sam miesiąc 2025 — ile zmiany wynika ze wzrostu/spadku ruchu, a ile z lepszych zgód (od grudnia 2025 głównie efekt wdrożenia POK)</div>
           </div>
+          <div id="pvDecompInsight" style="margin-bottom:14px"></div>
           <div style="position:relative;height:240px"><canvas id="pvDecompChart"></canvas></div>
-          <div style="font-size:10px;color:var(--muted);margin-top:6px;text-align:center">
-            Zmiana PV ze zgodą = zmiana ruchu (ΔPV łącznie × TCF% poprz. roku) + wzrost zgód (ΔTCF% × PV łącznie bież. roku)
+          <div style="font-size:10px;color:var(--muted);margin-top:8px">
+            <b>Jak czytać:</b> słupek zielony = ile PV zyskaliśmy dzięki wzrostowi zgód (POK) &nbsp;|&nbsp; słupek czerwony = ile straciliśmy przez mniejszy ruch na stronie &nbsp;|&nbsp; linia = efekt końcowy (suma obu)
           </div>
         </div>
       </div>
@@ -57565,6 +57566,28 @@ function renderPvDecomp() {
       borderColor:p.netto, backgroundColor:'transparent', borderDash:p.dash,
       borderWidth:2, pointRadius:3, pointHoverRadius:5, tension:0.3, spanGaps:false, yAxisID:'y', order:1});
   });
+
+  // Callout — średnia z pełnych miesięcy 2026
+  var insightEl = document.getElementById('pvDecompInsight');
+  if (insightEl && datasets.length >= 3) {
+    var dR = datasets[0].data, dZ = datasets[1].data, dN = datasets[2].data;
+    var validIdx = dN.map(function(v,i){return v!==null?i:-1;}).filter(function(i){return i>=0;});
+    if (validIdx.length > 0) {
+      var avgR = validIdx.reduce(function(s,i){return s+dR[i];},0)/validIdx.length;
+      var avgZ = validIdx.reduce(function(s,i){return s+dZ[i];},0)/validIdx.length;
+      var avgN = validIdx.reduce(function(s,i){return s+dN[i];},0)/validIdx.length;
+      var months = validIdx.map(function(i){return MSH[i];}).join(', ');
+      var pctOfZ = avgZ > 0 ? Math.round(Math.abs(avgR)/avgZ*100) : 0;
+      insightEl.innerHTML =
+        '<div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.6">'
+        +'<b style="font-size:12px">&#128161; Kluczowy wniosek</b> <span style="color:var(--muted);font-size:10px">(średnia: '+months+')</span><br>'
+        +'Wdrożenie POK generuje ok. <b style="color:#10b981">+'+(avgZ>0?'+':'')+avgZ.toFixed(0)+'M PV ze zgodą miesięcznie</b>, '
+        +'jednak spadek ogólnego ruchu na stronie niweluje ok. <b style="color:#f87171">'+pctOfZ+'% tego efektu</b> '
+        +'(<b style="color:#f87171">'+(avgR>=0?'+':'')+avgR.toFixed(0)+'M</b>). '
+        +'Wynik netto: <b style="color:#3b82f6">'+(avgN>=0?'+':'')+avgN.toFixed(0)+'M miesięcznie</b>.'
+        +'</div>';
+    }
+  }
 
   if (pvDecompChart) { pvDecompChart.destroy(); pvDecompChart=null; }
   pvDecompChart = new Chart(canvas, {
