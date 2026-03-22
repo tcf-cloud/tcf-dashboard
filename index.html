@@ -57048,7 +57048,7 @@ var PV_SRC_CFG = [
 function buildPvSourceFilters() {
   document.getElementById('pv-source-filters').innerHTML = PV_SRC_CFG.map(function(c) {
     var on = pvSrcState[c.key];
-    return '<button class=”vtab'+(on?' on':'')+'” onclick=”togglePvSrc(\''+c.key+'\')”'+(on?' style=”border-color:'+c.color+';color:'+c.color+';”':'')+'>'+c.label+'</button>';
+    return '<button class=”vtab'+(on?' on':'')+'” onclick=”togglePvSrc(\''+c.key+'\')”>'+c.label+'</button>';
   }).join('');
 }
 
