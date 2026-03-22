@@ -325,6 +325,13 @@ tr:last-child td{border-bottom:none}
         <div style="position:relative;height:300px"><canvas id="pvChart"></canvas></div>
         <div id="pvNote" style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center"></div>
         <div id="pvTable" style="margin-top:20px;overflow-x:auto"></div>
+        <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
+          <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:12px;letter-spacing:.04em">DEKOMPOZYCJA ZMIANY PV ZE ZGODĄ R/R (miesięcznie)</div>
+          <div style="position:relative;height:240px"><canvas id="pvDecompChart"></canvas></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:6px;text-align:center">
+            Zmiana PV ze zgodą = efekt ruchu (zmiana PV łącznie × TCF% poprz. roku) + efekt zgód (zmiana TCF% × PV łącznie bież. roku)
+          </div>
+        </div>
       </div>
     </div>
 
@@ -57117,7 +57124,7 @@ function togglePvSrc(key) {
     Object.keys(pvSrcState).forEach(function(k){pvSrcState[k]=false;});
     pvSrcState[key] = true;
   } else if (!isActive) { pvSrcState[key] = true; }
-  buildPvSourceFilters(); renderPvKPIs(); renderPV(); renderPvTable();
+  buildPvSourceFilters(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
 }
 
 function getActiveSources() {
@@ -57172,7 +57179,7 @@ function buildPvTabs() {
     return '<button class="vtab'+(v===pvVer?' on':'')+'" onclick="setPvVer(\''+v+'\')">'+v+'</button>';
   }).join('');
 }
-function setPvVer(v) { pvVer=v; buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); }
+function setPvVer(v) { pvVer=v; buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); }
 
 function setPvGran(g) {
   pvGran=g;
@@ -57503,6 +57510,83 @@ function renderPvTable() {
   html+='</tbody></table>';
   html+='<div style="font-size:10px;color:var(--muted);margin-top:6px;text-align:right">* Δ skalowane do liczby dni bieżącego miesiąca</div>';
   document.getElementById('pvTable').innerHTML=html;
+}
+
+// ---- PV Decomp ----
+var pvDecompChart = null;
+function renderPvDecomp() {
+  var pvData = window.PV_DATA;
+  if (!pvData || !pvData.length) return;
+  var ver = pvVer;
+  var byYM = {};
+  pvData.filter(function(r){return r.ver===ver;}).forEach(function(r){
+    var ym = r.date.substring(0,7);
+    if (!byYM[ym]) byYM[ym] = {zgoda:0, total:0};
+    byYM[ym].zgoda += r.pv_zgoda;
+    byYM[ym].total += r.pv_total;
+  });
+  var pairs = [['2024','2025'],['2025','2026']];
+  var pairColors = [
+    {ruch:'rgba(251,146,60,.75)', zgod:'rgba(52,211,153,.75)', netto:'#fb923c', nettoLine:[5,3]},
+    {ruch:'rgba(248,113,113,.9)', zgod:'rgba(16,185,129,.9)',  netto:'#3b82f6', nettoLine:[]}
+  ];
+  var curYM = new Date().toISOString().substring(0,7);
+  var labels = MSH; // ['Sty','Lut',...]
+  var datasets = [];
+  pairs.forEach(function(pair, pi) {
+    var y1=pair[0], y2=pair[1], col=pairColors[pi];
+    var efRuch=[], efZgod=[], netto=[];
+    for (var mi=0; mi<12; mi++) {
+      var m = (mi<9?'0':'')+(mi+1);
+      var d1=byYM[y1+'-'+m], d2=byYM[y2+'-'+m];
+      if (!d1||!d2||!d1.total||!d2.total) { efRuch.push(null); efZgod.push(null); netto.push(null); continue; }
+      if (y2+'-'+m === curYM) { efRuch.push(null); efZgod.push(null); netto.push(null); continue; } // pomiń niepełny mies.
+      var t1=d1.zgoda/d1.total, t2=d2.zgoda/d2.total;
+      var er=(d2.total-d1.total)*t1/1e6;
+      var ez=(t2-t1)*d2.total/1e6;
+      efRuch.push(+(er.toFixed(1)));
+      efZgod.push(+(ez.toFixed(1)));
+      netto.push(+(((d2.zgoda-d1.zgoda)/1e6).toFixed(1)));
+    }
+    var suffix = y1+'\u2192'+y2;
+    datasets.push({type:'bar', label:'Efekt ruchu '+suffix, data:efRuch, backgroundColor:col.ruch, stack:'s'+pi, order:2});
+    datasets.push({type:'bar', label:'Efekt zgód '+suffix,  data:efZgod, backgroundColor:col.zgod, stack:'s'+pi, order:2});
+    datasets.push({type:'line', label:'Netto '+suffix, data:netto,
+      borderColor:col.netto, backgroundColor:'transparent',
+      borderWidth:2, pointRadius:3, pointHoverRadius:5, tension:0.3, spanGaps:false,
+      borderDash:col.nettoLine, order:1});
+  });
+  var C = chartColors();
+  var isDk = document.documentElement.getAttribute('data-theme')==='dark';
+  var canvas = document.getElementById('pvDecompChart');
+  if (!canvas) return;
+  if (pvDecompChart) { pvDecompChart.destroy(); pvDecompChart=null; }
+  pvDecompChart = new Chart(canvas.getContext('2d'), {
+    type:'bar',
+    data:{labels:labels, datasets:datasets},
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      interaction:{mode:'index', intersect:false},
+      plugins:{
+        legend:{position:'top', labels:{color:C.legendColor, boxWidth:10, font:{size:10}, padding:10}},
+        tooltip:{
+          callbacks:{
+            label:function(c){
+              if(c.parsed.y==null) return null;
+              var v=c.parsed.y;
+              return ' '+c.dataset.label+': '+(v>=0?'+':'')+v.toFixed(1)+'M';
+            }
+          }
+        }
+      },
+      scales:{
+        x:{grid:{color:C.grid}, ticks:{font:{size:11},color:C.tick}},
+        y:{grid:{color:function(ctx){return ctx.tick.value===0?'rgba(255,255,255,0.4)':C.grid;},
+                 lineWidth:function(ctx){return ctx.tick.value===0?2:1;}},
+           ticks:{font:{size:11},color:C.tick,callback:function(v){return (v>=0?'+':'')+v.toFixed(0)+'M';}}}
+      }
+    }
+  });
 }
 
 // ---- Init ----
