@@ -56194,7 +56194,7 @@ var bc1  = null;
 var bc2  = null;
 var S = {
   sites: {'WPM (bez poczty wp i o2)': true},
-  vers:  {'Desktop + mob': true},
+  ver:   'Desktop + mob',
   years: {'2024':true,'2025':true,'2026':true},
   mode:  'daily',
   tver:  'Desktop',
@@ -56237,13 +56237,13 @@ function chipStyle(v){
 }
 
 function activeSites(){ return SITES.filter(function(s){return S.sites[s];}); }
+function activeVers() { return [S.ver]; }
 
 function siteLabel(s){
   if(s==='WPM (bez poczty wp i o2)') return 'WPM';
   if(s==='www.wp.pl') return 'SG wp.pl';
   return s;
 }
-function activeVers() { return VERS.filter(function(v){return S.vers[v];}); }
 function activeYears(){ return Object.keys(S.years).filter(function(y){return S.years[y];}).sort(); }
 
 // ---- Theme ----
@@ -56264,21 +56264,39 @@ function buildUI(){
 }
 
 function buildSitePills(){
-  document.getElementById('cs').innerHTML = SITES.map(function(s){
-    var on = S.sites[s];
-    return '<button class="pill site'+(on?' on':'')+'" onclick="toggleSite(\''+s+'\')" title="'+s+'">'+siteLabel(s)+'</button>';
-  }).join('');
+  var el = document.getElementById('cs');
+  el.innerHTML = '';
+  SITES.forEach(function(s){
+    var btn = document.createElement('button');
+    btn.className = 'pill site' + (S.sites[s] ? ' on' : '');
+    btn.title = s;
+    btn.textContent = siteLabel(s);
+    btn.addEventListener('click', (function(site){ return function(){ toggleSite(site); }; })(s));
+    el.appendChild(btn);
+  });
 }
 function buildVerPills(){
-  document.getElementById('cv').innerHTML = VERS.map(function(v){
-    return '<button class="pill ver'+(S.vers[v]?' on':'')+'" onclick="toggleVer(\''+v+'\')">'+v+'</button>';
-  }).join('');
+  var el = document.getElementById('cv');
+  el.innerHTML = '';
+  VERS.forEach(function(v){
+    var btn = document.createElement('button');
+    btn.className = 'pill ver' + (v === S.ver ? ' on' : '');
+    btn.textContent = v;
+    btn.addEventListener('click', (function(ver){ return function(){ setVer(ver); }; })(v));
+    el.appendChild(btn);
+  });
 }
 function buildYearPills(){
-  var yrs=availYears();
-  document.getElementById('cy').innerHTML = yrs.map(function(y){
-    return '<button class="pill y'+y+(S.years[y]?' on':'')+'" onclick="toggleYear(\''+y+'\')">'+y+'</button>';
-  }).join('');
+  var yrs = availYears();
+  var el = document.getElementById('cy');
+  el.innerHTML = '';
+  yrs.forEach(function(y){
+    var btn = document.createElement('button');
+    btn.className = 'pill y' + y + (S.years[y] ? ' on' : '');
+    btn.textContent = y;
+    btn.addEventListener('click', (function(year){ return function(){ toggleYear(year); }; })(y));
+    el.appendChild(btn);
+  });
 }
 function buildTableTabs(){
   document.getElementById('vtabs').innerHTML = VERS.map(function(v){
@@ -56287,23 +56305,22 @@ function buildTableTabs(){
 }
 
 function toggleSite(s){
-  var active=activeSites();
-  // Jesli jedyny aktywny - nie usuwaj
-  if(S.sites[s] && active.length<=1) return;
-  S.sites[s]=!S.sites[s];
+  var isActive = S.sites[s];
+  var anyOtherActive = SITES.some(function(k){ return k !== s && S.sites[k]; });
+  if (isActive && anyOtherActive) {
+    SITES.forEach(function(k){ S.sites[k] = false; });
+    S.sites[s] = true;
+  } else if (!isActive) { S.sites[s] = true; }
   buildSitePills(); renderChart();
 }
-function toggleVer(v){
-  var active=activeVers();
-  if(S.vers[v] && active.length<=1) return;
-  S.vers[v]=!S.vers[v];
-  buildVerPills(); renderChart();
-}
+function setVer(v){ S.ver = v; buildVerPills(); renderChart(); }
 function toggleYear(y){
-  var active=activeYears();
-  // Klikniecie aktywnego roku - nie usuwaj jesli to ostatni
-  if(S.years[y] && active.length<=1) return;
-  S.years[y]=!S.years[y];
+  var isActive = S.years[y];
+  var anyOtherActive = Object.keys(S.years).some(function(k){ return k !== y && S.years[k]; });
+  if (isActive && anyOtherActive) {
+    Object.keys(S.years).forEach(function(k){ S.years[k] = false; });
+    S.years[y] = true;
+  } else if (!isActive) { S.years[y] = true; }
   buildYearPills(); renderChart();
 }
 function setMode(m){
