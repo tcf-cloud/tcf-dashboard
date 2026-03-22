@@ -57226,6 +57226,7 @@ function renderPV() {
     if (!filtered.length){ document.getElementById('pvNote').textContent='Brak danych PV'; return; }
     var points = pvGran==='monthly' ? aggPvMonthly(filtered) : filtered.map(function(r){return Object.assign({},r,{ym:r.date.substring(0,7)});});
     var labels = points.map(function(r){return r.date;});
+    var xMin = labels.length ? labels[0].substring(0,7)+'-01' : undefined;
     var zgoda  = points.map(function(r){return +(r.pv_zgoda/1e6).toFixed(3);});
     var bez    = points.map(function(r){return +(r.pv_bez/1e6).toFixed(3);});
     var tcfLine= points.map(function(r){return r.pv_total>0?r.pv_zgoda/r.pv_total:null;});
@@ -57268,7 +57269,7 @@ function renderPV() {
           }}
         },
         scales:{
-          x:{type:'time', time:{unit:pvGran==='monthly'?'month':'week', displayFormats:{month:'MMM yyyy',week:'d MMM'}}, stacked:true, grid:{color:gridCol}, ticks:{color:mutedCol, font:{size:10}, maxRotation:0, maxTicksLimit:pvGran==='monthly'?28:20}},
+          x:{type:'time', min:xMin, time:{unit:pvGran==='monthly'?'month':'week', displayFormats:{month:'MMM yyyy',week:'d MMM'}}, stacked:true, grid:{color:gridCol}, ticks:{color:mutedCol, font:{size:10}, maxRotation:0, maxTicksLimit:pvGran==='monthly'?28:20}},
           yPV:{type:'linear', position:'left', stacked:true, grid:{color:gridCol}, ticks:{color:mutedCol, font:{size:10}, callback:function(v){return v+'M';}}, title:{display:true, text:'PV (mln)', color:mutedCol, font:{size:10}}},
           yTCF:{type:'linear', position:'right', min:tcfMin, max:1.0, grid:{drawOnChartArea:false}, ticks:{color:'#f59e0b', font:{size:10}, callback:function(v){return (v*100).toFixed(0)+'%';}}, title:{display:true, text:'TCF %', color:'#f59e0b', font:{size:10}}}
         }
