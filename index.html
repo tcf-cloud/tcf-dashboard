@@ -56870,7 +56870,7 @@ function renderSparklines(){
           callbacks:{title:function(it){return it[0].label;},
             label:function(it){return it.parsed.y!=null?(it.parsed.y*100).toFixed(2)+'%':null;}}}},
         scales:{
-          x:{display:true, ticks:{font:{size:9}, color:tickCol, maxRotation:0,
+          x:{display:true, ticks:{font:{size:9}, color:tickCol, maxRotation:0, autoSkip:false,
             callback:function(val,idx){
               var lbl=dates[idx]; if(!lbl) return '';
               var mn=['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
@@ -57293,7 +57293,7 @@ function renderPvSparklines(filtered) {
             label:function(it){return it.parsed.y!=null?(isPct?it.parsed.y.toFixed(2)+'%':it.parsed.y.toFixed(2)+'M'):null;}
           }}},
         scales:{
-          x:{display:true, ticks:{font:{size:9}, color:tickCol, maxRotation:0,
+          x:{display:true, ticks:{font:{size:9}, color:tickCol, maxRotation:0, autoSkip:false,
             callback:function(val,idx){
               var d=parseInt(labels[idx],10);
               return (d===1||d===5||d===10||d===15||d===20||d===25||d===30||d===31)?d+'':'';
