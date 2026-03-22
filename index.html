@@ -57476,7 +57476,7 @@ function renderPvTable() {
     }
     var diff=base1>0?(d2.pv_zgoda-base1)/base1*100:0;
     var col=diff>=0?'#10b981':'#f87171';
-    var note=scaled?'<span title="skalowane do '+d2.days+' dni ('+d1.days+' dni w poprz. roku)" style="color:var(--muted);font-size:10px;margin-left:2px">*</span>':'';
+    var note=scaled?'<sup title="skalowane do '+d2.days+' dni ('+d1.days+' dni w poprz. roku)" style="color:#f87171;font-size:9px;margin-left:1px">*</sup>':'';
     return '<td style="text-align:right;padding:5px 12px;color:'+col+';font-weight:600">'+(diff>=0?'+':'')+diff.toFixed(1)+'%'+note+'</td>';
   }
   var html='<table style="width:100%;border-collapse:collapse;font-size:12px">'
