@@ -57517,10 +57517,8 @@ var pvDecompChart = null;
 function renderPvDecomp() {
   try {
   var pvData = window.PV_DATA;
-  console.log('pvDecomp: pvData len', pvData&&pvData.length, 'pvVer', pvVer);
   if (!pvData || !pvData.length) return;
   var canvas = document.getElementById('pvDecompChart');
-  console.log('pvDecomp: canvas', canvas, 'parent h', canvas&&canvas.parentElement&&canvas.parentElement.offsetHeight);
   if (!canvas) return;
 
   // Agreguj per year-month dla wybranej wersji
@@ -57536,7 +57534,6 @@ function renderPvDecomp() {
 
   // Dwie pary: 2024→2025 (przyciemnione) i 2025→2026 (jasne)
   var pCfg = [
-    {y1:'2024',y2:'2025', ruch:'rgba(251,146,60,.5)', zgod:'rgba(52,211,153,.5)', netto:'rgba(251,146,60,.9)', dash:[4,3]},
     {y1:'2025',y2:'2026', ruch:'rgba(248,113,113,.85)', zgod:'rgba(16,185,129,.85)', netto:'#3b82f6', dash:[]}
   ];
 
@@ -57566,7 +57563,6 @@ function renderPvDecomp() {
       borderWidth:2, pointRadius:3, pointHoverRadius:5, tension:0.3, spanGaps:false, yAxisID:'y', order:1});
   });
 
-  console.log('pvDecomp: byYM keys', Object.keys(byYM).length, 'datasets[0] data sample', datasets[0]&&datasets[0].data.slice(0,3));
   if (pvDecompChart) { pvDecompChart.destroy(); pvDecompChart=null; }
   pvDecompChart = new Chart(canvas, {
     type:'bar',
