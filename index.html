@@ -57046,9 +57046,20 @@ var PV_SRC_CFG = [
 ];
 
 function buildPvSourceFilters() {
+  var accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#60a5fa';
   document.getElementById('pv-source-filters').innerHTML = PV_SRC_CFG.map(function(c) {
     var on = pvSrcState[c.key];
-    return '<button class=”vtab'+(on?' on':'')+'” onclick=”togglePvSrc(\''+c.key+'\')”>'+c.label+'</button>';
+    var style = on ? ' style=”background:'+accent+';color:#fff;font-weight:600;border-color:'+accent+';”' : '';
+    return '<button class=”vtab”'+style+' onclick=”togglePvSrc(\''+c.key+'\')”>'+c.label+'</button>';
+  }).join('');
+}
+
+function buildPvYearFilters() {
+  var accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#60a5fa';
+  document.getElementById('pv-year-filters').innerHTML = ['2024','2025','2026'].map(function(y) {
+    var on = pvYearState[y];
+    var style = on ? ' style=”background:'+accent+';color:#fff;font-weight:600;border-color:'+accent+';”' : '';
+    return '<button class=”vtab”'+style+' onclick=”togglePvYear(\''+y+'\')”>'+y+'</button>';
   }).join('');
 }
 
@@ -57068,13 +57079,6 @@ function getActiveSources() {
 
 // Year filter — multi-select
 var pvYearState = {'2024':true,'2025':true,'2026':true};
-
-function buildPvYearFilters() {
-  document.getElementById('pv-year-filters').innerHTML = ['2024','2025','2026'].map(function(y) {
-    var on = pvYearState[y];
-    return '<button class="vtab'+(on?' on':'')+'" onclick="togglePvYear(\''+y+'\')">'+y+'</button>';
-  }).join('');
-}
 
 function togglePvYear(y) {
   var isActive = pvYearState[y];
