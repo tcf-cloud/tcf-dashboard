@@ -352,6 +352,12 @@ tr:last-child td{border-bottom:none}
           <b>Jak czytać:</b> słupki = średni przychód programmatic WPM (PLN/dzień, lewa oś) &nbsp;|&nbsp; linia = średni TCF% Desktop+mob (prawa oś) &nbsp;|&nbsp; pionowa linia = wdrożenie POK &nbsp;|&nbsp; słupki po POK: niebieski = wyższa TCF%
         </div>
         <div id="tcfRevenueMethodNote" style="font-size:11px;color:var(--muted);margin-top:14px;padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border-left:3px solid rgba(99,179,237,0.5)"></div>
+        <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Scatter: przychód vs TCF% <span style="font-weight:400;color:var(--muted);font-size:11px">— każdy punkt = 1 miesiąc</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Czy wyższa zgoda TCF przekłada się na wyższy przychód? Szary = 2024, żółty = 2025 (przed POK), niebieski = po POK (XII 2025+)</div>
+          <div style="position:relative;height:280px"><canvas id="tcfScatterChart"></canvas></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:8px"><b>Jak czytać:</b> gdyby zgoda TCF wprost napędzała przychód, punkty układałyby się po skosie w górę-prawo. Rzeczywistość jest bardziej złożona.</div>
+        </div>
       </div>
     </div>
 
@@ -57909,6 +57915,107 @@ function renderTcfRevenue() {
   } catch(e) { console.error('renderTcfRevenue error:', e); }
 }
 
+var tcfScatterChart = null;
+function renderTcfScatter() {
+  try {
+    var C = chartColors(); C.muted = isDark() ? '#8892a4' : '#94a3b8';
+    var canvas = document.getElementById('tcfScatterChart');
+    if (!canvas) return;
+    var d = REV_DATA;
+    var monthNames = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paz','lis','gru'];
+
+    // Podziel punkty na grupy: 2024, 2025 przed POK, po POK
+    var pts2024 = [], pts2025 = [], ptsPok = [];
+    d.labels.forEach(function(l, i) {
+      var parts = l.split('-');
+      var yr = parseInt(parts[0]);
+      var mo = parseInt(parts[1]) - 1;
+      var pt = {
+        x: d.tcf[i],
+        y: Math.round(d.rev[i] / 1000),
+        label: monthNames[mo] + "'" + String(yr).slice(2)
+      };
+      if (yr === 2024) pts2024.push(pt);
+      else if (i < d.pokIdx) pts2025.push(pt);
+      else ptsPok.push(pt);
+    });
+
+    if (tcfScatterChart) { tcfScatterChart.destroy(); tcfScatterChart = null; }
+    tcfScatterChart = new Chart(canvas, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: '2024',
+            data: pts2024,
+            backgroundColor: 'rgba(150,150,170,0.6)',
+            borderColor: 'rgba(150,150,170,0.9)',
+            pointRadius: 6, pointHoverRadius: 8
+          },
+          {
+            label: '2025 (przed POK)',
+            data: pts2025,
+            backgroundColor: 'rgba(251,191,36,0.7)',
+            borderColor: 'rgba(251,191,36,1)',
+            pointRadius: 6, pointHoverRadius: 8
+          },
+          {
+            label: 'Po POK (XII 2025+)',
+            data: ptsPok,
+            backgroundColor: 'rgba(99,179,237,0.8)',
+            borderColor: 'rgba(99,179,237,1)',
+            pointRadius: 7, pointHoverRadius: 9
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: false,
+        plugins: {
+          legend: { position: 'top', labels: { color: C.legendColor, boxWidth: 10, font: { size: 10 }, padding: 10 } },
+          tooltip: {
+            callbacks: {
+              label: function(c) {
+                var pt = c.raw;
+                return ' ' + pt.label + ': ' + pt.y + 'k PLN/dzień  |  TCF ' + pt.x.toFixed(1) + '%';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'TCF% Desktop+mob', color: C.muted, font: { size: 10 } },
+            min: 84, max: 100,
+            grid: { color: C.grid },
+            ticks: { font: { size: 11 }, color: C.tick, callback: function(v) { return v + '%'; } }
+          },
+          y: {
+            title: { display: true, text: 'Przychód PLN/dzień (tys.)', color: C.muted, font: { size: 10 } },
+            grid: { color: C.grid },
+            ticks: { font: { size: 11 }, color: C.tick, callback: function(v) { return v + 'k'; } }
+          }
+        }
+      },
+      plugins: [{
+        id: 'scatterLabels',
+        afterDatasetsDraw: function(chart) {
+          var ctx = chart.ctx;
+          ctx.save();
+          ctx.font = '9px sans-serif';
+          chart.data.datasets.forEach(function(ds, di) {
+            var meta = chart.getDatasetMeta(di);
+            meta.data.forEach(function(el, i) {
+              var pt = ds.data[i];
+              ctx.fillStyle = ds.borderColor;
+              ctx.fillText(pt.label, el.x + 5, el.y - 4);
+            });
+          });
+          ctx.restore();
+        }
+      }]
+    });
+  } catch(e) { console.error('renderTcfScatter error:', e); }
+}
+
 // ---- Init ----
 (function(){
   try{
@@ -57925,7 +58032,7 @@ function renderTcfRevenue() {
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); renderPvTrend();
     buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
-    renderTcfRevenue();
+    renderTcfRevenue(); renderTcfScatter();
   }catch(e){
     document.getElementById('loading').innerHTML=
       '<div class="err"><b>Blad:</b> '+e.message+'<br><small>'+e.stack+'</small></div>';
