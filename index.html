@@ -56787,9 +56787,9 @@ function hmColor(v, minV, maxV){
   var range=maxV-minV||0.01;
   var t=Math.max(0,Math.min(1,(v-minV)/range));
   var h=Math.round(t*120); // 0=red, 120=green
-  var bgL=isDark()?32:45, fgL=isDark()?88:10;
-  return {bg:'hsl('+h+',90%,'+bgL+'%)',
-          fg:'hsl('+h+',50%,'+fgL+'%)'};
+  var bgS=isDark()?40:90, bgL=isDark()?22:45, fgS=isDark()?65:50, fgL=isDark()?72:10;
+  return {bg:'hsl('+h+','+bgS+'%,'+bgL+'%)',
+          fg:'hsl('+h+','+fgS+'%,'+fgL+'%)'};
 }
 
 function renderHeatmap(){
