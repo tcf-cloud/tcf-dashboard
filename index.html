@@ -57700,7 +57700,36 @@ function renderPvYoyBar() {
         y:{grid:{color:C.grid}, ticks:{font:{size:11},color:C.tick,callback:function(v){return v+'M';}},
            title:{display:true,text:'PV (mln)',color:C.tick,font:{size:10}}}
       }
-    }
+    },
+    plugins:[{
+      id:'pvYoyLabels',
+      afterDatasetsDraw:function(chart){
+        var ctx=chart.ctx;
+        var nowLabel='Rok '+nowYear+(hasEst?' *':'');
+        var prevLabel='Rok '+(parseInt(nowYear)-1);
+        var dsIdx=-1, prevIdx=-1;
+        chart.data.datasets.forEach(function(d,i){
+          if(d.label===nowLabel) dsIdx=i;
+          if(d.label===prevLabel) prevIdx=i;
+        });
+        if(dsIdx<0||prevIdx<0) return;
+        var meta=chart.getDatasetMeta(dsIdx);
+        var curr=chart.data.datasets[dsIdx].data;
+        var prev=chart.data.datasets[prevIdx].data;
+        ctx.save();
+        ctx.font='bold 10px sans-serif';
+        ctx.textAlign='center';
+        ctx.textBaseline='bottom';
+        meta.data.forEach(function(bar,i){
+          if(curr[i]==null||prev[i]==null||prev[i]===0) return;
+          var pct=(curr[i]/prev[i]-1)*100;
+          var lbl=(pct>=0?'+':'')+pct.toFixed(1)+'%';
+          ctx.fillStyle=pct>=0?'#10b981':'#f87171';
+          ctx.fillText(lbl, bar.x, bar.y-4);
+        });
+        ctx.restore();
+      }
+    }]
   });
 
   var noteEl = document.getElementById('pvYoyBarNote');
