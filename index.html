@@ -336,6 +336,13 @@ tr:last-child td{border-bottom:none}
             <b>Jak czytać:</b> słupek zielony = ile PV zyskaliśmy dzięki wzrostowi zgód (POK) &nbsp;|&nbsp; słupek czerwony = ile straciliśmy przez mniejszy ruch na serwisach WPM &nbsp;|&nbsp; linia = efekt końcowy (suma obu)
           </div>
         </div>
+        <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
+          <div style="margin-bottom:12px">
+            <div style="font-size:13px;font-weight:700;color:var(--text)">Łączna liczba PV r/r <span style="font-weight:400;color:var(--muted)">(miesięcznie, WPM bez poczty)</span></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px">Porównanie wolumenu ruchu w ujęciu miesiąc do miesiąca dla każdego roku — widać sezonowość i trend r/r.</div>
+          </div>
+          <div style="position:relative;height:260px"><canvas id="pvYoyBarChart"></canvas></div>
+        </div>
       </div>
     </div>
 
@@ -57279,7 +57286,7 @@ function buildPvTabs() {
     return '<button class="vtab'+(v===pvVer?' on':'')+'" onclick="setPvVer(\''+v+'\')">'+v+'</button>';
   }).join('');
 }
-function setPvVer(v) { pvVer=v; buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); }
+function setPvVer(v) { pvVer=v; buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar(); }
 
 function setPvGran(g) {
   pvGran=g;
@@ -57610,6 +57617,65 @@ function renderPvTable() {
   html+='</tbody></table>';
   html+='<div style="font-size:10px;color:var(--muted);margin-top:6px;text-align:right">* Δ skalowane do liczby dni bieżącego miesiąca</div>';
   document.getElementById('pvTable').innerHTML=html;
+}
+
+// ---- PV YoY Bar ----
+var pvYoyBarChart = null;
+function renderPvYoyBar() {
+  var C = chartColors();
+  var canvas = document.getElementById('pvYoyBarChart');
+  if (!canvas) return;
+  var nowYM = new Date().toISOString().substring(0,7);
+
+  // Pobierz wszystkie dane WPM bez filtra roku
+  var allRows = (window.PV_DATA||[]).filter(function(r){return r.ver===pvVer;});
+
+  // Agreguj miesięcznie (suma dzienna → suma miesięczna)
+  var byYM = {};
+  allRows.forEach(function(r) {
+    var ym = r.date.substring(0,7);
+    if (!byYM[ym]) byYM[ym] = 0;
+    byYM[ym] += r.pv_total;
+  });
+
+  var years = ['2024','2025','2026'];
+  var datasets = years.map(function(y) {
+    var col = YCOL[y]||{line:'#888',fill:'rgba(136,136,136,.5)'};
+    var baseBg = col.fill.replace(/[\d.]+\)$/,'0.75)');
+    var dimBg  = col.fill.replace(/[\d.]+\)$/,'0.25)');
+    var data = [], bgColors = [];
+    for (var m = 1; m <= 12; m++) {
+      var ym = y+'-'+(m<10?'0':'')+m;
+      var v = byYM[ym]!=null ? +(byYM[ym]/1e6).toFixed(2) : null;
+      data.push(v);
+      bgColors.push(ym===nowYM ? dimBg : baseBg);
+    }
+    if (!data.some(function(x){return x!=null;})) return null;
+    return { label:'Rok '+y, data:data, backgroundColor:bgColors,
+             borderColor:col.line, borderWidth:1.5, borderRadius:3 };
+  }).filter(Boolean);
+
+  if (pvYoyBarChart) { pvYoyBarChart.destroy(); pvYoyBarChart=null; }
+  pvYoyBarChart = new Chart(canvas, {
+    type:'bar',
+    data:{labels:MSH, datasets:datasets},
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{position:'top', onClick:function(){}, labels:{boxWidth:10,padding:14,font:{size:11},color:C.legendColor}},
+        tooltip:{
+          filter:function(item){return item.parsed.y!==null;},
+          callbacks:{label:function(c){return ' '+c.dataset.label+': '+(c.parsed.y!=null?c.parsed.y.toFixed(1)+' mln PV':'—');}}
+        }
+      },
+      scales:{
+        x:{grid:{color:C.grid}, ticks:{font:{size:11},color:C.tick}},
+        y:{grid:{color:C.grid}, ticks:{font:{size:11},color:C.tick,callback:function(v){return v+'M';}},
+           title:{display:true,text:'PV (mln)',color:C.tick,font:{size:10}}}
+      }
+    }
+  });
 }
 
 // ---- PV Decomp ----
@@ -58144,7 +58210,7 @@ function renderTcfScatter() {
     buildRankTabs(); renderRanking();
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); renderPvTrend();
-    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
+    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar();
     renderTcfRevenue(); renderTcfYoy(); renderTcfScatter();
   }catch(e){
     document.getElementById('loading').innerHTML=
