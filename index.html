@@ -342,6 +342,7 @@ tr:last-child td{border-bottom:none}
             <div style="font-size:11px;color:var(--muted);margin-top:3px">Porównanie wolumenu ruchu w ujęciu miesiąc do miesiąca dla każdego roku — widać sezonowość i trend r/r.</div>
           </div>
           <div style="position:relative;height:260px"><canvas id="pvYoyBarChart"></canvas></div>
+          <div id="pvYoyBarNote" style="font-size:10px;color:var(--muted);margin-top:6px"></div>
         </div>
       </div>
     </div>
@@ -57625,34 +57626,53 @@ function renderPvYoyBar() {
   var C = chartColors();
   var canvas = document.getElementById('pvYoyBarChart');
   if (!canvas) return;
-  var nowYM = new Date().toISOString().substring(0,7);
+  var now = new Date();
+  var nowYM = now.toISOString().substring(0,7);
+  var nowYear = nowYM.substring(0,4);
+  var nowMonth = parseInt(nowYM.substring(5,7));
 
-  // Pobierz wszystkie dane WPM bez filtra roku
+  function daysInMonth(y,m){ return new Date(parseInt(y),m,0).getDate(); }
+  function hatch(color){
+    var c=document.createElement('canvas'); c.width=8; c.height=8;
+    var cx=c.getContext('2d'); cx.strokeStyle=color; cx.lineWidth=1.5;
+    cx.beginPath(); cx.moveTo(0,8); cx.lineTo(8,0); cx.stroke();
+    return cx.createPattern(c,'repeat');
+  }
+
+  // Agreguj miesięcznie + zlicz unikalne dni
+  var byYM = {}, daysByYM = {};
   var allRows = (window.PV_DATA||[]).filter(function(r){return r.ver===pvVer;});
-
-  // Agreguj miesięcznie (suma dzienna → suma miesięczna)
-  var byYM = {};
   allRows.forEach(function(r) {
     var ym = r.date.substring(0,7);
-    if (!byYM[ym]) byYM[ym] = 0;
+    if (!byYM[ym]) { byYM[ym]=0; daysByYM[ym]={}; }
     byYM[ym] += r.pv_total;
+    daysByYM[ym][r.date] = true;
   });
+
+  // Estymacja bieżącego miesiąca (min. 10 dni danych)
+  var estDays = daysByYM[nowYM] ? Object.keys(daysByYM[nowYM]).length : 0;
+  var dim = daysInMonth(nowYear, nowMonth);
+  var hasEst = estDays >= 10;
+  if (hasEst) byYM[nowYM] = byYM[nowYM] / estDays * dim;
 
   var years = ['2024','2025','2026'];
   var datasets = years.map(function(y) {
     var col = YCOL[y]||{line:'#888',fill:'rgba(136,136,136,.5)'};
     var baseBg = col.fill.replace(/[\d.]+\)$/,'0.75)');
-    var dimBg  = col.fill.replace(/[\d.]+\)$/,'0.25)');
-    var data = [], bgColors = [];
+    var data = [], bgColors = [], borderColors = [], borderWidths = [];
     for (var m = 1; m <= 12; m++) {
       var ym = y+'-'+(m<10?'0':'')+m;
       var v = byYM[ym]!=null ? +(byYM[ym]/1e6).toFixed(2) : null;
       data.push(v);
-      bgColors.push(ym===nowYM ? dimBg : baseBg);
+      var isCur = ym===nowYM && hasEst;
+      bgColors.push(isCur ? hatch(col.line) : baseBg);
+      borderColors.push(isCur ? col.line : 'transparent');
+      borderWidths.push(isCur ? 2 : 0);
     }
     if (!data.some(function(x){return x!=null;})) return null;
-    return { label:'Rok '+y, data:data, backgroundColor:bgColors,
-             borderColor:col.line, borderWidth:1.5, borderRadius:3 };
+    return { label:'Rok '+y+(y===nowYear&&hasEst?' *':''), data:data,
+             backgroundColor:bgColors, borderColor:borderColors,
+             borderWidth:borderWidths, borderRadius:3 };
   }).filter(Boolean);
 
   if (pvYoyBarChart) { pvYoyBarChart.destroy(); pvYoyBarChart=null; }
@@ -57666,7 +57686,13 @@ function renderPvYoyBar() {
         legend:{position:'top', onClick:function(){}, labels:{boxWidth:10,padding:14,font:{size:11},color:C.legendColor}},
         tooltip:{
           filter:function(item){return item.parsed.y!==null;},
-          callbacks:{label:function(c){return ' '+c.dataset.label+': '+(c.parsed.y!=null?c.parsed.y.toFixed(1)+' mln PV':'—');}}
+          callbacks:{label:function(c){
+            var mi = c.dataIndex+1;
+            var ym = nowYear+'-'+(mi<10?'0':'')+mi;
+            var isEst = ym===nowYM && hasEst;
+            var lbl = c.dataset.label.replace(' *','');
+            return ' '+lbl+': '+(c.parsed.y!=null?c.parsed.y.toFixed(1)+' mln PV'+(isEst?' (estymacja)':''):'—');
+          }}
         }
       },
       scales:{
@@ -57676,6 +57702,13 @@ function renderPvYoyBar() {
       }
     }
   });
+
+  var noteEl = document.getElementById('pvYoyBarNote');
+  if (noteEl) {
+    noteEl.textContent = hasEst
+      ? '* '+MSH[nowMonth-1]+' '+nowYear+': estymacja do końca miesiąca (średnia z '+estDays+' dni × '+dim+' dni w miesiącu)'
+      : '';
+  }
 }
 
 // ---- PV Decomp ----
