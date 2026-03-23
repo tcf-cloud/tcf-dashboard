@@ -57726,7 +57726,7 @@ var REV_DATA = {
 var tcfRevenueChart = null;
 function renderTcfRevenue() {
   try {
-    var C = getColors();
+    var C = chartColors(); C.muted = isDark() ? '#8892a4' : '#94a3b8';
     var canvas = document.getElementById('tcfRevenueChart');
     if (!canvas) return;
     var d = REV_DATA;
