@@ -56468,6 +56468,11 @@ function fmtDate(tsMs){
   return d.getDate()+' '+mm[d.getMonth()]+' '+d.getFullYear();
 }
 
+function plMonthTick(v){
+  var d=new Date(v);
+  return MSH[d.getMonth()]+" '"+String(d.getFullYear()).slice(2);
+}
+
 function chartColors(){
   return {grid:isDark()?'#2d3450':'#f1f5f9', tick:isDark()?'#8892a4':'#94a3b8',
           legendColor:isDark()?'#e2e8f0':'#1e293b'};
@@ -56623,8 +56628,8 @@ function renderDaily(ctx){
       }
     },
     scales:{
-      x:{type:'time',time:{unit:'month',displayFormats:{month:"MMM ''yy"}},
-         grid:{color:C.grid},ticks:{font:{size:11},color:C.tick,maxRotation:0}},
+      x:{type:'time',time:{unit:'month'},
+         grid:{color:C.grid},ticks:{font:{size:11},color:C.tick,maxRotation:0,callback:plMonthTick}},
       y:{grid:{color:C.grid},ticks:{font:{size:11},color:C.tick,callback:function(v){return pct(v,0);}},
          afterDataLimits:function(ax){var r=ax.max-ax.min;ax.min-=r*.10;ax.max+=r*.10;}}
     }
@@ -57152,9 +57157,9 @@ function renderPvTrend() {
       scales:{
         x:{
           type:'time',
-          time:{unit:'month', displayFormats:{month:'MMM yy'}},
+          time:{unit:'month'},
           grid:{color:gridCol},
-          ticks:{color:mutedCol, font:{size:10}, maxRotation:0}
+          ticks:{color:mutedCol, font:{size:10}, maxRotation:0, callback:plMonthTick}
         },
         y:{
           grid:{color:gridCol},
@@ -57486,7 +57491,7 @@ function renderPV() {
           }}
         },
         scales:{
-          x:{type:'time', min:xMin, time:{unit:pvGran==='monthly'?'month':'week', displayFormats:{month:'MMM yyyy',week:'d MMM'}}, stacked:true, grid:{color:gridCol}, ticks:{color:mutedCol, font:{size:10}, maxRotation:0, maxTicksLimit:pvGran==='monthly'?28:20}},
+          x:{type:'time', min:xMin, time:{unit:pvGran==='monthly'?'month':'week'}, stacked:true, grid:{color:gridCol}, ticks:{color:mutedCol, font:{size:10}, maxRotation:0, maxTicksLimit:pvGran==='monthly'?28:20, callback:function(v){if(pvGran!=='monthly'){var d=new Date(v);return d.getDate()+' '+MSH[d.getMonth()];}return plMonthTick(v);}}},
           yPV:{type:'linear', position:'left', stacked:true, grid:{color:gridCol}, ticks:{color:mutedCol, font:{size:10}, callback:function(v){return v+'M';}}, title:{display:true, text:'PV (mln)', color:mutedCol, font:{size:10}}},
           yTCF:{type:'linear', position:'right', min:tcfMin, max:1.0, grid:{drawOnChartArea:false}, ticks:{color:'#f59e0b', font:{size:10}, callback:function(v){return (v*100).toFixed(0)+'%';}}, title:{display:true, text:'TCF %', color:'#f59e0b', font:{size:10}}}
         }
@@ -57541,7 +57546,7 @@ function renderPV() {
           }}
         },
         scales:{
-          x:{type:'time', time:{unit:pvGran==='monthly'?'month':'week', displayFormats:{month:'MMM yyyy',week:'d MMM'}}, grid:{color:gridCol}, ticks:{color:mutedCol, font:{size:10}, maxRotation:0, maxTicksLimit:pvGran==='monthly'?28:20}},
+          x:{type:'time', time:{unit:pvGran==='monthly'?'month':'week'}, grid:{color:gridCol}, ticks:{color:mutedCol, font:{size:10}, maxRotation:0, maxTicksLimit:pvGran==='monthly'?28:20, callback:function(v){if(pvGran!=='monthly'){var d=new Date(v);return d.getDate()+' '+MSH[d.getMonth()];}return plMonthTick(v);}}},
           yPV:{type:'linear', position:'left', grid:{color:gridCol}, ticks:{color:mutedCol, font:{size:10}, callback:function(v){return v+'M';}}, title:{display:true, text:'PV (mln)', color:mutedCol, font:{size:10}}}
         }
       }
@@ -57756,13 +57761,12 @@ function renderTcfRevenue() {
       return 'rgba(150,150,170,0.8)';
     });
 
-    // Etykiety: skróć do "sty'24" format
-    var monthNames = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paz','lis','gru'];
+    // Etykiety: skróć do "Sty '24" format
     var labels = d.labels.map(function(l) {
       var parts = l.split('-');
       var m = parseInt(parts[1]) - 1;
       var y = parts[0].slice(2);
-      return monthNames[m] + "'" + y;
+      return MSH[m] + " '" + y;
     });
 
     if (tcfRevenueChart) { tcfRevenueChart.destroy(); tcfRevenueChart = null; }
@@ -57928,8 +57932,6 @@ function renderTcfYoy() {
     var canvas = document.getElementById('tcfYoyChart');
     if (!canvas) return;
     var d = REV_DATA;
-    var monthNames = ['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Paź','Lis','Gru'];
-
     // Miesiące po POK (od pokIdx=23 = Gru 2025) z danymi r/r
     // pokIdx=23 → Gru 2025 (index 23), Sty 2026 (24), Lut 2026 (25), Mar 2026 (26)
     // Odpowiadające miesiące rok temu: 11,12,13,14
@@ -57941,7 +57943,7 @@ function renderTcfYoy() {
       var mo = parseInt(parts[1]) - 1;
       var yr = parts[0];
       pokMonths.push({
-        label: monthNames[mo] + ' ' + yr,
+        label: MSH[mo] + ' ' + yr,
         revNow: Math.round(d.rev[i] / 1000),
         revPrev: Math.round(d.rev[prevIdx] / 1000),
         tcfNow: d.tcf[i],
@@ -58034,8 +58036,6 @@ function renderTcfScatter() {
     var canvas = document.getElementById('tcfScatterChart');
     if (!canvas) return;
     var d = REV_DATA;
-    var monthNames = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paz','lis','gru'];
-
     // Podziel punkty na grupy: 2024, 2025 przed POK, po POK
     var pts2024 = [], pts2025 = [], ptsPok = [];
     d.labels.forEach(function(l, i) {
@@ -58045,7 +58045,7 @@ function renderTcfScatter() {
       var pt = {
         x: d.tcf[i],
         y: Math.round(d.rev[i] / 1000),
-        label: monthNames[mo] + "'" + String(yr).slice(2)
+        label: MSH[mo] + " '" + String(yr).slice(2)
       };
       if (yr === 2024) pts2024.push(pt);
       else if (i < d.pokIdx) pts2025.push(pt);
