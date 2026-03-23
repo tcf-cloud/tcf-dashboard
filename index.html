@@ -353,6 +353,12 @@ tr:last-child td{border-bottom:none}
         </div>
         <div id="tcfRevenueMethodNote" style="font-size:11px;color:var(--muted);margin-top:14px;padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border-left:3px solid rgba(99,179,237,0.5)"></div>
         <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Porównanie r/r — miesiące po POK <span style="font-weight:400;color:var(--muted);font-size:11px">— ten sam miesiąc rok temu vs teraz</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Żółty = rok temu (przed POK), niebieski = teraz (po POK). Nad słupkami: zmiana TCF% r/r.</div>
+          <div style="position:relative;height:260px"><canvas id="tcfYoyChart"></canvas></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:8px"><b>Jak czytać:</b> jeśli wyższy TCF przekłada się na przychód, niebieski powinien być wyższy od żółtego — mimo że rynek w 2025 był słabszy r/r.</div>
+        </div>
+        <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
           <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Scatter: przychód vs TCF% <span style="font-weight:400;color:var(--muted);font-size:11px">— każdy punkt = 1 miesiąc</span></div>
           <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Czy wyższa zgoda TCF przekłada się na wyższy przychód? Szary = 2024, żółty = 2025 (przed POK), niebieski = po POK (XII 2025+)</div>
           <div style="position:relative;height:280px"><canvas id="tcfScatterChart"></canvas></div>
@@ -57915,6 +57921,112 @@ function renderTcfRevenue() {
   } catch(e) { console.error('renderTcfRevenue error:', e); }
 }
 
+var tcfYoyChart = null;
+function renderTcfYoy() {
+  try {
+    var C = chartColors(); C.muted = isDark() ? '#8892a4' : '#94a3b8';
+    var canvas = document.getElementById('tcfYoyChart');
+    if (!canvas) return;
+    var d = REV_DATA;
+    var monthNames = ['Sty','Lut','Mar','Kwi','Maj','Cze','Lip','Sie','Wrz','Paź','Lis','Gru'];
+
+    // Miesiące po POK (od pokIdx=23 = Gru 2025) z danymi r/r
+    // pokIdx=23 → Gru 2025 (index 23), Sty 2026 (24), Lut 2026 (25), Mar 2026 (26)
+    // Odpowiadające miesiące rok temu: 11,12,13,14
+    var pokMonths = [];
+    for (var i = d.pokIdx; i < d.labels.length; i++) {
+      var prevIdx = i - 12;
+      if (prevIdx < 0) continue;
+      var parts = d.labels[i].split('-');
+      var mo = parseInt(parts[1]) - 1;
+      var yr = parts[0];
+      pokMonths.push({
+        label: monthNames[mo] + ' ' + yr,
+        revNow: Math.round(d.rev[i] / 1000),
+        revPrev: Math.round(d.rev[prevIdx] / 1000),
+        tcfNow: d.tcf[i],
+        tcfPrev: d.tcf[prevIdx],
+        deltaRev: Math.round((d.rev[i] / d.rev[prevIdx] - 1) * 100 * 10) / 10,
+        deltaTcf: Math.round((d.tcf[i] - d.tcf[prevIdx]) * 10) / 10
+      });
+    }
+
+    if (tcfYoyChart) { tcfYoyChart.destroy(); tcfYoyChart = null; }
+    tcfYoyChart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: pokMonths.map(function(m) { return m.label; }),
+        datasets: [
+          {
+            label: 'Rok temu (przed POK)',
+            data: pokMonths.map(function(m) { return m.revPrev; }),
+            backgroundColor: 'rgba(251,191,36,0.6)',
+            borderColor: 'rgba(251,191,36,0.9)',
+            borderWidth: 1
+          },
+          {
+            label: 'Teraz (po POK)',
+            data: pokMonths.map(function(m) { return m.revNow; }),
+            backgroundColor: 'rgba(99,179,237,0.7)',
+            borderColor: 'rgba(99,179,237,1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', labels: { color: C.legendColor, boxWidth: 10, font: { size: 10 }, padding: 10 } },
+          tooltip: {
+            callbacks: {
+              afterBody: function(items) {
+                var idx = items[0].dataIndex;
+                var m = pokMonths[idx];
+                return [
+                  '',
+                  'Zmiana przychodu: ' + (m.deltaRev >= 0 ? '+' : '') + m.deltaRev + '% r/r',
+                  'TCF rok temu: ' + m.tcfPrev.toFixed(1) + '%  →  teraz: ' + m.tcfNow.toFixed(1) + '%  (Δ +' + m.deltaTcf.toFixed(1) + 'pp)'
+                ];
+              }
+            }
+          }
+        },
+        scales: {
+          x: { grid: { color: C.grid }, ticks: { font: { size: 11 }, color: C.tick } },
+          y: {
+            grid: { color: C.grid },
+            ticks: { font: { size: 11 }, color: C.tick, callback: function(v) { return v + 'k'; } },
+            title: { display: true, text: 'PLN/dzień (tys.)', color: C.muted, font: { size: 10 } }
+          }
+        }
+      },
+      plugins: [{
+        id: 'yoyAnnotations',
+        afterDatasetsDraw: function(chart) {
+          var ctx = chart.ctx;
+          ctx.save();
+          pokMonths.forEach(function(m, i) {
+            var metaNow = chart.getDatasetMeta(1);
+            var el = metaNow.data[i];
+            if (!el) return;
+            var revColor = m.deltaRev >= 0 ? 'rgba(154,230,180,1)' : 'rgba(252,129,129,1)';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillStyle = revColor;
+            var revTxt = (m.deltaRev >= 0 ? '+' : '') + m.deltaRev + '%';
+            ctx.fillText(revTxt, el.x - ctx.measureText(revTxt).width / 2, el.y - 18);
+            ctx.fillStyle = 'rgba(154,230,180,0.8)';
+            ctx.font = '9px sans-serif';
+            var tcfTxt = '+' + m.deltaTcf.toFixed(1) + 'pp TCF';
+            ctx.fillText(tcfTxt, el.x - ctx.measureText(tcfTxt).width / 2, el.y - 6);
+          });
+          ctx.restore();
+        }
+      }]
+    });
+  } catch(e) { console.error('renderTcfYoy error:', e); }
+}
+
 var tcfScatterChart = null;
 function renderTcfScatter() {
   try {
@@ -58032,7 +58144,7 @@ function renderTcfScatter() {
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); renderPvTrend();
     buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
-    renderTcfRevenue(); renderTcfScatter();
+    renderTcfRevenue(); renderTcfYoy(); renderTcfScatter();
   }catch(e){
     document.getElementById('loading').innerHTML=
       '<div class="err"><b>Blad:</b> '+e.message+'<br><small>'+e.stack+'</small></div>';
