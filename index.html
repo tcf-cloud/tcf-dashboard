@@ -58118,7 +58118,8 @@ function renderTcfScatter() {
             meta.data.forEach(function(el, i) {
               var pt = ds.data[i];
               ctx.fillStyle = ds.borderColor;
-              ctx.fillText(pt.label, el.x + 5, el.y - 4);
+              var w = ctx.measureText(pt.label).width;
+              ctx.fillText(pt.label, el.x - w / 2, el.y - 10);
             });
           });
           ctx.restore();
