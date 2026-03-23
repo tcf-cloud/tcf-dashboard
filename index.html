@@ -56341,11 +56341,12 @@ function availYears(){
 }
 
 function chipStyle(v){
-  if(v>=.97) return 'background:#d1fae5;color:#065f46';
-  if(v>=.95) return 'background:#dcfce7;color:#166534';
-  if(v>=.93) return 'background:#fef9c3;color:#713f12';
-  if(v>=.90) return 'background:#ffedd5;color:#9a3412';
-  return 'background:#fee2e2;color:#991b1b';
+  var dark=isDark();
+  if(v>=.97) return dark?'background:rgba(16,185,129,.15);color:#6ee7b7':'background:#d1fae5;color:#065f46';
+  if(v>=.95) return dark?'background:rgba(16,185,129,.10);color:#86efac':'background:#dcfce7;color:#166534';
+  if(v>=.93) return dark?'background:rgba(245,158,11,.12);color:#fcd34d':'background:#fef9c3;color:#713f12';
+  if(v>=.90) return dark?'background:rgba(249,115,22,.12);color:#fdba74':'background:#ffedd5;color:#9a3412';
+  return dark?'background:rgba(239,68,68,.12);color:#fca5a5':'background:#fee2e2;color:#991b1b';
 }
 
 function activeSites(){ return SITES.filter(function(s){return S.sites[s];}); }
@@ -56368,6 +56369,7 @@ function toggleTheme(){
   if(bc2) renderBar2();
   renderHeatmap();
   if(rk) renderRanking();
+  renderTable();
 }
 
 // ---- Build UI ----
