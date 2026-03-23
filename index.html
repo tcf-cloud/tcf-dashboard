@@ -343,13 +343,13 @@ tr:last-child td{border-bottom:none}
     <div class="panel" style="margin-top:20px">
       <div class="panel-header">
         <div style="font-size:15px;font-weight:700;color:var(--text)">Ile warta jest 1pp TCF? &mdash; przychody WPM programmatic</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">Efekt POK (wdro&zdot;ony koniec XI 2025): naturalny eksperyment &mdash; du&zdot;y skok TCF% &rarr; czy przychody wzros&lstrok;y? &nbsp;&middot;&nbsp; &Oacute;r&oacute;d&lstrok;o: DSS wew &mdash; Wyniki dzienne Prebid+Google.xlsx (wiersz &bdquo;Dzienny przych&oacute;d&rdquo;)</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Efekt POK (wdrożony koniec XI 2025): naturalny eksperyment &mdash; duży skok TCF% &rarr; czy przychody wzrosły? &nbsp;&middot;&nbsp; Źródło: DSS wew &mdash; Wyniki dzienne Prebid+Google.xlsx (wiersz &bdquo;Dzienny przych&oacute;d&rdquo;)</div>
       </div>
       <div class="panel-body">
         <div id="tcfRevenueKPI" style="margin-bottom:16px"></div>
         <div style="position:relative;height:320px"><canvas id="tcfRevenueChart"></canvas></div>
         <div style="font-size:10px;color:var(--muted);margin-top:8px">
-          <b>Jak czyta&cacute;:</b> s&lstrok;upki = &scedil;redni przych&oacute;d programmatic WPM (PLN/dzie&nacute;, lewa o&sacute;) &nbsp;|&nbsp; linia = &scedil;redni TCF% Desktop+mob (prawa o&sacute;) &nbsp;|&nbsp; pionowa linia = wdro&zdot;enie POK &nbsp;|&nbsp; s&lstrok;upki po POK: niebieski = wy&zdot;sza TCF%
+          <b>Jak czytać:</b> słupki = średni przychód programmatic WPM (PLN/dzień, lewa oś) &nbsp;|&nbsp; linia = średni TCF% Desktop+mob (prawa oś) &nbsp;|&nbsp; pionowa linia = wdrożenie POK &nbsp;|&nbsp; słupki po POK: niebieski = wyższa TCF%
         </div>
         <div id="tcfRevenueMethodNote" style="font-size:11px;color:var(--muted);margin-top:14px;padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border-left:3px solid rgba(99,179,237,0.5)"></div>
       </div>
@@ -57896,15 +57896,15 @@ function renderTcfRevenue() {
         '<div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);border-radius:8px;padding:12px 18px;min-width:160px">' +
           '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Rocznie (12 mies.)</div>' +
           '<div style="font-size:22px;font-weight:700;color:rgba(251,191,36,0.95)">' + Math.round(per1ppK * 12 / 100) / 10 + 'M PLN</div>' +
-          '<div style="font-size:10px;color:var(--muted);margin-top:2px">na ka&zdot;dy pp TCF</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:2px">na każdy pp TCF</div>' +
         '</div>' +
       '</div>';
 
     var noteEl = document.getElementById('tcfRevenueMethodNote');
     noteEl.innerHTML =
-      '<b>Metodologia:</b> Por&oacute;wnanie r/r (sty&ndash;mar 2026 vs 2025) z korekt&aogon; o trend z okresu przed-POK (' + trendPct + '% r/r w paź&ndash;lis 2025). ' +
-      'Kontrafaktyczny przych&oacute;d bez POK = przych&oacute;d 2025 &times; (1 + trend). R&oacute;&zdot;nica mi&eogon;dzy rzeczywistym a kontrafaktycznym podzielona przez zmian&eogon; TCF% daje warto&scedil;&cacute; 1pp TCF. ' +
-      '<b>Uwaga:</b> To szacunek &mdash; inne czynniki r&oacute;wnie&zdot; wp&lstrok;ywaj&aogon; na przych&oacute;d (sezonowo&scedil;&cacute;, rynek programmatic, liczba impresji).';
+      '<b>Metodologia:</b> Porównanie r/r (sty&ndash;mar 2026 vs 2025) z korektą o trend z okresu przed-POK (' + trendPct + '% r/r w paź&ndash;lis 2025). ' +
+      'Kontrafaktyczny przychód bez POK = przychód 2025 &times; (1 + trend). Różnica między rzeczywistym a kontrafaktycznym podzielona przez zmianę TCF% daje wartość 1pp TCF. ' +
+      '<b>Uwaga:</b> To szacunek &mdash; inne czynniki również wpływają na przychód (sezonowość, rynek programmatic, liczba impresji).';
 
   } catch(e) { console.error('renderTcfRevenue error:', e); }
 }
