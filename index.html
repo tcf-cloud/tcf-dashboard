@@ -339,6 +339,22 @@ tr:last-child td{border-bottom:none}
       </div>
     </div>
 
+    <!-- PANEL: Ile warta 1pp TCF -->
+    <div class="panel" style="margin-top:20px">
+      <div class="panel-header">
+        <div style="font-size:15px;font-weight:700;color:var(--text)">Ile warta jest 1pp TCF? &mdash; przychody WPM programmatic</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Efekt POK (wdro&zdot;ony koniec XI 2025): naturalny eksperyment &mdash; du&zdot;y skok TCF% &rarr; czy przychody wzros&lstrok;y? &nbsp;&middot;&nbsp; &Oacute;r&oacute;d&lstrok;o: DSS wew &mdash; Wyniki dzienne Prebid+Google.xlsx (wiersz &bdquo;Dzienny przych&oacute;d&rdquo;)</div>
+      </div>
+      <div class="panel-body">
+        <div id="tcfRevenueKPI" style="margin-bottom:16px"></div>
+        <div style="position:relative;height:320px"><canvas id="tcfRevenueChart"></canvas></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px">
+          <b>Jak czyta&cacute;:</b> s&lstrok;upki = &scedil;redni przych&oacute;d programmatic WPM (PLN/dzie&nacute;, lewa o&sacute;) &nbsp;|&nbsp; linia = &scedil;redni TCF% Desktop+mob (prawa o&sacute;) &nbsp;|&nbsp; pionowa linia = wdro&zdot;enie POK &nbsp;|&nbsp; s&lstrok;upki po POK: niebieski = wy&zdot;sza TCF%
+        </div>
+        <div id="tcfRevenueMethodNote" style="font-size:11px;color:var(--muted);margin-top:14px;padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border-left:3px solid rgba(99,179,237,0.5)"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -57679,6 +57695,220 @@ function renderPvDecomp() {
   } catch(e) { console.error('renderPvDecomp error:', e); }
 }
 
+// ---- Dane: Przychody WPM programmatic (DSS) + TCF% miesięczne ----
+var REV_DATA = {
+  labels: [
+    '2024-01','2024-02','2024-03','2024-04','2024-05','2024-06',
+    '2024-07','2024-08','2024-09','2024-10','2024-11','2024-12',
+    '2025-01','2025-02','2025-03','2025-04','2025-05','2025-06',
+    '2025-07','2025-08','2025-09','2025-10','2025-11','2025-12',
+    '2026-01','2026-02','2026-03'
+  ],
+  // Średni dzienny przychód programmatic WPM (PLN, wiersz "Dzienny przychód")
+  rev: [
+    467579,476229,520177,530766,517712,552154,
+    514077,485589,571347,595531,660782,632780,
+    432775,473454,531077,518510,537325,554309,
+    499108,461478,544682,547998,593625,542800,
+    419649,489427,540514
+  ],
+  // TCF% Desktop+mob (z kolorowej tabeli Excela TCF)
+  tcf: [
+    91.6,90.9,90.6,91.6,91.9,91.2,
+    91.0,92.3,92.3,92.3,92.5,92.2,
+    91.5,91.6,90.2,89.9,89.8,89.7,
+    89.4,89.0,88.9,88.2,87.7,95.5,
+    97.3,97.8,97.8
+  ],
+  pokIdx: 23  // indeks Gru 2025 (pierwszy pełny miesiąc po POK)
+};
+
+var tcfRevenueChart = null;
+function renderTcfRevenue() {
+  try {
+    var C = getColors();
+    var canvas = document.getElementById('tcfRevenueChart');
+    if (!canvas) return;
+    var d = REV_DATA;
+    var pokIdx = d.pokIdx;
+
+    // Kolory słupków: przed POK = szary/amber, po POK = niebieski
+    var barColors = d.rev.map(function(v, i) {
+      if (i >= pokIdx) return 'rgba(99,179,237,0.75)';
+      if (i >= 12) return 'rgba(251,191,36,0.65)';
+      return 'rgba(150,150,170,0.5)';
+    });
+    var barBorders = d.rev.map(function(v, i) {
+      if (i >= pokIdx) return 'rgba(99,179,237,1)';
+      if (i >= 12) return 'rgba(251,191,36,0.9)';
+      return 'rgba(150,150,170,0.8)';
+    });
+
+    // Etykiety: skróć do "sty'24" format
+    var monthNames = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paz','lis','gru'];
+    var labels = d.labels.map(function(l) {
+      var parts = l.split('-');
+      var m = parseInt(parts[1]) - 1;
+      var y = parts[0].slice(2);
+      return monthNames[m] + "'" + y;
+    });
+
+    if (tcfRevenueChart) { tcfRevenueChart.destroy(); tcfRevenueChart = null; }
+    tcfRevenueChart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Przychód / dzień (PLN)',
+            data: d.rev.map(function(v) { return Math.round(v / 1000); }),
+            backgroundColor: barColors,
+            borderColor: barBorders,
+            borderWidth: 1,
+            yAxisID: 'yRev',
+            order: 2
+          },
+          {
+            label: 'TCF% Desktop+mob',
+            data: d.tcf,
+            type: 'line',
+            borderColor: 'rgba(154,230,180,1)',
+            backgroundColor: 'rgba(154,230,180,0.1)',
+            pointBackgroundColor: d.tcf.map(function(v, i) {
+              return i >= pokIdx ? 'rgba(154,230,180,1)' : 'rgba(154,230,180,0.5)';
+            }),
+            pointRadius: 3,
+            borderWidth: 2,
+            yAxisID: 'yTcf',
+            order: 1,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', labels: { color: C.legendColor, boxWidth: 10, font: { size: 10 }, padding: 10 } },
+          tooltip: {
+            callbacks: {
+              label: function(c) {
+                if (c.datasetIndex === 0) return ' Przychód: ' + (c.parsed.y).toFixed(0) + 'k PLN/dzień';
+                return ' TCF%: ' + c.parsed.y.toFixed(1) + '%';
+              }
+            }
+          },
+          // Pionowa linia POK (plugin inline)
+          afterDraw: undefined
+        },
+        scales: {
+          x: {
+            grid: { color: C.grid },
+            ticks: { font: { size: 10 }, color: C.tick, maxRotation: 45 }
+          },
+          yRev: {
+            position: 'left',
+            grid: { color: C.grid },
+            ticks: { font: { size: 11 }, color: C.tick, callback: function(v) { return v + 'k'; } },
+            title: { display: true, text: 'PLN/dzień (tys.)', color: C.muted, font: { size: 10 } }
+          },
+          yTcf: {
+            position: 'right',
+            min: 84, max: 100,
+            grid: { drawOnChartArea: false },
+            ticks: { font: { size: 11 }, color: 'rgba(154,230,180,0.9)', callback: function(v) { return v + '%'; } },
+            title: { display: true, text: 'TCF%', color: 'rgba(154,230,180,0.7)', font: { size: 10 } }
+          }
+        }
+      },
+      plugins: [{
+        id: 'pokLine',
+        afterDraw: function(chart) {
+          var ctx = chart.ctx;
+          var xScale = chart.scales.x;
+          var yScale = chart.scales.yRev;
+          var pokX = xScale.getPixelForValue(pokIdx);
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(pokX, yScale.top);
+          ctx.lineTo(pokX, yScale.bottom);
+          ctx.strokeStyle = 'rgba(255,180,0,0.7)';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([5, 4]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = 'rgba(255,180,0,0.85)';
+          ctx.font = '10px sans-serif';
+          ctx.fillText('POK', pokX + 4, yScale.top + 14);
+          ctx.restore();
+        }
+      }]
+    });
+
+    // KPI card
+    var jan25 = { rev: d.rev[12], tcf: d.tcf[12] };
+    var feb25 = { rev: d.rev[13], tcf: d.tcf[13] };
+    var mar25 = { rev: d.rev[14], tcf: d.tcf[14] };
+    var jan26 = { rev: d.rev[24], tcf: d.tcf[24] };
+    var feb26 = { rev: d.rev[25], tcf: d.tcf[25] };
+    var mar26 = { rev: d.rev[26], tcf: d.tcf[26] };
+
+    // YoY per miesiąc
+    var months = [
+      { name: 'Sty', r25: jan25.rev, r26: jan26.rev, t25: jan25.tcf, t26: jan26.tcf },
+      { name: 'Lut', r25: feb25.rev, r26: feb26.rev, t25: feb25.tcf, t26: feb26.tcf },
+      { name: 'Mar', r25: mar25.rev, r26: mar26.rev, t25: mar25.tcf, t26: mar26.tcf }
+    ];
+
+    // Trend pre-POK (paź-lis 2025 vs 2024): avg YoY
+    var prePokYoY = ((d.rev[21]/d.rev[9]) + (d.rev[22]/d.rev[10])) / 2 - 1; // -8.6%
+    // Counterfactual: co by bylo bez POK (ten sam trend)
+    var totalBenefit = 0, totalDays = 0;
+    months.forEach(function(m) {
+      var cntf = m.r25 * (1 + prePokYoY);
+      var benefit = m.r26 - cntf;
+      totalBenefit += benefit;
+      totalDays++;
+    });
+    var avgBenefitPerDay = totalBenefit / totalDays; // PLN/dzień
+    var avgBenefitPerMonth = avgBenefitPerDay * 30;
+    var avgDeltaTcf = ((jan26.tcf - jan25.tcf) + (feb26.tcf - feb25.tcf) + (mar26.tcf - mar25.tcf)) / 3;
+    var revPer1pp = avgBenefitPerMonth / avgDeltaTcf;
+
+    var kpiEl = document.getElementById('tcfRevenueKPI');
+    var benefitK = Math.round(avgBenefitPerMonth / 1000);
+    var per1ppK = Math.round(revPer1pp / 1000);
+    var deltaT = avgDeltaTcf.toFixed(1);
+    var trendPct = (prePokYoY * 100).toFixed(1);
+
+    kpiEl.innerHTML =
+      '<div style="display:flex;gap:12px;flex-wrap:wrap">' +
+        '<div style="background:rgba(99,179,237,0.12);border:1px solid rgba(99,179,237,0.3);border-radius:8px;padding:12px 18px;min-width:160px">' +
+          '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Szacowany efekt POK</div>' +
+          '<div style="font-size:22px;font-weight:700;color:rgba(99,179,237,1)">+' + benefitK + 'k PLN/mies.</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:2px">vs trend r/r bez POK (' + trendPct + '%)</div>' +
+        '</div>' +
+        '<div style="background:rgba(154,230,180,0.12);border:1px solid rgba(154,230,180,0.3);border-radius:8px;padding:12px 18px;min-width:160px">' +
+          '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">1pp TCF &asymp;</div>' +
+          '<div style="font-size:22px;font-weight:700;color:rgba(154,230,180,1)">' + per1ppK + 'k PLN/mies.</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:2px">przy &Delta;TCF = +' + deltaT + 'pp (POK)</div>' +
+        '</div>' +
+        '<div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);border-radius:8px;padding:12px 18px;min-width:160px">' +
+          '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Rocznie (12 mies.)</div>' +
+          '<div style="font-size:22px;font-weight:700;color:rgba(251,191,36,0.95)">' + Math.round(per1ppK * 12 / 100) / 10 + 'M PLN</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:2px">na ka&zdot;dy pp TCF</div>' +
+        '</div>' +
+      '</div>';
+
+    var noteEl = document.getElementById('tcfRevenueMethodNote');
+    noteEl.innerHTML =
+      '<b>Metodologia:</b> Por&oacute;wnanie r/r (sty&ndash;mar 2026 vs 2025) z korekt&aogon; o trend z okresu przed-POK (' + trendPct + '% r/r w paź&ndash;lis 2025). ' +
+      'Kontrafaktyczny przych&oacute;d bez POK = przych&oacute;d 2025 &times; (1 + trend). R&oacute;&zdot;nica mi&eogon;dzy rzeczywistym a kontrafaktycznym podzielona przez zmian&eogon; TCF% daje warto&scedil;&cacute; 1pp TCF. ' +
+      '<b>Uwaga:</b> To szacunek &mdash; inne czynniki r&oacute;wnie&zdot; wp&lstrok;ywaj&aogon; na przych&oacute;d (sezonowo&scedil;&cacute;, rynek programmatic, liczba impresji).';
+
+  } catch(e) { console.error('renderTcfRevenue error:', e); }
+}
+
 // ---- Init ----
 (function(){
   try{
@@ -57695,6 +57925,7 @@ function renderPvDecomp() {
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); renderPvTrend();
     buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
+    renderTcfRevenue();
   }catch(e){
     document.getElementById('loading').innerHTML=
       '<div class="err"><b>Blad:</b> '+e.message+'<br><small>'+e.stack+'</small></div>';
