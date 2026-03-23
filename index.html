@@ -57722,10 +57722,16 @@ function renderPvYoyBar() {
         ctx.textBaseline='bottom';
         meta.data.forEach(function(bar,i){
           if(curr[i]==null||prev[i]==null||prev[i]===0) return;
+          // Pozycja nad najwyższym słupkiem w grupie
+          var topY = bar.y;
+          chart.data.datasets.forEach(function(d,di){
+            var m2=chart.getDatasetMeta(di);
+            if(m2.data[i] && m2.data[i].y < topY) topY=m2.data[i].y;
+          });
           var pct=(curr[i]/prev[i]-1)*100;
           var lbl=(pct>=0?'+':'')+pct.toFixed(1)+'%';
           ctx.fillStyle=pct>=0?'#10b981':'#f87171';
-          ctx.fillText(lbl, bar.x, bar.y-4);
+          ctx.fillText(lbl, bar.x, topY-6);
         });
         ctx.restore();
       }
