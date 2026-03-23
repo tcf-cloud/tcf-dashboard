@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Zgody TCF 2.0 — WPM Grupa WP</title>
+<title>Zgody TCF 2.0 � WPM Grupa WP</title>
 <script>
 /**
  * Skipped minification because the original files appears to be already minified.
@@ -259,7 +259,7 @@ tr:last-child td{border-bottom:none}
     <div class="panel">
       <div class="panel-hdr">
         <div class="panel-hdr-top">
-          <span class="panel-title">Ranking serwisów &mdash; bieżący miesiąc vs rok temu</span>
+          <span class="panel-title">Ranking serwis�w &mdash; bie��cy miesi�c vs rok temu</span>
           <div class="vtabs" id="ranktabs"></div>
         </div>
       </div>
@@ -284,16 +284,16 @@ tr:last-child td{border-bottom:none}
     <div class="panel" style="grid-column:1/-1">
       <div class="panel-hdr">
         <div class="panel-hdr-top">
-          <span class="panel-title">Trend PV ze zgodą TCF &mdash; WPM</span>
+          <span class="panel-title">Trend PV ze zgod� TCF &mdash; WPM</span>
           <div style="display:flex;gap:6px;align-items:center">
             <div class="vtabs" id="pvtrendtabs"></div>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
-            <button class="vtab on" id="pvtrend-zgoda" onclick="setPvTrendMetric('zgoda')">Ze zgodą</button>
+            <button class="vtab on" id="pvtrend-zgoda" onclick="setPvTrendMetric('zgoda')">Ze zgod�</button>
             <button class="vtab" id="pvtrend-bez" onclick="setPvTrendMetric('bez')">Bez zgody</button>
-            <button class="vtab" id="pvtrend-total" onclick="setPvTrendMetric('total')">Łącznie</button>
+            <button class="vtab" id="pvtrend-total" onclick="setPvTrendMetric('total')">��cznie</button>
             <button class="vtab" id="pvtrend-both" onclick="setPvTrendMetric('both')">Oba</button>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
-            <button class="vtab on" id="pvtrend-ma7" onclick="setPvTrendMA(7)">Śr. 7d</button>
+            <button class="vtab on" id="pvtrend-ma7" onclick="setPvTrendMA(7)">�r. 7d</button>
             <button class="vtab" id="pvtrend-ma1" onclick="setPvTrendMA(1)">Dziennie</button>
           </div>
         </div>
@@ -307,7 +307,7 @@ tr:last-child td{border-bottom:none}
     <div class="panel" style="grid-column:1/-1">
       <div class="panel-hdr">
         <div class="panel-hdr-top">
-          <span class="panel-title">PV WPM &mdash; ze zgodą vs bez zgody TCF</span>
+          <span class="panel-title">PV WPM &mdash; ze zgod� vs bez zgody TCF</span>
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
             <div id="pv-source-filters" style="display:flex;gap:4px;align-items:center"></div>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
@@ -327,19 +327,19 @@ tr:last-child td{border-bottom:none}
         <div id="pvTable" style="margin-top:20px;overflow-x:auto"></div>
         <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
           <div style="margin-bottom:12px">
-            <div style="font-size:13px;font-weight:700;color:var(--text)">Co wpłynęło na zmianę PV ze zgodą TCF? <span style="font-weight:400;color:var(--muted)">(miesięcznie, rok do roku)</span> <span style="font-size:11px;font-weight:400;color:var(--muted);background:var(--chart-grid);border-radius:4px;padding:2px 6px;margin-left:4px">WPM bez poczty</span></div>
-            <div style="font-size:11px;color:var(--muted);margin-top:3px">Każdy miesiąc 2026 vs ten sam miesiąc 2025 — ile zmiany wynika ze wzrostu/spadku ruchu, a ile z lepszych zgód (od grudnia 2025 głównie efekt wdrożenia POK). Analiza dotyczy wyłącznie serwisów WPM — na poczcie POK nie był wdrażany.</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text)">Co wp�yn�o na zmian� PV ze zgod� TCF? <span style="font-weight:400;color:var(--muted)">(miesi�cznie, rok do roku)</span> <span style="font-size:11px;font-weight:400;color:var(--muted);background:var(--chart-grid);border-radius:4px;padding:2px 6px;margin-left:4px">WPM bez poczty</span></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px">Ka�dy miesi�c 2026 vs ten sam miesi�c 2025 � ile zmiany wynika ze wzrostu/spadku ruchu, a ile z lepszych zg�d (od grudnia 2025 g��wnie efekt wdro�enia POK). Analiza dotyczy wy��cznie serwis�w WPM � na poczcie POK nie by� wdra�any.</div>
           </div>
           <div id="pvDecompInsight" style="margin-bottom:14px"></div>
           <div style="position:relative;height:240px"><canvas id="pvDecompChart"></canvas></div>
           <div style="font-size:10px;color:var(--muted);margin-top:8px">
-            <b>Jak czytać:</b> słupek zielony = ile PV zyskaliśmy dzięki wzrostowi zgód (POK) &nbsp;|&nbsp; słupek czerwony = ile straciliśmy przez mniejszy ruch na serwisach WPM &nbsp;|&nbsp; linia = efekt końcowy (suma obu)
+            <b>Jak czyta�:</b> s�upek zielony = ile PV zyskali�my dzi�ki wzrostowi zg�d (POK) &nbsp;|&nbsp; s�upek czerwony = ile stracili�my przez mniejszy ruch na serwisach WPM &nbsp;|&nbsp; linia = efekt ko�cowy (suma obu)
           </div>
         </div>
         <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
           <div style="margin-bottom:12px">
-            <div style="font-size:13px;font-weight:700;color:var(--text)">Łączna liczba PV r/r <span style="font-weight:400;color:var(--muted)">(miesięcznie, WPM bez poczty)</span></div>
-            <div style="font-size:11px;color:var(--muted);margin-top:3px">Porównanie wolumenu ruchu w ujęciu miesiąc do miesiąca dla każdego roku — widać sezonowość i trend r/r.</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text)">��czna liczba PV r/r <span style="font-weight:400;color:var(--muted)">(miesi�cznie, WPM bez poczty)</span></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px">Por�wnanie wolumenu ruchu w uj�ciu miesi�c do miesi�ca dla ka�dego roku � wida� sezonowo�� i trend r/r.</div>
           </div>
           <div style="position:relative;height:260px"><canvas id="pvYoyBarChart"></canvas></div>
           <div id="pvYoyTable" style="margin-top:16px;overflow-x:auto"></div>
@@ -352,26 +352,26 @@ tr:last-child td{border-bottom:none}
     <div class="panel" style="margin-top:20px">
       <div class="panel-header">
         <div style="font-size:15px;font-weight:700;color:var(--text)">Ile warta jest 1pp TCF? &mdash; przychody WPM programmatic</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">Efekt POK (wdrożony koniec XI 2025): naturalny eksperyment &mdash; duży skok TCF% &rarr; czy przychody wzrosły? &nbsp;&middot;&nbsp; Źródło: DSS wew &mdash; Wyniki dzienne Prebid+Google.xlsx (wiersz &bdquo;Dzienny przych&oacute;d&rdquo;)</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Efekt POK (wdro�ony koniec XI 2025): naturalny eksperyment &mdash; du�y skok TCF% &rarr; czy przychody wzros�y? &nbsp;&middot;&nbsp; �r�d�o: DSS wew &mdash; Wyniki dzienne Prebid+Google.xlsx (wiersz &bdquo;Dzienny przych&oacute;d&rdquo;)</div>
       </div>
       <div class="panel-body">
         <div id="tcfRevenueKPI" style="margin-bottom:16px"></div>
         <div style="position:relative;height:320px"><canvas id="tcfRevenueChart"></canvas></div>
         <div style="font-size:10px;color:var(--muted);margin-top:8px">
-          <b>Jak czytać:</b> słupki = średni przychód programmatic WPM (PLN/dzień, lewa oś) &nbsp;|&nbsp; linia = średni TCF% Desktop+mob (prawa oś) &nbsp;|&nbsp; pionowa linia = wdrożenie POK &nbsp;|&nbsp; słupki po POK: niebieski = wyższa TCF%
+          <b>Jak czyta�:</b> s�upki = �redni przych�d programmatic WPM (PLN/dzie�, lewa o�) &nbsp;|&nbsp; linia = �redni TCF% Desktop+mob (prawa o�) &nbsp;|&nbsp; pionowa linia = wdro�enie POK &nbsp;|&nbsp; s�upki po POK: niebieski = wy�sza TCF%
         </div>
         <div id="tcfRevenueMethodNote" style="font-size:11px;color:var(--muted);margin-top:14px;padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border-left:3px solid rgba(99,179,237,0.5)"></div>
         <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
-          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Porównanie r/r — miesiące po POK <span style="font-weight:400;color:var(--muted);font-size:11px">— ten sam miesiąc rok temu vs teraz</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Żółty = rok temu (przed POK), niebieski = teraz (po POK). Nad słupkami: zmiana TCF% r/r.</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Por�wnanie r/r � miesi�ce po POK <span style="font-weight:400;color:var(--muted);font-size:11px">� ten sam miesi�c rok temu vs teraz</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">��ty = rok temu (przed POK), niebieski = teraz (po POK). Nad s�upkami: zmiana TCF% r/r.</div>
           <div style="position:relative;height:260px"><canvas id="tcfYoyChart"></canvas></div>
-          <div style="font-size:10px;color:var(--muted);margin-top:8px"><b>Jak czytać:</b> żółty = ten sam miesiąc rok temu (przed POK), niebieski = teraz (po POK). Jeśli wyższy TCF przekłada się na przychód, niebieski powinien być wyższy od żółtego. Nad słupkami: zmiana przychodu r/r (%) i zmiana TCF% r/r.</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:8px"><b>Jak czyta�:</b> ��ty = ten sam miesi�c rok temu (przed POK), niebieski = teraz (po POK). Je�li wy�szy TCF przek�ada si� na przych�d, niebieski powinien by� wy�szy od ��tego. Nad s�upkami: zmiana przychodu r/r (%) i zmiana TCF% r/r.</div>
         </div>
         <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
-          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Scatter: przychód vs TCF% <span style="font-weight:400;color:var(--muted);font-size:11px">— każdy punkt = 1 miesiąc</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Czy wyższa zgoda TCF przekłada się na wyższy przychód? Szary = 2024, żółty = 2025 (przed POK), niebieski = po POK (XII 2025+)</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Scatter: przych�d vs TCF% <span style="font-weight:400;color:var(--muted);font-size:11px">� ka�dy punkt = 1 miesi�c</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Czy wy�sza zgoda TCF przek�ada si� na wy�szy przych�d? Szary = 2024, ��ty = 2025 (przed POK), niebieski = po POK (XII 2025+)</div>
           <div style="position:relative;height:280px"><canvas id="tcfScatterChart"></canvas></div>
-          <div style="font-size:10px;color:var(--muted);margin-top:8px"><b>Jak czytać:</b> gdyby zgoda TCF wprost napędzała przychód, punkty układałyby się po skosie w górę-prawo. Rzeczywistość jest bardziej złożona &mdash; przychód zależy też od wolumenu ruchu (PV). W 2026 r. łączna liczba PV w serwisach WPM była niższa r/r o 7&ndash;24%, co "zjadało" efekt zgód i zamazuje korelację na tym wykresie.</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:8px"><b>Jak czyta�:</b> gdyby zgoda TCF wprost nap�dza�a przych�d, punkty uk�ada�yby si� po skosie w g�r�-prawo. Rzeczywisto�� jest bardziej z�o�ona &mdash; przych�d zale�y te� od wolumenu ruchu (PV). W 2026 r. ��czna liczba PV w serwisach WPM by�a ni�sza r/r o 7&ndash;24%, co "zjada�o" efekt zg�d i zamazuje korelacj� na tym wykresie.</div>
         </div>
       </div>
     </div>
@@ -56289,7 +56289,7 @@ var YCOL = {
   '2025': {line:'#f59e0b', fill:'rgba(245,158,11,.15)'},
   '2026': {line:'#3b82f6', fill:'rgba(59,130,246,.15)'}
 };
-// Kolory per (serwis × wersja): COMBO_COLS[sIdx][vIdx]
+// Kolory per (serwis � wersja): COMBO_COLS[sIdx][vIdx]
 // Kolejnosc wersji: Desktop+mob, Desktop, Mobile (per VERS)
 var COMBO_COLS = [
   ['#60a5fa','#818cf8','#38bdf8'],  // WPM: sky-blue, indigo, cyan
@@ -56491,18 +56491,18 @@ function getDatasetColor(sIdx, vIdx, year){
   var sites=activeSites(), vers=activeVers(), yrs=activeYears();
   var yRank=yrs.indexOf(year); // 0=najstarszy rok
 
-  // 1 serwis, 1 wersja → rozrozniaj tylko po roku (YCOL)
+  // 1 serwis, 1 wersja � rozrozniaj tylko po roku (YCOL)
   if(sites.length<=1 && vers.length<=1){
     return YCOL[year]||{line:'#94a3b8',fill:'rgba(148,163,184,.15)'};
   }
 
-  // W pozostalych przypadkach: kolor bazowy po (serwis × wersja)
-  // Rok = przytlumienie (40% najstarszy → 65% sredni → 100% najnowszy)
+  // W pozostalych przypadkach: kolor bazowy po (serwis � wersja)
+  // Rok = przytlumienie (40% najstarszy � 65% sredni � 100% najnowszy)
   var alphas=[0.40,0.65,1.0];
   var nYrs=yrs.length;
   var alpha = nYrs===1 ? 1.0 : nYrs===2 ? [0.50,1.0][yRank] : alphas[yRank]||0.4;
 
-  // Mapuj wIdx na pozycje w COMBO_COLS — VERS = ['Desktop + mob','Desktop','Mobile']
+  // Mapuj wIdx na pozycje w COMBO_COLS � VERS = ['Desktop + mob','Desktop','Mobile']
   var vGlobal=VERS.indexOf(vers[vIdx]);  // 0/1/2
   var row=COMBO_COLS[sIdx%COMBO_COLS.length]||COMBO_COLS[0];
   var hex=row[vGlobal<0?0:vGlobal];
@@ -56575,11 +56575,11 @@ function renderDaily(ctx){
         var m1=maps[s][v][y1], m2=maps[s][v][y2];
         var d1=Object.keys(m1).sort(), d2=Object.keys(m2).sort();
         if(!d1.length||!d2.length) continue;
-        // Ostatni dzien roku Y1 → dodaj do Y2 (zeby linia Y2 "startowala" z tego punktu)
+        // Ostatni dzien roku Y1 � dodaj do Y2 (zeby linia Y2 "startowala" z tego punktu)
         var lastD1=d1[d1.length-1];
         m2[lastD1]=m1[lastD1];
         dateSet[lastD1]=1;
-        // Pierwszy dzien roku Y2 → dodaj do Y1 (zeby linia Y1 "docierala" do poczatku Y2)
+        // Pierwszy dzien roku Y2 � dodaj do Y1 (zeby linia Y1 "docierala" do poczatku Y2)
         var firstD2=d2[0];
         m1[firstD2]=m2[firstD2];
         dateSet[firstD2]=1;
@@ -56764,7 +56764,7 @@ function renderRanking(){
     interaction:{mode:'index',intersect:false},
     plugins:{
       legend:{position:'top',onClick:function(){},labels:{boxWidth:10,padding:14,font:{size:11},color:C.legendColor}},
-      tooltip:{callbacks:{label:function(c){return ' '+c.dataset.label+': '+(c.parsed.x!=null?pct(c.parsed.x,2):'—');}}}
+      tooltip:{callbacks:{label:function(c){return ' '+c.dataset.label+': '+(c.parsed.x!=null?pct(c.parsed.x,2):'�');}}}
     },
     scales:{
       x:{grid:{color:C.grid},ticks:{font:{size:11},color:C.tick,callback:function(v){return pct(v,0);}},min:0.80,max:1.0},
@@ -56831,7 +56831,7 @@ function renderHeatmap(){
       if(c){
         html+='<td class="hm-cell" title="'+s+' '+m+': '+pct(v,2)+'"><span class="hm-v" style="background:'+c.bg+';color:'+c.fg+'">'+pct(v,1)+'</span></td>';
       } else {
-        html+='<td class="hm-cell"><span style="color:var(--muted);font-size:10px">—</span></td>';
+        html+='<td class="hm-cell"><span style="color:var(--muted);font-size:10px">�</span></td>';
       }
     });
     html+='</tr>';
@@ -56989,7 +56989,7 @@ function renderSparklines(){
           x:{display:true, ticks:{font:{size:9}, color:tickCol, maxRotation:0, autoSkip:false,
             callback:function(val,idx){
               var lbl=dates[idx]; if(!lbl) return '';
-              var mn=['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
+              var mn=['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','pa�','lis','gru'];
               var day=parseInt(lbl.substring(8,10),10), mo=parseInt(lbl.substring(5,7))-1;
               return (idx===0||day===1)?mn[mo]:'';
             }}, grid:{display:false}},
@@ -57114,12 +57114,12 @@ function renderPvTrend() {
   var smZgoda = maSmooth(rawZgoda, pvTrendMA);
   var smBez   = maSmooth(rawBez,   pvTrendMA);
   var smTotal = maSmooth(rawTotal, pvTrendMA);
-  var sfx = pvTrendMA>1?' (śr. '+pvTrendMA+'d)':'';
+  var sfx = pvTrendMA>1?' (�r. '+pvTrendMA+'d)':'';
 
   var datasets = [];
   if(pvTrendMetric==='zgoda'||pvTrendMetric==='both'){
     datasets.push({
-      label:'PV ze zgodą TCF'+sfx,
+      label:'PV ze zgod� TCF'+sfx,
       data: smZgoda,
       borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.08)',
       borderWidth:2, pointRadius:0, fill:pvTrendMetric==='zgoda', tension:0.3, spanGaps:true
@@ -57136,7 +57136,7 @@ function renderPvTrend() {
   }
   if(pvTrendMetric==='total'){
     datasets.push({
-      label:'PV łącznie'+sfx,
+      label:'PV ��cznie'+sfx,
       data: smTotal,
       borderColor:'#94a3b8', backgroundColor:'rgba(148,163,184,0.05)',
       borderWidth:1.5, pointRadius:0, fill:true, tension:0.3, spanGaps:true
@@ -57189,7 +57189,7 @@ var pvChart = null;
 var pvVer = 'Desktop + mob';
 var pvGran = 'monthly';
 
-// Source filter — multi-select
+// Source filter � multi-select
 var pvSrcState = {wpm:true, wp:false, o2:false, total:false};
 var PV_SRC_CFG = [
   {key:'wpm', label:'WPM', color:'#10b981'},
@@ -57240,7 +57240,7 @@ function getActiveSources() {
   return PV_SRC_CFG.filter(function(c){return pvSrcState[c.key];});
 }
 
-// Year filter — multi-select
+// Year filter � multi-select
 var pvYearState = {'2024':true,'2025':true,'2026':true};
 
 function togglePvYear(y) {
@@ -57334,7 +57334,7 @@ function renderPvKPIs() {
   if (activeSrcs.length === 1) {
     filtered = getPvRows(activeSrcs[0].key);
   } else {
-    // multiple sources — merge by date
+    // multiple sources � merge by date
     var byDate = {};
     activeSrcs.forEach(function(src) {
       getPvRows(src.key).forEach(function(r) {
@@ -57367,9 +57367,9 @@ function renderPvKPIs() {
       +'</div>';
   }
   var html='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">';
-  html+=card('PV łącznie — bm', fmt(cur.pv_total), prev.pv_total>0?fmtD(cur.pv_total-pN.pv_total)+' vs '+prevYM:null, cur.pv_total>=pN.pv_total, 0);
-  html+=card('PV ze zgodą TCF — bm', fmt(cur.pv_zgoda), prev.pv_zgoda>0?fmtD(cur.pv_zgoda-pN.pv_zgoda)+' vs '+prevYM:null, cur.pv_zgoda>=pN.pv_zgoda, 1);
-  html+=card('% PV ze zgodą — bm', curPct.toFixed(1)+'%', prevPct>0?fmtPp(curPct-prevPct)+' vs '+prevYM:null, curPct>=prevPct, 2);
+  html+=card('PV ��cznie � bm', fmt(cur.pv_total), prev.pv_total>0?fmtD(cur.pv_total-pN.pv_total)+' vs '+prevYM:null, cur.pv_total>=pN.pv_total, 0);
+  html+=card('PV ze zgod� TCF � bm', fmt(cur.pv_zgoda), prev.pv_zgoda>0?fmtD(cur.pv_zgoda-pN.pv_zgoda)+' vs '+prevYM:null, cur.pv_zgoda>=pN.pv_zgoda, 1);
+  html+=card('% PV ze zgod� � bm', curPct.toFixed(1)+'%', prevPct>0?fmtPp(curPct-prevPct)+' vs '+prevYM:null, curPct>=prevPct, 2);
   html+='</div>';
   document.getElementById('pvKPIs').innerHTML=html;
   renderPvSparklines(filtered);
@@ -57451,20 +57451,20 @@ function renderPV() {
   if (pvChart){pvChart.destroy();}
 
   if (single) {
-    // --- Tryb jednotny: stacked bar ze zgodą/bez + TCF% line (jak poprzednio) ---
+    // --- Tryb jednotny: stacked bar ze zgod�/bez + TCF% line (jak poprzednio) ---
     var src = active[0];
     var filtered = getPvRows(src.key).sort(function(a,b){return a.date<b.date?-1:1;});
     if (!filtered.length){ document.getElementById('pvNote').textContent='Brak danych PV'; return; }
     var points = pvGran==='monthly' ? aggPvMonthly(filtered) : filtered.map(function(r){return Object.assign({},r,{ym:r.date.substring(0,7)});});
 
-    // Estymacja bieżącego miesiąca (monthly, min. 10 dni)
+    // Estymacja bie��cego miesi�ca (monthly, min. 10 dni)
     var pvEstDays = 0, pvHasEst = false;
     if (pvGran==='monthly') {
       var nowDates={};
       filtered.filter(function(r){return r.date.startsWith(nowYM);}).forEach(function(r){nowDates[r.date]=true;});
       pvEstDays = Object.keys(nowDates).length;
       var pvDim = new Date(parseInt(nowYM.substring(0,4)), parseInt(nowYM.substring(5,7)), 0).getDate();
-      pvHasEst = pvEstDays >= 10;
+      pvHasEst = pvEstDays >= 14;
       if (pvHasEst) {
         var pvScale = pvDim / pvEstDays;
         points = points.map(function(p){
@@ -57508,12 +57508,12 @@ function renderPV() {
     if (pvHasEst) {
       document.getElementById('pvNote').textContent =
         '* '+MSH[parseInt(nowYM.substring(5,7))-1]+' '+nowYM.substring(0,4)+
-        ': estymacja do końca miesiąca (średnia z '+pvEstDays+' dni × '+pvDim+' dni w miesiącu)';
+        ': estymacja do ko�ca miesi�ca (�rednia z '+pvEstDays+' dni � '+pvDim+' dni w miesi�cu)';
     }
     pvChart = new Chart(canvas, {
       type:'bar',
       data:{labels:labels, datasets:[
-        {label:'Ze zgodą TCF', data:zgoda, backgroundColor:bgZgoda, borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
+        {label:'Ze zgod� TCF', data:zgoda, backgroundColor:bgZgoda, borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
         {label:'Bez zgody TCF', data:bez, backgroundColor:bgBez, borderWidth:0, stack:'pv', yAxisID:'yPV', order:2},
         {label:'TCF %', data:tcfLine, type:'line', borderColor:'#f59e0b', backgroundColor:'transparent', borderWidth:2.5, pointRadius:0, yAxisID:'yTCF', order:1, tension:0.3, spanGaps:true}
       ]},
@@ -57533,7 +57533,7 @@ function renderPV() {
               var total=zgoda[item.dataIndex]+bez[item.dataIndex];
               return item.dataset.label+': '+item.raw.toFixed(2)+'M ('+(total>0?(item.raw/total*100).toFixed(1):0)+'%)';
             },
-            footer:function(items){return 'Łącznie: '+(zgoda[items[0].dataIndex]+bez[items[0].dataIndex]).toFixed(2)+'M PV';}
+            footer:function(items){return '��cznie: '+(zgoda[items[0].dataIndex]+bez[items[0].dataIndex]).toFixed(2)+'M PV';}
           }}
         },
         scales:{
@@ -57603,7 +57603,7 @@ function renderPV() {
 function renderPvTable() {
   var active = getActiveSources();
   if (!active.length) return;
-  // Tabela zawsze pokazuje wszystkie lata — ignoruje filtr roku
+  // Tabela zawsze pokazuje wszystkie lata � ignoruje filtr roku
   var savedYearState = JSON.parse(JSON.stringify(pvYearState)); Object.keys(pvYearState).forEach(function(k){pvYearState[k]=true;});
   var filtered = [];
   active.forEach(function(src){ filtered = filtered.concat(getPvRows(src.key)); });
@@ -57619,7 +57619,7 @@ function renderPvTable() {
   var curYM=new Date().toISOString().substring(0,7);
   var curDays = byYM[curYM] ? byYM[curYM].days : 0;
   var curDim = new Date(parseInt(curYM.substring(0,4)), parseInt(curYM.substring(5,7)), 0).getDate();
-  var tblHasEst = curDays >= 10;
+  var tblHasEst = curDays >= 14;
   if (tblHasEst && byYM[curYM]) {
     var tblScale = curDim / curDays;
     byYM[curYM].pv_zgoda  = byYM[curYM].pv_zgoda  * tblScale;
@@ -57630,19 +57630,19 @@ function renderPvTable() {
   function isIncomplete(ym){ return ym < INCOMPLETE_BEFORE; }
   function cell(ym){
     var d=byYM[ym];
-    if(!d||d.pv_total===0) return '<td style="color:var(--muted);text-align:center;padding:5px 12px">—</td>';
+    if(!d||d.pv_total===0) return '<td style="color:var(--muted);text-align:center;padding:5px 12px">�</td>';
     var pct=(d.pv_zgoda/d.pv_total*100).toFixed(1);
     var val=(d.pv_zgoda/1e6).toFixed(1);
     var inc=isIncomplete(ym);
     var isEst=ym===curYM&&tblHasEst;
     var style='text-align:right;padding:5px 12px'+(inc?';opacity:0.45':'');
     var star=inc?'<span title="dane niekompletne" style="color:#f59e0b;margin-left:2px">*</span>'
-             :isEst?'<span title="estymacja do końca miesiąca" style="color:var(--muted);margin-left:2px">*</span>':'';
+             :isEst?'<span title="estymacja do ko�ca miesi�ca" style="color:var(--muted);margin-left:2px">*</span>':'';
     return '<td style="'+style+'"><b>'+val+'M</b><span style="color:var(--muted);font-size:11px;margin-left:4px">('+pct+'%)</span>'+star+'</td>';
   }
   function dCell(ym1,ym2){
     var d1=byYM[ym1],d2=byYM[ym2];
-    if(!d1||!d2||!d1.pv_total||!d2.pv_total) return '<td style="color:var(--muted);text-align:center;padding:5px 12px">—</td>';
+    if(!d1||!d2||!d1.pv_total||!d2.pv_total) return '<td style="color:var(--muted);text-align:center;padding:5px 12px">�</td>';
     if(isIncomplete(ym1)||isIncomplete(ym2)) return '<td style="color:var(--muted);text-align:center;padding:5px 12px;opacity:0.45">n/d*</td>';
     var diff=d1.pv_zgoda>0?(d2.pv_zgoda-d1.pv_zgoda)/d1.pv_zgoda*100:0;
     var col=diff>=0?'#10b981':'#f87171';
@@ -57651,16 +57651,16 @@ function renderPvTable() {
   }
   var html='<table style="width:100%;border-collapse:collapse;font-size:12px">'
     +'<thead><tr style="border-bottom:1px solid var(--border)">'
-    +'<th style="text-align:left;padding:6px 12px;color:var(--muted)">Miesiąc</th>';
-  years.forEach(function(y){html+='<th style="text-align:right;padding:6px 12px;color:var(--muted)">'+y+' <span style="font-weight:400;font-size:10px">(PV ze zgodą)</span></th>';});
-  html+='<th style="text-align:right;padding:6px 12px;color:var(--muted)">Δ 24→25</th><th style="text-align:right;padding:6px 12px;color:var(--muted)">Δ 25→26</th></tr></thead><tbody>';
+    +'<th style="text-align:left;padding:6px 12px;color:var(--muted)">Miesi�c</th>';
+  years.forEach(function(y){html+='<th style="text-align:right;padding:6px 12px;color:var(--muted)">'+y+' <span style="font-weight:400;font-size:10px">(PV ze zgod�)</span></th>';});
+  html+='<th style="text-align:right;padding:6px 12px;color:var(--muted)">? 24�25</th><th style="text-align:right;padding:6px 12px;color:var(--muted)">? 25�26</th></tr></thead><tbody>';
   ['01','02','03','04','05','06','07','08','09','10','11','12'].forEach(function(m,i){
     html+='<tr'+(i%2?'':' style="background:var(--chart-grid)"')+'><td style="padding:5px 12px;color:var(--muted)">'+MSH[i]+'</td>';
     years.forEach(function(y){html+=cell(y+'-'+m);});
     html+=dCell('2024-'+m,'2025-'+m)+dCell('2025-'+m,'2026-'+m)+'</tr>';
   });
   html+='</tbody></table>';
-  html+=tblHasEst?'<div style="font-size:10px;color:var(--muted);margin-top:6px;text-align:right">* '+MSH[parseInt(curYM.substring(5,7))-1]+' '+curYM.substring(0,4)+': estymacja do końca miesiąca (średnia z '+curDays+' dni × '+curDim+' dni w miesiącu)</div>':'';
+  html+=tblHasEst?'<div style="font-size:10px;color:var(--muted);margin-top:6px;text-align:right">* '+MSH[parseInt(curYM.substring(5,7))-1]+' '+curYM.substring(0,4)+': estymacja do ko�ca miesi�ca (�rednia z '+curDays+' dni � '+curDim+' dni w miesi�cu)</div>':'';
   document.getElementById('pvTable').innerHTML=html;
 }
 
@@ -57683,7 +57683,7 @@ function renderPvYoyBar() {
     return cx.createPattern(c,'repeat');
   }
 
-  // Agreguj miesięcznie + zlicz unikalne dni
+  // Agreguj miesi�cznie + zlicz unikalne dni
   var byYM = {}, daysByYM = {};
   var allRows = (window.PV_DATA||[]).filter(function(r){return r.ver===pvVer;});
   allRows.forEach(function(r) {
@@ -57693,10 +57693,10 @@ function renderPvYoyBar() {
     daysByYM[ym][r.date] = true;
   });
 
-  // Estymacja bieżącego miesiąca (min. 10 dni danych)
+  // Estymacja bie��cego miesi�ca (min. 10 dni danych)
   var estDays = daysByYM[nowYM] ? Object.keys(daysByYM[nowYM]).length : 0;
   var dim = daysInMonth(nowYear, nowMonth);
-  var hasEst = estDays >= 10;
+  var hasEst = estDays >= 14;
   if (hasEst) byYM[nowYM] = byYM[nowYM] / estDays * dim;
 
   var years = ['2024','2025','2026'];
@@ -57736,7 +57736,7 @@ function renderPvYoyBar() {
             var ym = nowYear+'-'+(mi<10?'0':'')+mi;
             var isEst = ym===nowYM && hasEst;
             var lbl = c.dataset.label.replace(' *','');
-            return ' '+lbl+': '+(c.parsed.y!=null?c.parsed.y.toFixed(1)+' mln PV'+(isEst?' (estymacja)':''):'—');
+            return ' '+lbl+': '+(c.parsed.y!=null?c.parsed.y.toFixed(1)+' mln PV'+(isEst?' (estymacja)':''):'�');
           }}
         }
       },
@@ -57752,7 +57752,7 @@ function renderPvYoyBar() {
   var noteEl = document.getElementById('pvYoyBarNote');
   if (noteEl) {
     noteEl.textContent = hasEst
-      ? '* '+MSH[nowMonth-1]+' '+nowYear+': estymacja do końca miesiąca (średnia z '+estDays+' dni × '+dim+' dni w miesiącu)'
+      ? '* '+MSH[nowMonth-1]+' '+nowYear+': estymacja do ko�ca miesi�ca (�rednia z '+estDays+' dni � '+dim+' dni w miesi�cu)'
       : '';
   }
 
@@ -57769,7 +57769,7 @@ function renderPvYoyBar() {
   }
   var html='<table style="width:100%;border-collapse:collapse;font-size:12px">';
   html+='<thead><tr>';
-  html+='<th style="text-align:left;padding:6px 10px;border-bottom:2px solid var(--border);color:var(--muted);font-size:11px">Miesiąc</th>';
+  html+='<th style="text-align:left;padding:6px 10px;border-bottom:2px solid var(--border);color:var(--muted);font-size:11px">Miesi�c</th>';
   years.forEach(function(y){
     var c=(YCOL[y]||{}).line||'#888';
     html+='<th style="text-align:right;padding:6px 10px;border-bottom:2px solid var(--border);color:'+c+';font-size:11px">'+y+' (mln PV)</th>';
@@ -57815,7 +57815,7 @@ function renderPvDecomp() {
 
   var curYM = new Date().toISOString().substring(0,7);
 
-  // Dwie pary: 2024→2025 (przyciemnione) i 2025→2026 (jasne)
+  // Dwie pary: 2024�2025 (przyciemnione) i 2025�2026 (jasne)
   var pCfg = [
     {y1:'2025',y2:'2026', ruch:'rgba(248,113,113,.85)', zgod:'rgba(16,185,129,.85)', netto:'#3b82f6', dash:[]}
   ];
@@ -57840,13 +57840,13 @@ function renderPvDecomp() {
     }
     var sfx = p.y1+'\u2192'+p.y2;
     datasets.push({label:'Zmiana ruchu (\u2191\u2193 odwiedzin)', data:efR, type:'bar', backgroundColor:p.ruch, yAxisID:'y', order:2});
-    datasets.push({label:'Wzrost zgód TCF (POK)',               data:efZ, type:'bar', backgroundColor:p.zgod, yAxisID:'y', order:2});
+    datasets.push({label:'Wzrost zg�d TCF (POK)',               data:efZ, type:'bar', backgroundColor:p.zgod, yAxisID:'y', order:2});
     datasets.push({label:'Zmiana \u0142\u0105cznie', data:net, type:'line',
       borderColor:p.netto, backgroundColor:'transparent', borderDash:p.dash,
       borderWidth:2, pointRadius:3, pointHoverRadius:5, tension:0.3, spanGaps:false, yAxisID:'y', order:1});
   });
 
-  // Callout — średnia z pełnych miesięcy 2026
+  // Callout � �rednia z pe�nych miesi�cy 2026
   var insightEl = document.getElementById('pvDecompInsight');
   if (insightEl && datasets.length >= 3) {
     var dR = datasets[0].data, dZ = datasets[1].data, dN = datasets[2].data;
@@ -57859,11 +57859,11 @@ function renderPvDecomp() {
       var pctOfZ = avgZ > 0 ? Math.round(Math.abs(avgR)/avgZ*100) : 0;
       insightEl.innerHTML =
         '<div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:10px 14px;font-size:11px;line-height:1.6">'
-        +'<b style="font-size:12px">&#128161; Kluczowy wniosek</b> <span style="color:var(--muted);font-size:10px">(średnia: '+months+')</span><br>'
-        +'Wdrożenie POK generuje ok. <b style="color:#10b981">+'+avgZ.toFixed(0)+'M PV ze zgodą miesięcznie</b>, '
-        +'jednak spadek ogólnego ruchu w serwisach WPM niweluje ok. <b style="color:#f87171">'+pctOfZ+'% tego efektu</b> '
+        +'<b style="font-size:12px">&#128161; Kluczowy wniosek</b> <span style="color:var(--muted);font-size:10px">(�rednia: '+months+')</span><br>'
+        +'Wdro�enie POK generuje ok. <b style="color:#10b981">+'+avgZ.toFixed(0)+'M PV ze zgod� miesi�cznie</b>, '
+        +'jednak spadek og�lnego ruchu w serwisach WPM niweluje ok. <b style="color:#f87171">'+pctOfZ+'% tego efektu</b> '
         +'(<b style="color:#f87171">'+(avgR>=0?'+':'')+avgR.toFixed(0)+'M</b>). '
-        +'Wynik netto: <b style="color:#3b82f6">'+(avgN>=0?'+':'')+avgN.toFixed(0)+'M miesięcznie</b>.'
+        +'Wynik netto: <b style="color:#3b82f6">'+(avgN>=0?'+':'')+avgN.toFixed(0)+'M miesi�cznie</b>.'
         +'</div>';
     }
   }
@@ -57895,7 +57895,7 @@ function renderPvDecomp() {
   } catch(e) { console.error('renderPvDecomp error:', e); }
 }
 
-// ---- Dane: Przychody WPM programmatic (DSS) + TCF% miesięczne ----
+// ---- Dane: Przychody WPM programmatic (DSS) + TCF% miesi�czne ----
 var REV_DATA = {
   labels: [
     '2024-01','2024-02','2024-03','2024-04','2024-05','2024-06',
@@ -57904,7 +57904,7 @@ var REV_DATA = {
     '2025-07','2025-08','2025-09','2025-10','2025-11','2025-12',
     '2026-01','2026-02','2026-03'
   ],
-  // Średni dzienny przychód programmatic WPM (PLN, wiersz "Dzienny przychód")
+  // �redni dzienny przych�d programmatic WPM (PLN, wiersz "Dzienny przych�d")
   rev: [
     467579,476229,520177,530766,517712,552154,
     514077,485589,571347,595531,660782,632780,
@@ -57920,7 +57920,7 @@ var REV_DATA = {
     89.4,89.0,88.9,88.2,87.7,95.5,
     97.3,97.8,97.8
   ],
-  pokIdx: 23  // indeks Gru 2025 (pierwszy pełny miesiąc po POK)
+  pokIdx: 23  // indeks Gru 2025 (pierwszy pe�ny miesi�c po POK)
 };
 
 var tcfRevenueChart = null;
@@ -57932,7 +57932,7 @@ function renderTcfRevenue() {
     var d = REV_DATA;
     var pokIdx = d.pokIdx;
 
-    // Kolory słupków: przed POK = szary/amber, po POK = niebieski
+    // Kolory s�upk�w: przed POK = szary/amber, po POK = niebieski
     var barColors = d.rev.map(function(v, i) {
       if (i >= pokIdx) return 'rgba(99,179,237,0.75)';
       if (i >= 12) return 'rgba(251,191,36,0.65)';
@@ -57944,7 +57944,7 @@ function renderTcfRevenue() {
       return 'rgba(150,150,170,0.8)';
     });
 
-    // Etykiety: skróć do "Sty '24" format
+    // Etykiety: skr�� do "Sty '24" format
     var labels = d.labels.map(function(l) {
       var parts = l.split('-');
       var m = parseInt(parts[1]) - 1;
@@ -57959,7 +57959,7 @@ function renderTcfRevenue() {
         labels: labels,
         datasets: [
           {
-            label: 'Przychód / dzień (PLN)',
+            label: 'Przych�d / dzie� (PLN)',
             data: d.rev.map(function(v) { return Math.round(v / 1000); }),
             backgroundColor: barColors,
             borderColor: barBorders,
@@ -57992,7 +57992,7 @@ function renderTcfRevenue() {
           tooltip: {
             callbacks: {
               label: function(c) {
-                if (c.datasetIndex === 0) return ' Przychód: ' + (c.parsed.y).toFixed(0) + 'k PLN/dzień';
+                if (c.datasetIndex === 0) return ' Przych�d: ' + (c.parsed.y).toFixed(0) + 'k PLN/dzie�';
                 return ' TCF%: ' + c.parsed.y.toFixed(1) + '%';
               }
             }
@@ -58009,7 +58009,7 @@ function renderTcfRevenue() {
             position: 'left',
             grid: { color: C.grid },
             ticks: { font: { size: 11 }, color: C.tick, callback: function(v) { return v + 'k'; } },
-            title: { display: true, text: 'PLN/dzień (tys.)', color: C.muted, font: { size: 10 } }
+            title: { display: true, text: 'PLN/dzie� (tys.)', color: C.muted, font: { size: 10 } }
           },
           yTcf: {
             position: 'right',
@@ -58052,14 +58052,14 @@ function renderTcfRevenue() {
     var feb26 = { rev: d.rev[25], tcf: d.tcf[25] };
     var mar26 = { rev: d.rev[26], tcf: d.tcf[26] };
 
-    // YoY per miesiąc
+    // YoY per miesi�c
     var months = [
       { name: 'Sty', r25: jan25.rev, r26: jan26.rev, t25: jan25.tcf, t26: jan26.tcf },
       { name: 'Lut', r25: feb25.rev, r26: feb26.rev, t25: feb25.tcf, t26: feb26.tcf },
       { name: 'Mar', r25: mar25.rev, r26: mar26.rev, t25: mar25.tcf, t26: mar26.tcf }
     ];
 
-    // Trend pre-POK (paź-lis 2025 vs 2024): avg YoY
+    // Trend pre-POK (pa�-lis 2025 vs 2024): avg YoY
     var prePokYoY = ((d.rev[21]/d.rev[9]) + (d.rev[22]/d.rev[10])) / 2 - 1; // -8.6%
     // Counterfactual: co by bylo bez POK (ten sam trend)
     var totalBenefit = 0, totalDays = 0;
@@ -58069,7 +58069,7 @@ function renderTcfRevenue() {
       totalBenefit += benefit;
       totalDays++;
     });
-    var avgBenefitPerDay = totalBenefit / totalDays; // PLN/dzień
+    var avgBenefitPerDay = totalBenefit / totalDays; // PLN/dzie�
     var avgBenefitPerMonth = avgBenefitPerDay * 30;
     var avgDeltaTcf = ((jan26.tcf - jan25.tcf) + (feb26.tcf - feb25.tcf) + (mar26.tcf - mar25.tcf)) / 3;
     var revPer1pp = avgBenefitPerMonth / avgDeltaTcf;
@@ -58095,15 +58095,15 @@ function renderTcfRevenue() {
         '<div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);border-radius:8px;padding:12px 18px;min-width:160px">' +
           '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Rocznie (12 mies.)</div>' +
           '<div style="font-size:22px;font-weight:700;color:rgba(251,191,36,0.95)">' + Math.round(per1ppK * 12 / 100) / 10 + 'M PLN</div>' +
-          '<div style="font-size:10px;color:var(--muted);margin-top:2px">na każdy pp TCF</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:2px">na ka�dy pp TCF</div>' +
         '</div>' +
       '</div>';
 
     var noteEl = document.getElementById('tcfRevenueMethodNote');
     noteEl.innerHTML =
-      '<b>Metodologia:</b> Porównanie r/r (sty&ndash;mar 2026 vs 2025) z korektą o trend z okresu przed-POK (' + trendPct + '% r/r w paź&ndash;lis 2025). ' +
-      'Kontrafaktyczny przychód bez POK = przychód 2025 &times; (1 + trend). Różnica między rzeczywistym a kontrafaktycznym podzielona przez zmianę TCF% daje wartość 1pp TCF. ' +
-      '<b>Uwaga:</b> To szacunek &mdash; inne czynniki również wpływają na przychód (sezonowość, rynek programmatic, liczba impresji).';
+      '<b>Metodologia:</b> Por�wnanie r/r (sty&ndash;mar 2026 vs 2025) z korekt� o trend z okresu przed-POK (' + trendPct + '% r/r w pa�&ndash;lis 2025). ' +
+      'Kontrafaktyczny przych�d bez POK = przych�d 2025 &times; (1 + trend). R�nica mi�dzy rzeczywistym a kontrafaktycznym podzielona przez zmian� TCF% daje warto�� 1pp TCF. ' +
+      '<b>Uwaga:</b> To szacunek &mdash; inne czynniki r�wnie� wp�ywaj� na przych�d (sezonowo��, rynek programmatic, liczba impresji).';
 
   } catch(e) { console.error('renderTcfRevenue error:', e); }
 }
@@ -58115,9 +58115,9 @@ function renderTcfYoy() {
     var canvas = document.getElementById('tcfYoyChart');
     if (!canvas) return;
     var d = REV_DATA;
-    // Miesiące po POK (od pokIdx=23 = Gru 2025) z danymi r/r
-    // pokIdx=23 → Gru 2025 (index 23), Sty 2026 (24), Lut 2026 (25), Mar 2026 (26)
-    // Odpowiadające miesiące rok temu: 11,12,13,14
+    // Miesi�ce po POK (od pokIdx=23 = Gru 2025) z danymi r/r
+    // pokIdx=23 � Gru 2025 (index 23), Sty 2026 (24), Lut 2026 (25), Mar 2026 (26)
+    // Odpowiadaj�ce miesi�ce rok temu: 11,12,13,14
     var pokMonths = [];
     for (var i = d.pokIdx; i < d.labels.length; i++) {
       var prevIdx = i - 12;
@@ -58171,7 +58171,7 @@ function renderTcfYoy() {
                 return [
                   '',
                   'Zmiana przychodu: ' + (m.deltaRev >= 0 ? '+' : '') + m.deltaRev + '% r/r',
-                  'TCF rok temu: ' + m.tcfPrev.toFixed(1) + '%  →  teraz: ' + m.tcfNow.toFixed(1) + '%  (Δ +' + m.deltaTcf.toFixed(1) + 'pp)'
+                  'TCF rok temu: ' + m.tcfPrev.toFixed(1) + '%  �  teraz: ' + m.tcfNow.toFixed(1) + '%  (? +' + m.deltaTcf.toFixed(1) + 'pp)'
                 ];
               }
             }
@@ -58182,7 +58182,7 @@ function renderTcfYoy() {
           y: {
             grid: { color: C.grid },
             ticks: { font: { size: 11 }, color: C.tick, callback: function(v) { return v + 'k'; } },
-            title: { display: true, text: 'PLN/dzień (tys.)', color: C.muted, font: { size: 10 } }
+            title: { display: true, text: 'PLN/dzie� (tys.)', color: C.muted, font: { size: 10 } }
           }
         }
       },
@@ -58271,7 +58271,7 @@ function renderTcfScatter() {
             callbacks: {
               label: function(c) {
                 var pt = c.raw;
-                return ' ' + pt.label + ': ' + pt.y + 'k PLN/dzień  |  TCF ' + pt.x.toFixed(1) + '%';
+                return ' ' + pt.label + ': ' + pt.y + 'k PLN/dzie�  |  TCF ' + pt.x.toFixed(1) + '%';
               }
             }
           }
@@ -58284,7 +58284,7 @@ function renderTcfScatter() {
             ticks: { font: { size: 11 }, color: C.tick, callback: function(v) { return v + '%'; } }
           },
           y: {
-            title: { display: true, text: 'Przychód PLN/dzień (tys.)', color: C.muted, font: { size: 10 } },
+            title: { display: true, text: 'Przych�d PLN/dzie� (tys.)', color: C.muted, font: { size: 10 } },
             grid: { color: C.grid },
             ticks: { font: { size: 11 }, color: C.tick, callback: function(v) { return v + 'k'; } }
           }
