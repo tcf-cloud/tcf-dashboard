@@ -57238,7 +57238,7 @@ function renderPvTrend() {
         label:'PV ze zgodą TCF '+yr+sfx,
         data: smZgoda,
         borderColor:col.line, backgroundColor:col.fill,
-        borderWidth:2, pointRadius:0, fill:pvTrendMetric==='zgoda', tension:0.3, spanGaps:true
+        borderWidth:2, pointRadius:0, fill:pvTrendMetric==='zgoda', tension:0.3, spanGaps:false
       });
     }
     if(pvTrendMetric==='bez'||pvTrendMetric==='both'){
@@ -57246,7 +57246,7 @@ function renderPvTrend() {
         label:'PV bez zgody TCF '+yr+sfx,
         data: smBez,
         borderColor:col.line, backgroundColor:col.fill,
-        borderWidth:2, pointRadius:0, fill:pvTrendMetric==='bez', tension:0.3, spanGaps:true,
+        borderWidth:2, pointRadius:0, fill:pvTrendMetric==='bez', tension:0.3, spanGaps:false,
         borderDash:[4,3]
       });
     }
@@ -57255,7 +57255,7 @@ function renderPvTrend() {
         label:'PV łącznie '+yr+sfx,
         data: smTotal,
         borderColor:col.line, backgroundColor:col.fill,
-        borderWidth:1.5, pointRadius:0, fill:true, tension:0.3, spanGaps:true
+        borderWidth:1.5, pointRadius:0, fill:true, tension:0.3, spanGaps:false
       });
     }
   });
