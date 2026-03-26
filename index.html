@@ -351,7 +351,9 @@ tr:last-child td{border-bottom:none}
       </div>
     </div>
 
-    <!-- PANEL: Ile warta 1pp TCF -->
+    <!-- PANEL: Ile warta 1pp TCF — UKRYTY (zakomentowany) -->
+    <!-- KOMMENTARZ: Wyciętą na żądanie użytkownika (2026-03-26) — kod jest zakomentowany ale można go przywrócić -->
+    <!--
     <div class="panel" style="margin-top:20px">
       <div class="panel-header">
         <div style="font-size:15px;font-weight:700;color:var(--text)">Ile warta jest 1pp TCF? &mdash; przychody WPM programmatic</div>
@@ -378,6 +380,7 @@ tr:last-child td{border-bottom:none}
         </div>
       </div>
     </div>
+    -->
 
   </div>
 </div>
@@ -58042,7 +58045,9 @@ function renderPvDecomp() {
   } catch(e) { console.error('renderPvDecomp error:', e); }
 }
 
-// ---- Dane: Przychody WPM programmatic (DSS) + TCF% miesięczne ----
+// ---- Dane: Przychody WPM programmatic (DSS) + TCF% miesięczne — UKRYTY (zakomentowany) ----
+// KOMENTARZ: Wyciętą na żądanie użytkownika (2026-03-26) — kod zakomentowany ale można przywrócić
+/*
 var REV_DATA = {
   labels: [
     '2024-01','2024-02','2024-03','2024-04','2024-05','2024-06',
@@ -58069,7 +58074,10 @@ var REV_DATA = {
   ],
   pokIdx: 23  // indeks Gru 2025 (pierwszy pełny miesiąc po POK)
 };
+*/
 
+// ---- UKRYTY: Funkcje TCF Revenue (zakomentowany na 2026-03-26) ----
+/*
 var tcfRevenueChart = null;
 function renderTcfRevenue() {
   try {
@@ -58458,6 +58466,7 @@ function renderTcfScatter() {
     });
   } catch(e) { console.error('renderTcfScatter error:', e); }
 }
+*/
 
 // ---- Init ----
 (function(){
@@ -58475,7 +58484,7 @@ function renderTcfScatter() {
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); buildPvTrendYearPills(); renderPvTrend();
     buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar();
-    renderTcfRevenue(); renderTcfYoy(); renderTcfScatter();
+    // renderTcfRevenue(); renderTcfYoy(); renderTcfScatter(); // UKRYTY (zakomentowany na 2026-03-26)
   }catch(e){
     document.getElementById('loading').innerHTML=
       '<div class="err"><b>Blad:</b> '+e.message+'<br><small>'+e.stack+'</small></div>';
