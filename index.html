@@ -57217,7 +57217,7 @@ function renderPvTrend() {
     return activeYrs.indexOf(yr)>=0;
   }).sort();
 
-  // Dodaj bridge points na granicy lat (laczenie linii)
+  // Dodaj bridge points na granicy lat - średnia z ostatniego dnia Y1 i pierwszego dnia Y2
   for(var i=0;i<activeYrs.length-1;i++){
     var y1=activeYrs[i], y2=activeYrs[i+1];
     if(parseInt(y2)-parseInt(y1)!==1) continue;
@@ -57225,8 +57225,12 @@ function renderPvTrend() {
         d2=allDates.filter(function(d){return d.substring(0,4)===y2;});
     if(!d1.length||!d2.length) continue;
     var lastD1=d1[d1.length-1], firstD2=d2[0];
-    if(!dateMap[firstD2][y1]) dateMap[firstD2][y1]=dateMap[firstD2][y2];
-    if(!dateMap[lastD1][y2]) dateMap[lastD1][y2]=dateMap[lastD1][y1];
+    ['zgoda','bez','total'].forEach(function(metric){
+      var v1=dateMap[lastD1][y1][metric], v2=dateMap[firstD2][y2][metric];
+      var avg=(v1+v2)/2;
+      dateMap[lastD1][y1][metric]=avg;
+      dateMap[firstD2][y2][metric]=avg;
+    });
   }
 
   var labels = allDates;
