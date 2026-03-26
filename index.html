@@ -293,6 +293,9 @@ tr:last-child td{border-bottom:none}
             <button class="vtab" id="pvtrend-total" onclick="setPvTrendMetric('total')">Łącznie</button>
             <button class="vtab" id="pvtrend-both" onclick="setPvTrendMetric('both')">Oba</button>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+            <span style="font-size:11px;color:var(--muted);margin-left:4px">ROK:</span>
+            <div id="pvtrend-years" style="display:inline-flex;gap:4px;margin-left:4px"></div>
+            <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
             <button class="vtab on" id="pvtrend-ma7" onclick="setPvTrendMA(7)">Śr. 7d</button>
             <button class="vtab" id="pvtrend-ma1" onclick="setPvTrendMA(1)">Dziennie</button>
           </div>
@@ -57137,6 +57140,7 @@ var pvTrendChart = null;
 var pvTrendVer = 'Desktop + mob';
 var pvTrendMetric = 'zgoda'; // 'zgoda' | 'total' | 'both'
 var pvTrendMA = 7;
+var pvTrendYears = {'2024':true,'2025':true,'2026':true};
 
 function buildPvTrendTabs() {
   document.getElementById('pvtrendtabs').innerHTML = ['Desktop + mob','Desktop','Mobile'].map(function(v){
@@ -57155,6 +57159,32 @@ function setPvTrendMA(n){
   renderPvTrend();
 }
 
+function buildPvTrendYearPills(){
+  var pvData = window.PV_DATA||[];
+  var yrs = Object.keys(pvData.reduce(function(a,r){a[r.date.substring(0,4)]=1;return a;},{})).sort();
+  yrs.forEach(function(y){ if(pvTrendYears[y]===undefined) pvTrendYears[y]=true; });
+  var el = document.getElementById('pvtrend-years');
+  if(!el) return;
+  el.innerHTML = '';
+  yrs.forEach(function(y){
+    var btn = document.createElement('button');
+    btn.className = 'pill y'+y+(pvTrendYears[y]?' on':'');
+    btn.textContent = y;
+    btn.addEventListener('click',(function(year){return function(){togglePvTrendYear(year);};})(y));
+    el.appendChild(btn);
+  });
+}
+
+function togglePvTrendYear(y){
+  var isActive = pvTrendYears[y];
+  var anyOtherActive = Object.keys(pvTrendYears).some(function(k){return k!==y&&pvTrendYears[k];});
+  if(isActive && anyOtherActive){
+    Object.keys(pvTrendYears).forEach(function(k){pvTrendYears[k]=false;});
+    pvTrendYears[y]=true;
+  } else if(!isActive){ pvTrendYears[y]=true; }
+  buildPvTrendYearPills(); renderPvTrend();
+}
+
 function maSmooth(arr, n) {
   if(n<=1) return arr.slice();
   return arr.map(function(_,i){
@@ -57167,48 +57197,68 @@ function maSmooth(arr, n) {
 function renderPvTrend() {
   var pvData = window.PV_DATA;
   if(!pvData||!pvData.length){ return; }
-  var filtered = pvData.filter(function(r){return r.ver===pvTrendVer;}).sort(function(a,b){return a.date<b.date?-1:1;});
 
   var cs = getComputedStyle(document.documentElement);
   var textCol  = cs.getPropertyValue('--text').trim()||'#e2e8f0';
   var mutedCol = cs.getPropertyValue('--muted').trim()||'#64748b';
   var gridCol  = cs.getPropertyValue('--chart-grid').trim()||'rgba(255,255,255,0.07)';
 
-  var labels = filtered.map(function(r){return r.date;});
-  var rawZgoda = filtered.map(function(r){return r.pv_zgoda/1e6;});
-  var rawBez   = filtered.map(function(r){return r.pv_bez/1e6;});
-  var rawTotal = filtered.map(function(r){return r.pv_total/1e6;});
-  var smZgoda = maSmooth(rawZgoda, pvTrendMA);
-  var smBez   = maSmooth(rawBez,   pvTrendMA);
-  var smTotal = maSmooth(rawTotal, pvTrendMA);
+  // Zbuduj mapę dat: {date -> {rok -> {zgoda, bez, total}}}
+  var dateMap = {};
+  pvData.filter(function(r){return r.ver===pvTrendVer;}).forEach(function(r){
+    var yr = r.date.substring(0,4);
+    if(!dateMap[r.date]) dateMap[r.date]={};
+    dateMap[r.date][yr]={zgoda:r.pv_zgoda/1e6, bez:r.pv_bez/1e6, total:r.pv_total/1e6};
+  });
+
+  var activeYrs = Object.keys(pvTrendYears).filter(function(y){return pvTrendYears[y];}).sort();
+  var allDates = Object.keys(dateMap).filter(function(d){
+    var yr=d.substring(0,4);
+    return activeYrs.indexOf(yr)>=0;
+  }).sort();
+
+  var labels = allDates;
   var sfx = pvTrendMA>1?' (śr. '+pvTrendMA+'d)':'';
 
+  // Per rok: zbuduj datasets
   var datasets = [];
-  if(pvTrendMetric==='zgoda'||pvTrendMetric==='both'){
-    datasets.push({
-      label:'PV ze zgodą TCF'+sfx,
-      data: smZgoda,
-      borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.08)',
-      borderWidth:2, pointRadius:0, fill:pvTrendMetric==='zgoda', tension:0.3, spanGaps:true
-    });
-  }
-  if(pvTrendMetric==='bez'||pvTrendMetric==='both'){
-    datasets.push({
-      label:'PV bez zgody TCF'+sfx,
-      data: smBez,
-      borderColor:'#f87171', backgroundColor:'rgba(248,113,113,0.08)',
-      borderWidth:2, pointRadius:0, fill:pvTrendMetric==='bez', tension:0.3, spanGaps:true,
-      borderDash: pvTrendMetric==='both'?[4,3]:[]
-    });
-  }
-  if(pvTrendMetric==='total'){
-    datasets.push({
-      label:'PV łącznie'+sfx,
-      data: smTotal,
-      borderColor:'#94a3b8', backgroundColor:'rgba(148,163,184,0.05)',
-      borderWidth:1.5, pointRadius:0, fill:true, tension:0.3, spanGaps:true
-    });
-  }
+  activeYrs.forEach(function(yr){
+    var yrData = dateMap;
+    var rawZgoda = allDates.map(function(d){return yrData[d]&&yrData[d][yr]?yrData[d][yr].zgoda:null;});
+    var rawBez = allDates.map(function(d){return yrData[d]&&yrData[d][yr]?yrData[d][yr].bez:null;});
+    var rawTotal = allDates.map(function(d){return yrData[d]&&yrData[d][yr]?yrData[d][yr].total:null;});
+    var smZgoda = maSmooth(rawZgoda, pvTrendMA);
+    var smBez = maSmooth(rawBez, pvTrendMA);
+    var smTotal = maSmooth(rawTotal, pvTrendMA);
+
+    var col = (YCOL[yr]||{line:'#888',fill:'rgba(136,136,136,.15)'});
+
+    if(pvTrendMetric==='zgoda'||pvTrendMetric==='both'){
+      datasets.push({
+        label:'PV ze zgodą TCF '+yr+sfx,
+        data: smZgoda,
+        borderColor:col.line, backgroundColor:col.fill,
+        borderWidth:2, pointRadius:0, fill:pvTrendMetric==='zgoda', tension:0.3, spanGaps:true
+      });
+    }
+    if(pvTrendMetric==='bez'||pvTrendMetric==='both'){
+      datasets.push({
+        label:'PV bez zgody TCF '+yr+sfx,
+        data: smBez,
+        borderColor:col.line, backgroundColor:col.fill,
+        borderWidth:2, pointRadius:0, fill:pvTrendMetric==='bez', tension:0.3, spanGaps:true,
+        borderDash:[4,3]
+      });
+    }
+    if(pvTrendMetric==='total'){
+      datasets.push({
+        label:'PV łącznie '+yr+sfx,
+        data: smTotal,
+        borderColor:col.line, backgroundColor:col.fill,
+        borderWidth:1.5, pointRadius:0, fill:true, tension:0.3, spanGaps:true
+      });
+    }
+  });
 
   var cfg = {
     type:'line',
@@ -58393,7 +58443,7 @@ function renderTcfScatter() {
     buildBarTabs(); renderBar1(); renderBar2();
     buildRankTabs(); renderRanking();
     buildHmTabs(); renderHeatmap();
-    buildPvTrendTabs(); renderPvTrend();
+    buildPvTrendTabs(); buildPvTrendYearPills(); renderPvTrend();
     buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar();
     renderTcfRevenue(); renderTcfYoy(); renderTcfScatter();
   }catch(e){
