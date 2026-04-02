@@ -58598,7 +58598,9 @@ function renderPvDailyChart() {
   var dates = data.dates;
   if(!dates.length){ if(pvDailyChartInst){pvDailyChartInst.destroy();pvDailyChartInst=null;} return; }
   var labels = dates.map(function(d){
-    var dt=new Date(d); return dt.getDate()+' '+['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'][dt.getMonth()];
+    var dt=new Date(d);
+    var dateStr=dt.getDate()+' '+['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'][dt.getMonth()];
+    return [dateStr, PVDOW[dt.getDay()]];
   });
   var deskVals = dates.map(function(d){return data.desk[d]!=null?+(data.desk[d]/1e6).toFixed(3):null;});
   var mobVals  = dates.map(function(d){return data.mob[d]!=null?+(data.mob[d]/1e6).toFixed(3):null;});
@@ -58643,7 +58645,7 @@ function renderPvDailyTable() {
   var el=document.getElementById('pvDailyTable');
   if(!el) return;
   var data=getPvDailyData();
-  var dates=data.dates;
+  var dates=data.dates.slice(-14);
   if(!dates.length){el.innerHTML='';return;}
   var showD=pvDailyVer==='Desktop'||pvDailyVer==='Desktop+mob';
   var showM=pvDailyVer==='Mobile'||pvDailyVer==='Desktop+mob';
@@ -58682,7 +58684,7 @@ function renderPvDailyTable() {
     var dW=data.desk[dMinus(date,7)]||null, mW=data.mob[dMinus(date,7)]||null;
     html+='<tr style="background:'+bg+';'+bt+'">'
       +'<td style="padding:4px 8px;font-size:11px;'+(isWknd?'font-weight:700;color:var(--text)':'color:var(--muted)')+'">'+PVDOW[dow]+'</td>'
-      +'<td style="padding:4px 8px;color:var(--muted);font-size:11px;white-space:nowrap;text-align:center">'+date+'</td>';
+      +'<td style="padding:4px 8px;color:var(--muted);font-size:11px;white-space:nowrap;text-align:left">'+date+'</td>';
     if(showD) html+=val(dC)+pct(dC,dP)+pct(dC,dW)+ma(deskMAArr[i]);
     if(showM) html+=val(mC)+pct(mC,mP)+pct(mC,mW)+ma(mobMAArr[i]);
     html+='</tr>';
