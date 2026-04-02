@@ -357,7 +357,6 @@ tr:last-child td{border-bottom:none}
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
             <div id="pvDailyVerTabs" style="display:flex;gap:4px"></div>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
-            <div id="pvDailyModeTabs" style="display:flex;gap:4px"></div>
           </div>
         </div>
       </div>
@@ -58569,10 +58568,6 @@ function buildPvDailyTabs() {
   document.getElementById('pvDailyVerTabs').innerHTML = vers.map(function(v){
     return '<button class="vtab'+(v===pvDailyVer?' on':'')+'" onclick="setPvDailyVer(\''+v+'\')">'+v+'</button>';
   }).join('');
-  var modes = [{k:'daily',l:'Dzienny'},{k:'ma7',l:'Śr. 7 dni'}];
-  document.getElementById('pvDailyModeTabs').innerHTML = modes.map(function(s){
-    return '<button class="vtab'+(s.k===pvDailyChartMode?' on':'')+'" onclick="setPvDailyMode(\''+s.k+'\')">'+s.l+'</button>';
-  }).join('');
 }
 function setPvDailySrc(s){ pvDailySrc=s; buildPvDailyTabs(); renderPvDaily(); }
 function setPvDailyVer(v){ pvDailyVer=v; buildPvDailyTabs(); renderPvDaily(); }
@@ -58630,7 +58625,7 @@ function renderPvDailyChart() {
   var mobMA  = pvDailyRollingAvg(dates,data.mob,7).map(function(v){return v!=null?+(v/1e6).toFixed(3):null;});
   var showD = pvDailyVer==='Desktop'||pvDailyVer==='Desktop+mob';
   var showM = pvDailyVer==='Mobile'||pvDailyVer==='Desktop+mob';
-  var isMA = pvDailyChartMode==='ma7';
+  var isMA = false; // zawsze pokazuj słupki + linię śr7
   var datasets=[];
   if(showD){
     if(!isMA) datasets.push({type:'bar',  label:'Desktop (dzienny)', data:deskVals, backgroundColor:'rgba(59,130,246,0.45)', borderColor:'rgba(59,130,246,0.7)', borderWidth:1, order:2});
@@ -58654,7 +58649,7 @@ function renderPvDailyChart() {
       }}
     },
     scales:{
-      x:{grid:{color:C.gridColor},ticks:{color:C.tickColor,font:{size:10},maxRotation:0}},
+      x:{grid:{color:C.gridColor},ticks:{maxRotation:0,font:{size:10},color:function(ctx){var dow=new Date(dates[ctx.index]).getDay();return dow===0?'#f87171':dow===6?'#fb923c':C.tickColor;}}},
       y:{min:yMin,grid:{color:C.gridColor},ticks:{color:C.tickColor,font:{size:10},callback:function(v){return v.toFixed(0)+'M';}},
          title:{display:true,text:'PV (mln)',color:C.tickColor,font:{size:10}}}
     }
