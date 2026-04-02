@@ -356,6 +356,8 @@ tr:last-child td{border-bottom:none}
             <div id="pvDailySrcTabs" style="display:flex;gap:4px"></div>
             <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
             <div id="pvDailyVerTabs" style="display:flex;gap:4px"></div>
+            <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+            <div id="pvDailyModeTabs" style="display:flex;gap:4px"></div>
           </div>
         </div>
       </div>
@@ -58532,6 +58534,7 @@ function renderPvTable() {
 // ---- Panel: Trend dzienny PV ----
 var pvDailySrc = 'wpm';
 var pvDailyVer = 'Desktop+mob';
+var pvDailyChartMode = 'daily'; // 'daily' | 'ma7'
 var pvDailyChartInst = null;
 var PVDOW = ['Nd','Pn','Wt','Śr','Cz','Pt','So'];
 
@@ -58544,9 +58547,14 @@ function buildPvDailyTabs() {
   document.getElementById('pvDailyVerTabs').innerHTML = vers.map(function(v){
     return '<button class="vtab'+(v===pvDailyVer?' on':'')+'" onclick="setPvDailyVer(\''+v+'\')">'+v+'</button>';
   }).join('');
+  var modes = [{k:'daily',l:'Dzienny'},{k:'ma7',l:'Śr. 7 dni'}];
+  document.getElementById('pvDailyModeTabs').innerHTML = modes.map(function(s){
+    return '<button class="vtab'+(s.k===pvDailyChartMode?' on':'')+'" onclick="setPvDailyMode(\''+s.k+'\')">'+s.l+'</button>';
+  }).join('');
 }
 function setPvDailySrc(s){ pvDailySrc=s; buildPvDailyTabs(); renderPvDaily(); }
 function setPvDailyVer(v){ pvDailyVer=v; buildPvDailyTabs(); renderPvDaily(); }
+function setPvDailyMode(m){ pvDailyChartMode=m; buildPvDailyTabs(); renderPvDailyChart(); }
 
 function getPvDailyRaw() {
   if(pvDailySrc==='wpm') return window.PV_DATA||[];
@@ -58598,15 +58606,19 @@ function renderPvDailyChart() {
   var mobMA  = pvDailyRollingAvg(dates,data.mob,7).map(function(v){return v!=null?+(v/1e6).toFixed(3):null;});
   var showD = pvDailyVer==='Desktop'||pvDailyVer==='Desktop+mob';
   var showM = pvDailyVer==='Mobile'||pvDailyVer==='Desktop+mob';
+  var isMA = pvDailyChartMode==='ma7';
   var datasets=[];
   if(showD){
-    datasets.push({type:'bar',  label:'Desktop (dzienny)', data:deskVals, backgroundColor:'rgba(59,130,246,0.45)', borderColor:'rgba(59,130,246,0.7)', borderWidth:1, order:2});
-    datasets.push({type:'line', label:'Desktop śr7',       data:deskMA,  borderColor:'#3b82f6', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1});
+    if(!isMA) datasets.push({type:'bar',  label:'Desktop (dzienny)', data:deskVals, backgroundColor:'rgba(59,130,246,0.45)', borderColor:'rgba(59,130,246,0.7)', borderWidth:1, order:2});
+    datasets.push({type:'line', label:'Desktop śr7', data:deskMA, borderColor:'#3b82f6', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1});
   }
   if(showM){
-    datasets.push({type:'bar',  label:'Mobile (dzienny)',  data:mobVals, backgroundColor:'rgba(245,158,11,0.45)', borderColor:'rgba(245,158,11,0.7)', borderWidth:1, order:2});
-    datasets.push({type:'line', label:'Mobile śr7',        data:mobMA,   borderColor:'#f59e0b', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1});
+    if(!isMA) datasets.push({type:'bar',  label:'Mobile (dzienny)',  data:mobVals, backgroundColor:'rgba(245,158,11,0.45)', borderColor:'rgba(245,158,11,0.7)', borderWidth:1, order:2});
+    datasets.push({type:'line', label:'Mobile śr7', data:mobMA, borderColor:'#f59e0b', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1});
   }
+  // Y-axis min: slightly below data minimum to show variation
+  var allVals=[].concat(showD?deskVals:[]).concat(showD?deskMA:[]).concat(showM?mobVals:[]).concat(showM?mobMA:[]).filter(function(v){return v!=null;});
+  var yMin = allVals.length ? Math.floor(Math.min.apply(null,allVals)*0.97*10)/10 : 0;
   var cfg={type:'bar',data:{labels:labels,datasets:datasets},options:{
     responsive:true,maintainAspectRatio:false,animation:false,
     plugins:{
@@ -58618,7 +58630,7 @@ function renderPvDailyChart() {
     },
     scales:{
       x:{grid:{color:C.gridColor},ticks:{color:C.tickColor,font:{size:10},maxRotation:0}},
-      y:{grid:{color:C.gridColor},ticks:{color:C.tickColor,font:{size:10},callback:function(v){return v.toFixed(0)+'M';}},
+      y:{min:yMin,grid:{color:C.gridColor},ticks:{color:C.tickColor,font:{size:10},callback:function(v){return v.toFixed(0)+'M';}},
          title:{display:true,text:'PV (mln)',color:C.tickColor,font:{size:10}}}
     }
   }};
@@ -58661,7 +58673,7 @@ function renderPvDailyTable() {
   html+='</tr></thead><tbody>';
   dates.forEach(function(date,i){
     var dow=new Date(date).getDay(), isSat=dow===6, isWknd=dow===0||isSat;
-    var bg=isWknd?'rgba(100,116,139,0.13)':(i%2===0?'':'var(--chart-grid)');
+    var bg=isWknd?'rgba(100,116,139,0.13)':'';
     var bt=isSat?'border-top:2px solid var(--border);':'';
     var dC=data.desk[date]!=null?data.desk[date]:null;
     var mC=data.mob[date]!=null?data.mob[date]:null;
@@ -58669,7 +58681,7 @@ function renderPvDailyTable() {
     var dW=data.desk[dMinus(date,7)]||null, mW=data.mob[dMinus(date,7)]||null;
     html+='<tr style="background:'+bg+';'+bt+'">'
       +'<td style="padding:4px 8px;font-size:11px;'+(isWknd?'font-weight:700;color:var(--text)':'color:var(--muted)')+'">'+PVDOW[dow]+'</td>'
-      +'<td style="padding:4px 8px;color:var(--muted);font-size:11px;white-space:nowrap">'+date+'</td>';
+      +'<td style="padding:4px 8px;color:var(--muted);font-size:11px;white-space:nowrap;text-align:center">'+date+'</td>';
     if(showD) html+=val(dC)+pct(dC,dP)+pct(dC,dW)+ma(deskMAArr[i]);
     if(showM) html+=val(mC)+pct(mC,mP)+pct(mC,mW)+ma(mobMAArr[i]);
     html+='</tr>';
