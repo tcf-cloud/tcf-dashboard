@@ -58609,20 +58609,21 @@ function renderPvDailyChart() {
   var isMA = pvDailyChartMode==='ma7';
   var datasets=[];
   if(showD){
-    if(!isMA) datasets.push({type:'bar',  label:'Desktop (dzienny)', data:deskVals, backgroundColor:'rgba(59,130,246,0.45)', borderColor:'rgba(59,130,246,0.7)', borderWidth:1, order:2});
-    datasets.push({type:'line', label:'Desktop śr7', data:deskMA, borderColor:'#3b82f6', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1});
+    if(!isMA) datasets.push({type:'bar',  label:'Desktop', data:deskVals, backgroundColor:'rgba(59,130,246,0.45)', borderColor:'rgba(59,130,246,0.7)', borderWidth:1, order:2});
+    datasets.push({type:'line', label:'Desktop'+(isMA?'':' śr7'), data:deskMA, borderColor:'#3b82f6', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1, legendHide:!isMA});
   }
   if(showM){
-    if(!isMA) datasets.push({type:'bar',  label:'Mobile (dzienny)',  data:mobVals, backgroundColor:'rgba(245,158,11,0.45)', borderColor:'rgba(245,158,11,0.7)', borderWidth:1, order:2});
-    datasets.push({type:'line', label:'Mobile śr7', data:mobMA, borderColor:'#f59e0b', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1});
+    if(!isMA) datasets.push({type:'bar',  label:'Mobile',  data:mobVals, backgroundColor:'rgba(245,158,11,0.45)', borderColor:'rgba(245,158,11,0.7)', borderWidth:1, order:2});
+    datasets.push({type:'line', label:'Mobile'+(isMA?'':' śr7'), data:mobMA, borderColor:'#f59e0b', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1, legendHide:!isMA});
   }
-  // Y-axis min: slightly below data minimum to show variation
+  // Y-axis min: pad by 20% of data range below minimum
   var allVals=[].concat(showD?deskVals:[]).concat(showD?deskMA:[]).concat(showM?mobVals:[]).concat(showM?mobMA:[]).filter(function(v){return v!=null;});
-  var yMin = allVals.length ? Math.floor(Math.min.apply(null,allVals)*0.97*10)/10 : 0;
+  var yMinRaw=allVals.length?Math.min.apply(null,allVals):0, yMaxRaw=allVals.length?Math.max.apply(null,allVals):1;
+  var yMin = Math.max(0, Math.floor((yMinRaw-(yMaxRaw-yMinRaw)*0.2)*10)/10);
   var cfg={type:'bar',data:{labels:labels,datasets:datasets},options:{
     responsive:true,maintainAspectRatio:false,animation:false,
     plugins:{
-      legend:{display:true,position:'top',labels:{color:C.legendColor,boxWidth:12,font:{size:11},padding:12}},
+      legend:{display:true,position:'top',labels:{color:C.legendColor,boxWidth:12,font:{size:11},padding:12,filter:function(item,data){return !data.datasets[item.datasetIndex].legendHide;}}},
       tooltip:{mode:'index',intersect:false,callbacks:{
         title:function(items){var d=dates[items[0].dataIndex];return PVDOW[new Date(d).getDay()]+', '+d;},
         label:function(item){return item.dataset.label+': '+(item.raw!=null?item.raw.toFixed(2)+'M':'—');}
