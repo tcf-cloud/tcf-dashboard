@@ -58604,8 +58604,8 @@ function renderPvDailyChart() {
   var mobVals  = dates.map(function(d){return data.mob[d]!=null?+(data.mob[d]/1e6).toFixed(3):null;});
   var deskMA = pvDailyRollingAvg(dates,data.desk,7).map(function(v){return v!=null?+(v/1e6).toFixed(3):null;});
   var mobMA  = pvDailyRollingAvg(dates,data.mob,7).map(function(v){return v!=null?+(v/1e6).toFixed(3):null;});
-  var showD = pvDailyVer==='Desktop'||pvDailyVer==='Desktop+mob';
-  var showM = pvDailyVer==='Mobile'||pvDailyVer==='Desktop+mob';
+  var showD = true;
+  var showM = true;
   var isMA = pvDailyChartMode==='ma7';
   var datasets=[];
   if(showD){
@@ -58623,7 +58623,7 @@ function renderPvDailyChart() {
   var cfg={type:'bar',data:{labels:labels,datasets:datasets},options:{
     responsive:true,maintainAspectRatio:false,animation:false,
     plugins:{
-      legend:{display:true,position:'top',labels:{color:C.legendColor,boxWidth:12,font:{size:11},padding:12,filter:function(item,data){return !data.datasets[item.datasetIndex].legendHide;}}},
+      legend:{display:true,position:'top',onClick:function(){return false;},labels:{color:C.legendColor,boxWidth:12,font:{size:11},padding:12,filter:function(item,data){return !data.datasets[item.datasetIndex].legendHide;}}},
       tooltip:{mode:'index',intersect:false,callbacks:{
         title:function(items){var d=dates[items[0].dataIndex];return PVDOW[new Date(d).getDay()]+', '+d;},
         label:function(item){return item.dataset.label+': '+(item.raw!=null?item.raw.toFixed(2)+'M':'—');}
