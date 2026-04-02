@@ -58537,6 +58537,28 @@ var pvDailyVer = 'Desktop+mob';
 var pvDailyChartMode = 'daily'; // 'daily' | 'ma7'
 var pvDailyChartInst = null;
 var PVDOW = ['Nd','Pn','Wt','Śr','Cz','Pt','So'];
+var pvDailyBarLabelsPlugin = {
+  id: 'pvDailyBarLabels',
+  afterDatasetsDraw: function(chart) {
+    if(pvDailyChartMode !== 'daily' || pvDailyVer === 'Desktop+mob') return;
+    var ctx = chart.ctx;
+    chart.data.datasets.forEach(function(dataset, i) {
+      if(dataset.type !== 'bar') return;
+      var meta = chart.getDatasetMeta(i);
+      meta.data.forEach(function(bar, j) {
+        var v = dataset.data[j];
+        if(v == null) return;
+        ctx.save();
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = 'bold 9px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(v.toFixed(1)+'M', bar.x, bar.y - 2);
+        ctx.restore();
+      });
+    });
+  }
+};
 
 function buildPvDailyTabs() {
   var srcs = [{k:'wpm',l:'WPM'},{k:'wp',l:'poczta.wp'},{k:'o2',l:'poczta.o2'},{k:'total',l:'Total'}];
@@ -58636,7 +58658,7 @@ function renderPvDailyChart() {
       y:{min:yMin,grid:{color:C.gridColor},ticks:{color:C.tickColor,font:{size:10},callback:function(v){return v.toFixed(0)+'M';}},
          title:{display:true,text:'PV (mln)',color:C.tickColor,font:{size:10}}}
     }
-  }};
+  },plugins:[pvDailyBarLabelsPlugin]};
   if(pvDailyChartInst){pvDailyChartInst.destroy();}
   pvDailyChartInst=new Chart(canvas,cfg);
 }
