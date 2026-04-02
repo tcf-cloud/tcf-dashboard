@@ -324,7 +324,6 @@ tr:last-child td{border-bottom:none}
         <div style="position:relative;height:300px"><canvas id="pvChart"></canvas></div>
         <div id="pvNote" style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center"></div>
         <div id="pvTable" style="margin-top:20px;overflow-x:auto"></div>
-        <div id="pvDailyTrend" style="margin-top:24px;overflow-x:auto"></div>
         <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
           <div style="margin-bottom:12px">
             <div style="font-size:13px;font-weight:700;color:var(--text)">Co wpłynęło na zmianę PV ze zgodą TCF? <span style="font-weight:400;color:var(--muted)">(miesięcznie, rok do roku)</span> <span style="font-size:11px;font-weight:400;color:var(--muted);background:var(--chart-grid);border-radius:4px;padding:2px 6px;margin-left:4px">WPM bez poczty</span></div>
@@ -345,6 +344,24 @@ tr:last-child td{border-bottom:none}
           <div id="pvYoyTable" style="margin-top:16px;overflow-x:auto"></div>
           <div id="pvYoyBarNote" style="font-size:10px;color:var(--muted);margin-top:6px"></div>
         </div>
+      </div>
+    </div>
+
+    <!-- Panel: Trend dzienny PV -->
+    <div class="panel" style="grid-column:1/-1;margin-top:20px">
+      <div class="panel-hdr">
+        <div class="panel-hdr-top">
+          <span class="panel-title">Trend dzienny PV &mdash; ostatnie 21 dni</span>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <div id="pvDailySrcTabs" style="display:flex;gap:4px"></div>
+            <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+            <div id="pvDailyVerTabs" style="display:flex;gap:4px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div style="position:relative;height:280px"><canvas id="pvDailyChart"></canvas></div>
+        <div id="pvDailyTable" style="margin-top:20px;overflow-x:auto"></div>
       </div>
     </div>
 
@@ -58081,7 +58098,7 @@ function togglePvSrc(key) {
     Object.keys(pvSrcState).forEach(function(k){pvSrcState[k]=false;});
     pvSrcState[key] = true;
   } else if (!isActive) { pvSrcState[key] = true; }
-  buildPvSourceFilters(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDailyTrend(); renderPvDecomp();
+  buildPvSourceFilters(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
 }
 
 function getActiveSources() {
@@ -58136,7 +58153,7 @@ function buildPvTabs() {
     return '<button class="vtab'+(v===pvVer?' on':'')+'" onclick="setPvVer(\''+v+'\')">'+v+'</button>';
   }).join('');
 }
-function setPvVer(v) { pvVer=v; buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDailyTrend(); renderPvDecomp(); renderPvYoyBar(); }
+function setPvVer(v) { pvVer=v; buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar(); }
 
 function setPvGran(g) {
   pvGran=g;
@@ -58512,67 +58529,150 @@ function renderPvTable() {
   document.getElementById('pvTable').innerHTML=html;
 }
 
-// ---- PV Daily Trend (d/d, t/t) ----
-function renderPvDailyTrend() {
-  var el = document.getElementById('pvDailyTrend');
-  if (!el) return;
-  var active = getActiveSources();
-  if (!active.length) { el.innerHTML=''; return; }
-  var byDateDesk = {}, byDateMob = {};
-  function addRows(rows) {
-    rows.forEach(function(r) {
-      if (r.ver==='Desktop') { if(!byDateDesk[r.date])byDateDesk[r.date]=0; byDateDesk[r.date]+=r.pv_total; }
-      else if (r.ver==='Mobile') { if(!byDateMob[r.date])byDateMob[r.date]=0; byDateMob[r.date]+=r.pv_total; }
-    });
-  }
-  function getRaw(key) {
-    if (key==='wpm') return window.PV_DATA||[];
-    if (key==='total') return (window.PV_DATA||[]).concat(window.PV_POCZTY_DATA||[]);
-    var site=key==='wp'?'poczta.wp.pl':'poczta.o2.pl';
-    return (window.PV_POCZTY_DATA||[]).filter(function(r){return r.site===site;});
-  }
-  active.forEach(function(src){ addRows(getRaw(src.key)); });
+// ---- Panel: Trend dzienny PV ----
+var pvDailySrc = 'wpm';
+var pvDailyVer = 'Desktop+mob';
+var pvDailyChartInst = null;
+var PVDOW = ['Nd','Pn','Wt','Śr','Cz','Pt','So'];
+
+function buildPvDailyTabs() {
+  var srcs = [{k:'wpm',l:'WPM'},{k:'wp',l:'poczta.wp'},{k:'o2',l:'poczta.o2'},{k:'total',l:'Total'}];
+  document.getElementById('pvDailySrcTabs').innerHTML = srcs.map(function(s){
+    return '<button class="vtab'+(s.k===pvDailySrc?' on':'')+'" onclick="setPvDailySrc(\''+s.k+'\')">'+s.l+'</button>';
+  }).join('');
+  var vers = ['Desktop+mob','Desktop','Mobile'];
+  document.getElementById('pvDailyVerTabs').innerHTML = vers.map(function(v){
+    return '<button class="vtab'+(v===pvDailyVer?' on':'')+'" onclick="setPvDailyVer(\''+v+'\')">'+v+'</button>';
+  }).join('');
+}
+function setPvDailySrc(s){ pvDailySrc=s; buildPvDailyTabs(); renderPvDaily(); }
+function setPvDailyVer(v){ pvDailyVer=v; buildPvDailyTabs(); renderPvDaily(); }
+
+function getPvDailyRaw() {
+  if(pvDailySrc==='wpm') return window.PV_DATA||[];
+  if(pvDailySrc==='total') return (window.PV_DATA||[]).concat(window.PV_POCZTY_DATA||[]);
+  var site=pvDailySrc==='wp'?'poczta.wp.pl':'poczta.o2.pl';
+  return (window.PV_POCZTY_DATA||[]).filter(function(r){return r.site===site;});
+}
+
+function getPvDailyData() {
+  var raw = getPvDailyRaw();
+  var d={}, m={};
+  raw.forEach(function(r){
+    if(r.ver==='Desktop'){ d[r.date]=(d[r.date]||0)+r.pv_total; }
+    else if(r.ver==='Mobile'){ m[r.date]=(m[r.date]||0)+r.pv_total; }
+  });
   var allD={};
-  Object.keys(byDateDesk).forEach(function(d){allD[d]=1;});
-  Object.keys(byDateMob).forEach(function(d){allD[d]=1;});
+  Object.keys(d).forEach(function(x){allD[x]=1;});
+  Object.keys(m).forEach(function(x){allD[x]=1;});
   var dates=Object.keys(allD).sort().slice(-21);
+  return {desk:d, mob:m, dates:dates};
+}
+
+function pvDailyRollingAvg(sortedDates, byDate, n) {
+  return sortedDates.map(function(d, i){
+    var vals=[];
+    for(var j=Math.max(0,i-n+1);j<=i;j++){
+      var v=byDate[sortedDates[j]];
+      if(v!=null) vals.push(v);
+    }
+    return vals.length?vals.reduce(function(a,b){return a+b;},0)/vals.length:null;
+  });
+}
+
+function renderPvDaily() { renderPvDailyChart(); renderPvDailyTable(); }
+
+function renderPvDailyChart() {
+  var C = chartColors();
+  var canvas = document.getElementById('pvDailyChart');
+  if(!canvas) return;
+  var data = getPvDailyData();
+  var dates = data.dates;
+  if(!dates.length){ if(pvDailyChartInst){pvDailyChartInst.destroy();pvDailyChartInst=null;} return; }
+  var labels = dates.map(function(d){
+    var dt=new Date(d); return dt.getDate()+' '+['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'][dt.getMonth()];
+  });
+  var deskVals = dates.map(function(d){return data.desk[d]!=null?+(data.desk[d]/1e6).toFixed(3):null;});
+  var mobVals  = dates.map(function(d){return data.mob[d]!=null?+(data.mob[d]/1e6).toFixed(3):null;});
+  var deskMA = pvDailyRollingAvg(dates,data.desk,7).map(function(v){return v!=null?+(v/1e6).toFixed(3):null;});
+  var mobMA  = pvDailyRollingAvg(dates,data.mob,7).map(function(v){return v!=null?+(v/1e6).toFixed(3):null;});
+  var showD = pvDailyVer==='Desktop'||pvDailyVer==='Desktop+mob';
+  var showM = pvDailyVer==='Mobile'||pvDailyVer==='Desktop+mob';
+  var datasets=[];
+  if(showD){
+    datasets.push({type:'bar',  label:'Desktop (dzienny)', data:deskVals, backgroundColor:'rgba(59,130,246,0.45)', borderColor:'rgba(59,130,246,0.7)', borderWidth:1, order:2});
+    datasets.push({type:'line', label:'Desktop śr7',       data:deskMA,  borderColor:'#3b82f6', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1});
+  }
+  if(showM){
+    datasets.push({type:'bar',  label:'Mobile (dzienny)',  data:mobVals, backgroundColor:'rgba(245,158,11,0.45)', borderColor:'rgba(245,158,11,0.7)', borderWidth:1, order:2});
+    datasets.push({type:'line', label:'Mobile śr7',        data:mobMA,   borderColor:'#f59e0b', borderWidth:2.5, pointRadius:0, tension:0.3, fill:false, spanGaps:true, order:1});
+  }
+  var cfg={type:'bar',data:{labels:labels,datasets:datasets},options:{
+    responsive:true,maintainAspectRatio:false,animation:false,
+    plugins:{
+      legend:{display:true,position:'top',labels:{color:C.legendColor,boxWidth:12,font:{size:11},padding:12}},
+      tooltip:{mode:'index',intersect:false,callbacks:{
+        title:function(items){var d=dates[items[0].dataIndex];return PVDOW[new Date(d).getDay()]+', '+d;},
+        label:function(item){return item.dataset.label+': '+(item.raw!=null?item.raw.toFixed(2)+'M':'—');}
+      }}
+    },
+    scales:{
+      x:{grid:{color:C.gridColor},ticks:{color:C.tickColor,font:{size:10},maxRotation:0}},
+      y:{grid:{color:C.gridColor},ticks:{color:C.tickColor,font:{size:10},callback:function(v){return v.toFixed(0)+'M';}},
+         title:{display:true,text:'PV (mln)',color:C.tickColor,font:{size:10}}}
+    }
+  }};
+  if(pvDailyChartInst){pvDailyChartInst.destroy();}
+  pvDailyChartInst=new Chart(canvas,cfg);
+}
+
+function renderPvDailyTable() {
+  var el=document.getElementById('pvDailyTable');
+  if(!el) return;
+  var data=getPvDailyData();
+  var dates=data.dates;
   if(!dates.length){el.innerHTML='';return;}
+  var showD=pvDailyVer==='Desktop'||pvDailyVer==='Desktop+mob';
+  var showM=pvDailyVer==='Mobile'||pvDailyVer==='Desktop+mob';
+  var deskMAArr=pvDailyRollingAvg(dates,data.desk,7);
+  var mobMAArr =pvDailyRollingAvg(dates,data.mob,7);
   function dMinus(d,n){var x=new Date(d);x.setDate(x.getDate()-n);return x.toISOString().substring(0,10);}
-  function pctCell(cur,prev){
-    if(cur==null||prev==null||!prev)return '<td style="color:var(--muted);text-align:center;padding:4px 10px;font-size:11px">—</td>';
-    var diff=(cur-prev)/prev*100;
-    var col=diff>=0?'#10b981':'#f87171';
-    return '<td style="text-align:right;padding:4px 10px;font-size:11px;color:'+col+';font-weight:700">'+(diff>=0?'+':'')+diff.toFixed(1)+'%</td>';
+  function pct(cur,prev){
+    if(cur==null||!prev)return '<td style="color:var(--muted);text-align:center;padding:4px 8px;font-size:11px">—</td>';
+    var diff=(cur-prev)/prev*100, col=diff>=0?'#10b981':'#f87171';
+    return '<td style="text-align:right;padding:4px 8px;font-size:11px;color:'+col+';font-weight:700">'+(diff>=0?'+':'')+diff.toFixed(1)+'%</td>';
   }
-  function valCell(v){
-    if(v==null)return '<td style="color:var(--muted);text-align:center;padding:4px 10px;font-size:11px">—</td>';
-    return '<td style="text-align:right;padding:4px 10px;font-size:12px"><b>'+(v/1e6).toFixed(2)+'M</b></td>';
+  function val(v){
+    if(v==null)return '<td style="color:var(--muted);text-align:center;padding:4px 8px">—</td>';
+    return '<td style="text-align:right;padding:4px 8px;font-size:12px"><b>'+(v/1e6).toFixed(2)+'M</b></td>';
   }
-  var mth='color:var(--muted);font-size:10px;font-weight:600;padding:5px 10px;text-align:right';
-  var html='<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Trend dzienny PV'
-    +'<span style="font-weight:400;color:var(--muted);font-size:11px;margin-left:8px">ostatnie 21 dni &nbsp;·&nbsp; d/d = dzień do dnia &nbsp;·&nbsp; t/t = tydzień do tygodnia</span></div>'
-    +'<table style="width:100%;border-collapse:collapse"><thead>'
-    +'<tr><th></th>'
-    +'<th colspan="3" style="text-align:center;padding:5px 10px;color:#3b82f6;font-size:11px;font-weight:700;border-bottom:2px solid #3b82f6">Desktop</th>'
-    +'<th colspan="3" style="text-align:center;padding:5px 10px;color:#f59e0b;font-size:11px;font-weight:700;border-bottom:2px solid #f59e0b">Mobile</th>'
-    +'</tr><tr style="border-bottom:1px solid var(--border)">'
-    +'<th style="text-align:left;color:var(--muted);font-size:10px;font-weight:600;padding:5px 10px">Data</th>'
-    +'<th style="'+mth+'">PV</th><th style="'+mth+'">d/d</th><th style="'+mth+'">t/t</th>'
-    +'<th style="'+mth+'">PV</th><th style="'+mth+'">d/d</th><th style="'+mth+'">t/t</th>'
-    +'</tr></thead><tbody>';
+  function ma(v){
+    if(v==null)return '<td style="color:var(--muted);text-align:center;padding:4px 8px;font-size:11px">—</td>';
+    return '<td style="text-align:right;padding:4px 8px;font-size:11px;color:var(--muted)">'+(v/1e6).toFixed(2)+'M</td>';
+  }
+  var th='color:var(--muted);font-size:10px;font-weight:600;padding:5px 8px';
+  var html='<table style="width:100%;border-collapse:collapse"><thead><tr><th colspan="2"></th>';
+  if(showD) html+='<th colspan="4" style="text-align:center;padding:5px 8px;color:#3b82f6;font-size:11px;font-weight:700;border-bottom:2px solid #3b82f6">Desktop</th>';
+  if(showM) html+='<th colspan="4" style="text-align:center;padding:5px 8px;color:#f59e0b;font-size:11px;font-weight:700;border-bottom:2px solid #f59e0b">Mobile</th>';
+  html+='</tr><tr style="border-bottom:1px solid var(--border)">'
+    +'<th style="text-align:left;'+th+'">Dzień</th><th style="text-align:left;'+th+'">Data</th>';
+  if(showD) html+='<th style="text-align:right;'+th+'">PV</th><th style="text-align:right;'+th+'">d/d</th><th style="text-align:right;'+th+'">t/t</th><th style="text-align:right;'+th+'">śr7</th>';
+  if(showM) html+='<th style="text-align:right;'+th+'">PV</th><th style="text-align:right;'+th+'">d/d</th><th style="text-align:right;'+th+'">t/t</th><th style="text-align:right;'+th+'">śr7</th>';
+  html+='</tr></thead><tbody>';
   dates.forEach(function(date,i){
-    var dC=byDateDesk[date]!=null?byDateDesk[date]:null;
-    var mC=byDateMob[date]!=null?byDateMob[date]:null;
-    var dP=byDateDesk[dMinus(date,1)]!=null?byDateDesk[dMinus(date,1)]:null;
-    var mP=byDateMob[dMinus(date,1)]!=null?byDateMob[dMinus(date,1)]:null;
-    var dW=byDateDesk[dMinus(date,7)]!=null?byDateDesk[dMinus(date,7)]:null;
-    var mW=byDateMob[dMinus(date,7)]!=null?byDateMob[dMinus(date,7)]:null;
-    var bg=i%2===0?'':'background:var(--chart-grid)';
-    html+='<tr style="'+bg+'">'
-      +'<td style="padding:4px 10px;color:var(--muted);font-size:11px;white-space:nowrap">'+date+'</td>'
-      +valCell(dC)+pctCell(dC,dP)+pctCell(dC,dW)
-      +valCell(mC)+pctCell(mC,mP)+pctCell(mC,mW)
-      +'</tr>';
+    var dow=new Date(date).getDay(), isSat=dow===6, isWknd=dow===0||isSat;
+    var bg=isWknd?'rgba(100,116,139,0.13)':(i%2===0?'':'var(--chart-grid)');
+    var bt=isSat?'border-top:2px solid var(--border);':'';
+    var dC=data.desk[date]!=null?data.desk[date]:null;
+    var mC=data.mob[date]!=null?data.mob[date]:null;
+    var dP=data.desk[dMinus(date,1)]||null, mP=data.mob[dMinus(date,1)]||null;
+    var dW=data.desk[dMinus(date,7)]||null, mW=data.mob[dMinus(date,7)]||null;
+    html+='<tr style="background:'+bg+';'+bt+'">'
+      +'<td style="padding:4px 8px;font-size:11px;'+(isWknd?'font-weight:700;color:var(--text)':'color:var(--muted)')+'">'+PVDOW[dow]+'</td>'
+      +'<td style="padding:4px 8px;color:var(--muted);font-size:11px;white-space:nowrap">'+date+'</td>';
+    if(showD) html+=val(dC)+pct(dC,dP)+pct(dC,dW)+ma(deskMAArr[i]);
+    if(showM) html+=val(mC)+pct(mC,mP)+pct(mC,mW)+ma(mobMAArr[i]);
+    html+='</tr>';
   });
   html+='</tbody></table>';
   el.innerHTML=html;
@@ -59247,7 +59347,8 @@ function renderTcfScatter() {
     buildRankTabs(); renderRanking();
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); buildPvTrendYearPills(); renderPvTrend();
-    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDailyTrend(); renderPvDecomp(); renderPvYoyBar();
+    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar();
+    buildPvDailyTabs(); renderPvDaily();
     // renderTcfRevenue(); renderTcfYoy(); renderTcfScatter(); // UKRYTY (zakomentowany na 2026-03-26)
   }catch(e){
     document.getElementById('loading').innerHTML=
