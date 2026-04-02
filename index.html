@@ -324,6 +324,7 @@ tr:last-child td{border-bottom:none}
         <div style="position:relative;height:300px"><canvas id="pvChart"></canvas></div>
         <div id="pvNote" style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center"></div>
         <div id="pvTable" style="margin-top:20px;overflow-x:auto"></div>
+        <div id="pvDailyTrend" style="margin-top:24px;overflow-x:auto"></div>
         <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:16px">
           <div style="margin-bottom:12px">
             <div style="font-size:13px;font-weight:700;color:var(--text)">Co wpłynęło na zmianę PV ze zgodą TCF? <span style="font-weight:400;color:var(--muted)">(miesięcznie, rok do roku)</span> <span style="font-size:11px;font-weight:400;color:var(--muted);background:var(--chart-grid);border-radius:4px;padding:2px 6px;margin-left:4px">WPM bez poczty</span></div>
@@ -58080,7 +58081,7 @@ function togglePvSrc(key) {
     Object.keys(pvSrcState).forEach(function(k){pvSrcState[k]=false;});
     pvSrcState[key] = true;
   } else if (!isActive) { pvSrcState[key] = true; }
-  buildPvSourceFilters(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
+  buildPvSourceFilters(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDailyTrend(); renderPvDecomp();
 }
 
 function getActiveSources() {
@@ -58135,7 +58136,7 @@ function buildPvTabs() {
     return '<button class="vtab'+(v===pvVer?' on':'')+'" onclick="setPvVer(\''+v+'\')">'+v+'</button>';
   }).join('');
 }
-function setPvVer(v) { pvVer=v; buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar(); }
+function setPvVer(v) { pvVer=v; buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDailyTrend(); renderPvDecomp(); renderPvYoyBar(); }
 
 function setPvGran(g) {
   pvGran=g;
@@ -58509,6 +58510,72 @@ function renderPvTable() {
   html+='</tbody></table>';
   html+=tblHasEst?'<div style="font-size:10px;color:var(--muted);margin-top:6px;text-align:right">* '+MSH[parseInt(curYM.substring(5,7))-1]+' '+curYM.substring(0,4)+': estymacja do końca miesiąca (średnia z '+curDays+' dni × '+curDim+' dni w miesiącu)</div>':'';
   document.getElementById('pvTable').innerHTML=html;
+}
+
+// ---- PV Daily Trend (d/d, t/t) ----
+function renderPvDailyTrend() {
+  var el = document.getElementById('pvDailyTrend');
+  if (!el) return;
+  var active = getActiveSources();
+  if (!active.length) { el.innerHTML=''; return; }
+  var byDateDesk = {}, byDateMob = {};
+  function addRows(rows) {
+    rows.forEach(function(r) {
+      if (r.ver==='Desktop') { if(!byDateDesk[r.date])byDateDesk[r.date]=0; byDateDesk[r.date]+=r.pv_total; }
+      else if (r.ver==='Mobile') { if(!byDateMob[r.date])byDateMob[r.date]=0; byDateMob[r.date]+=r.pv_total; }
+    });
+  }
+  function getRaw(key) {
+    if (key==='wpm') return window.PV_DATA||[];
+    if (key==='total') return (window.PV_DATA||[]).concat(window.PV_POCZTY_DATA||[]);
+    var site=key==='wp'?'poczta.wp.pl':'poczta.o2.pl';
+    return (window.PV_POCZTY_DATA||[]).filter(function(r){return r.site===site;});
+  }
+  active.forEach(function(src){ addRows(getRaw(src.key)); });
+  var allD={};
+  Object.keys(byDateDesk).forEach(function(d){allD[d]=1;});
+  Object.keys(byDateMob).forEach(function(d){allD[d]=1;});
+  var dates=Object.keys(allD).sort().slice(-21).reverse();
+  if(!dates.length){el.innerHTML='';return;}
+  function dMinus(d,n){var x=new Date(d);x.setDate(x.getDate()-n);return x.toISOString().substring(0,10);}
+  function pctCell(cur,prev){
+    if(cur==null||prev==null||!prev)return '<td style="color:var(--muted);text-align:center;padding:4px 10px;font-size:11px">—</td>';
+    var diff=(cur-prev)/prev*100;
+    var col=diff>=0?'#10b981':'#f87171';
+    return '<td style="text-align:right;padding:4px 10px;font-size:11px;color:'+col+';font-weight:700">'+(diff>=0?'+':'')+diff.toFixed(1)+'%</td>';
+  }
+  function valCell(v){
+    if(v==null)return '<td style="color:var(--muted);text-align:center;padding:4px 10px;font-size:11px">—</td>';
+    return '<td style="text-align:right;padding:4px 10px;font-size:12px"><b>'+(v/1e6).toFixed(2)+'M</b></td>';
+  }
+  var mth='color:var(--muted);font-size:10px;font-weight:600;padding:5px 10px;text-align:right';
+  var html='<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Trend dzienny PV'
+    +'<span style="font-weight:400;color:var(--muted);font-size:11px;margin-left:8px">ostatnie 21 dni &nbsp;·&nbsp; d/d = dzień do dnia &nbsp;·&nbsp; t/t = tydzień do tygodnia</span></div>'
+    +'<table style="width:100%;border-collapse:collapse"><thead>'
+    +'<tr><th></th>'
+    +'<th colspan="3" style="text-align:center;padding:5px 10px;color:#3b82f6;font-size:11px;font-weight:700;border-bottom:2px solid #3b82f6">Desktop</th>'
+    +'<th colspan="3" style="text-align:center;padding:5px 10px;color:#f59e0b;font-size:11px;font-weight:700;border-bottom:2px solid #f59e0b">Mobile</th>'
+    +'</tr><tr style="border-bottom:1px solid var(--border)">'
+    +'<th style="text-align:left;color:var(--muted);font-size:10px;font-weight:600;padding:5px 10px">Data</th>'
+    +'<th style="'+mth+'">PV</th><th style="'+mth+'">d/d</th><th style="'+mth+'">t/t</th>'
+    +'<th style="'+mth+'">PV</th><th style="'+mth+'">d/d</th><th style="'+mth+'">t/t</th>'
+    +'</tr></thead><tbody>';
+  dates.forEach(function(date,i){
+    var dC=byDateDesk[date]!=null?byDateDesk[date]:null;
+    var mC=byDateMob[date]!=null?byDateMob[date]:null;
+    var dP=byDateDesk[dMinus(date,1)]!=null?byDateDesk[dMinus(date,1)]:null;
+    var mP=byDateMob[dMinus(date,1)]!=null?byDateMob[dMinus(date,1)]:null;
+    var dW=byDateDesk[dMinus(date,7)]!=null?byDateDesk[dMinus(date,7)]:null;
+    var mW=byDateMob[dMinus(date,7)]!=null?byDateMob[dMinus(date,7)]:null;
+    var bg=i%2===0?'':'background:var(--chart-grid)';
+    html+='<tr style="'+bg+'">'
+      +'<td style="padding:4px 10px;color:var(--muted);font-size:11px;white-space:nowrap">'+date+'</td>'
+      +valCell(dC)+pctCell(dC,dP)+pctCell(dC,dW)
+      +valCell(mC)+pctCell(mC,mP)+pctCell(mC,mW)
+      +'</tr>';
+  });
+  html+='</tbody></table>';
+  el.innerHTML=html;
 }
 
 // ---- PV YoY Bar ----
@@ -59180,7 +59247,7 @@ function renderTcfScatter() {
     buildRankTabs(); renderRanking();
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); buildPvTrendYearPills(); renderPvTrend();
-    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar();
+    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDailyTrend(); renderPvDecomp(); renderPvYoyBar();
     // renderTcfRevenue(); renderTcfYoy(); renderTcfScatter(); // UKRYTY (zakomentowany na 2026-03-26)
   }catch(e){
     document.getElementById('loading').innerHTML=
