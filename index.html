@@ -60931,7 +60931,7 @@ var pvDailyBarLabelsPlugin = {
 };
 
 function buildPvDailyTabs() {
-  var srcs = [{k:'wpm',l:'WPM'},{k:'wwwwp',l:'www.wp'},{k:'wiadomosci',l:'wiadomości'},{k:'sportowe',l:'sportowe'},{k:'wp',l:'poczta.wp'},{k:'o2',l:'poczta.o2'},{k:'total',l:'Total'}];
+  var srcs = [{k:'wpm',l:'WPM'},{k:'wwwwp',l:'SG wp.pl'},{k:'wiadomosci',l:'wiadomości'},{k:'sportowe',l:'sportowe'},{k:'wp',l:'poczta.wp'},{k:'o2',l:'poczta.o2'},{k:'total',l:'Total'}];
   document.getElementById('pvDailySrcTabs').innerHTML = srcs.map(function(s){
     return '<button class="vtab'+(s.k===pvDailySrc?' on':'')+'" onclick="setPvDailySrc(\''+s.k+'\')">'+s.l+'</button>';
   }).join('');
