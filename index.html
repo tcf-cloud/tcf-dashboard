@@ -158,13 +158,18 @@ tr:last-child td{border-bottom:none}
 html{scroll-padding-top:50px}
 #dash-nav{position:sticky;top:0;z-index:100;background:var(--bg);
           border-bottom:2px solid var(--accent);
-          display:flex;align-items:center;height:42px;padding:0 24px;gap:2px;
-          box-shadow:0 4px 14px rgba(0,0,0,.22);overflow-x:auto}
-#dash-nav .nav-title{font-size:13px;font-weight:700;color:var(--text);padding-right:16px;margin-right:6px;
-                     border-right:1px solid var(--border);white-space:nowrap;flex-shrink:0}
-#dash-nav a{padding:0 12px;height:42px;display:flex;align-items:center;font-size:12px;font-weight:500;
+          display:flex;align-items:center;height:56px;padding:0 24px;gap:2px;
+          box-shadow:0 4px 16px rgba(0,0,0,.28);overflow-x:auto;
+          transition:height .25s ease,box-shadow .25s ease}
+#dash-nav.nav-compact{height:38px;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+#dash-nav .nav-title{font-size:15px;font-weight:700;color:var(--text);padding-right:16px;margin-right:8px;
+                     border-right:1px solid var(--border);white-space:nowrap;flex-shrink:0;
+                     transition:font-size .25s ease}
+#dash-nav.nav-compact .nav-title{font-size:12px}
+#dash-nav a{padding:0 13px;height:56px;display:flex;align-items:center;font-size:13px;font-weight:500;
             color:var(--muted);text-decoration:none;white-space:nowrap;
-            border-bottom:2px solid transparent;transition:all .15s;flex-shrink:0}
+            border-bottom:2px solid transparent;transition:height .25s ease,font-size .25s ease,color .15s,border-color .15s;flex-shrink:0}
+#dash-nav.nav-compact a{height:38px;font-size:12px}
 #dash-nav a:hover:not(.soon){color:var(--accent);border-bottom-color:var(--accent)}
 #dash-nav a.soon{opacity:.4;cursor:default}
 /* KPI group labels */
@@ -61818,6 +61823,14 @@ function renderTcfScatter() {
     document.getElementById('loading').innerHTML=
       '<div class="err"><b>Blad:</b> '+e.message+'<br><small>'+e.stack+'</small></div>';
   }
+})();
+
+// Shrinking nav on scroll
+(function(){
+  var nav = document.getElementById('dash-nav');
+  window.addEventListener('scroll', function(){
+    if(nav) nav.classList.toggle('nav-compact', window.scrollY > 50);
+  }, {passive:true});
 })();
 </script>
 </body>
