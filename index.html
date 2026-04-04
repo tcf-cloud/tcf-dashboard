@@ -170,7 +170,11 @@ html{scroll-padding-top:50px}
             color:var(--muted);text-decoration:none;white-space:nowrap;
             border-bottom:2px solid transparent;transition:height .25s ease,font-size .25s ease,color .15s,border-color .15s;flex-shrink:0}
 #dash-nav.nav-compact a{height:38px;font-size:12px}
-#dash-nav a:hover:not(.soon){color:var(--accent);border-bottom-color:var(--accent)}
+#dash-nav a[data-c="1"]{--nc:#3b82f6}
+#dash-nav a[data-c="2"]{--nc:#a855f7}
+#dash-nav a[data-c="3"]{--nc:#f59e0b}
+#dash-nav a[data-c="4"]{--nc:#10b981}
+#dash-nav a:hover:not(.soon){color:var(--nc,var(--accent));border-bottom-color:var(--nc,var(--accent))}
 #dash-nav a.soon{opacity:.4;cursor:default}
 /* KPI group labels */
 .kpi-group-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:4px 0 8px}
@@ -195,11 +199,12 @@ html{scroll-padding-top:50px}
 </head>
 <body>
 <nav id="dash-nav" style="display:none">
+  <img id="nav-logo" width="28" height="28" style="border-radius:6px;display:block;flex-shrink:0;margin-right:10px" alt="WP">
   <span class="nav-title">WPM Analytics</span>
-  <a href="#sec-tcf-zgody">TCF — Zgody</a>
-  <a href="#sec-tcf-rr">TCF r/r</a>
-  <a href="#sec-pv-historia">PV — Historia</a>
-  <a href="#sec-pv-ostatnie">PV — Ostatnie dni</a>
+  <a href="#sec-tcf-zgody" data-c="1">TCF — Zgody</a>
+  <a href="#sec-tcf-rr" data-c="2">TCF r/r</a>
+  <a href="#sec-pv-historia" data-c="3">PV — Historia</a>
+  <a href="#sec-pv-ostatnie" data-c="4">PV — Ostatnie dni</a>
   <a href="#sec-boty" class="soon">Boty 🔜</a>
   <a href="#sec-skutecznosc" class="soon">Skuteczność plansz 🔜</a>
 </nav>
@@ -61811,6 +61816,7 @@ function renderTcfScatter() {
     document.getElementById('loading').style.display='none';
     document.getElementById('dash').style.display='block';
     document.getElementById('dash-nav').style.display='flex';
+    (function(){var nl=document.getElementById('nav-logo'),hl=document.querySelector('.wp-logo img');if(nl&&hl)nl.src=hl.src;})();
     buildUI(); renderKPIs(); renderChart(); renderTable();
     buildBarTabs(); renderBar1(); renderBar2();
     buildRankTabs(); renderRanking();
