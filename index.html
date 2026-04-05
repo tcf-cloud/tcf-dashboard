@@ -60872,7 +60872,7 @@ function renderPvSparklines(filtered) {
           x:{display:true, ticks:{font:{size:9}, color:tickCol, maxRotation:0, autoSkip:false,
             callback:function(val,idx){
               var d=parseInt(labels[idx],10);
-              return (d===1||d===5||d===10||d===15||d===20||d===25||d===30||d===31)?d+'':'';
+              var n=labels.length; if(n<=7) return d+''; if(n<=15) return idx%2===0?d+'':''; return (d===1||d%5===0)?d+'':'';
             }}, grid:{display:false}},
           y:{display:true, position:'right',
             ticks:{font:{size:11,weight:'600'}, color:tickCol, maxTicksLimit:3,
