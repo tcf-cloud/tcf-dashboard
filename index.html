@@ -230,6 +230,8 @@ html{scroll-padding-top:50px}
 
     <div class="kpi-group-lbl">TCF — Zgody</div>
     <div class="kpi-grid" id="kpis"></div>
+    <div class="kpi-group-lbl" style="margin-top:18px">PV — Urządzenia</div>
+    <div id="pvDevKPIs"></div>
     <div class="kpi-group-lbl" style="margin-top:18px">PV — Odsłony</div>
     <div id="pvKPIs"></div>
 
@@ -60680,7 +60682,7 @@ function togglePvSrc(key) {
     Object.keys(pvSrcState).forEach(function(k){pvSrcState[k]=false;});
     pvSrcState[key] = true;
   } else if (!isActive) { pvSrcState[key] = true; }
-  buildPvSourceFilters(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
+  buildPvSourceFilters(); renderPvDevKPIs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp();
 }
 
 function getActiveSources() {
@@ -60770,6 +60772,108 @@ function getTcfForPv(labels) {
   var byDate = {};
   wpmRows.forEach(function(r){ byDate[r.date]=r.val; });
   return labels.map(function(d){ return byDate[d]!==undefined?byDate[d]:null; });
+}
+
+function getDevRows(ver) {
+  var activeSrcs = getActiveSources();
+  var byDate = {};
+  activeSrcs.forEach(function(src) {
+    var rows;
+    if (src.key === 'wpm') {
+      rows = (window.PV_DATA||[]).filter(function(r){return r.ver===ver;});
+    } else if (src.key === 'total') {
+      rows = (window.PV_DATA||[]).filter(function(r){return r.ver===ver;})
+             .concat((window.PV_POCZTY_DATA||[]).filter(function(r){return r.ver===ver;}));
+    } else {
+      var sn = src.key==='wp'?'poczta.wp.pl':'poczta.o2.pl';
+      rows = (window.PV_POCZTY_DATA||[]).filter(function(r){return r.site===sn&&r.ver===ver;});
+    }
+    rows.forEach(function(r){
+      if(!byDate[r.date]) byDate[r.date]={date:r.date,pv_total:0};
+      byDate[r.date].pv_total+=r.pv_total;
+    });
+  });
+  return Object.values(byDate).sort(function(a,b){return a.date<b.date?-1:1;});
+}
+
+var pvDevSparkCharts = [];
+
+function renderPvDevKPIs() {
+  if (!window.PV_DATA||!window.PV_DATA.length) return;
+  var today = new Date();
+  var curYM = today.toISOString().substring(0,7);
+  var prevDate = new Date(today); prevDate.setDate(1); prevDate.setMonth(prevDate.getMonth()-1);
+  var prevYM = prevDate.toISOString().substring(0,7);
+  var VERS_DEV = ['Desktop + mob','Desktop','Mobile'];
+  var DEV_LABELS = ['Desktop+mob','Desktop','Mobile'];
+  function fmt(n){return (n/1e6).toFixed(1)+'M';}
+  function fmtD(n){return (n>=0?'+':'')+(n/1e6).toFixed(1)+'M';}
+  var html='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">';
+  VERS_DEV.forEach(function(ver,i){
+    var rows=getDevRows(ver);
+    var cur=rows.filter(function(r){return r.date.startsWith(curYM);});
+    var prev=rows.filter(function(r){return r.date.startsWith(prevYM);});
+    var curSum=cur.reduce(function(s,r){return s+r.pv_total;},0);
+    var prevSum=prev.reduce(function(s,r){return s+r.pv_total;},0);
+    var sc=prev.length>0&&cur.length>0?cur.length/prev.length:1;
+    var diff=curSum-prevSum*sc;
+    html+='<div style="background:var(--panel-bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px">'
+      +'<div style="font-size:11px;color:var(--muted);margin-bottom:4px">PV '+DEV_LABELS[i]+' — bm</div>'
+      +'<div style="font-size:22px;font-weight:700">'+fmt(curSum)+'</div>'
+      +(prevSum>0?'<div style="font-size:11px;color:'+(diff>=0?'#10b981':'#f87171')+';font-weight:600;margin-top:2px">'+fmtD(diff)+' vs '+prevYM+'</div>':'')
+      +'<canvas class="kpi-spark" id="pv-dev-spark-'+i+'"></canvas>'
+      +'</div>';
+  });
+  html+='</div>';
+  document.getElementById('pvDevKPIs').innerHTML=html;
+  renderPvDevSparklines(curYM);
+}
+
+function renderPvDevSparklines(curYM) {
+  pvDevSparkCharts.forEach(function(c){c.destroy();}); pvDevSparkCharts=[];
+  var VERS_DEV=['Desktop + mob','Desktop','Mobile'];
+  var DEV_COLS=[{line:'#3b82f6',rgb:'59,130,246'},{line:'#10b981',rgb:'16,185,129'},{line:'#f59e0b',rgb:'245,158,11'}];
+  var isDk=document.documentElement.getAttribute('data-theme')==='dark';
+  var tickCol=isDk?'#c8d2e1':'#334155';
+  var gridCol=isDk?'rgba(255,255,255,.06)':'rgba(0,0,0,.12)';
+  var bgCol=isDk?'rgba(30,38,60,.95)':'rgba(255,255,255,.97)';
+  var txCol=isDk?'#e2e8f0':'#1e293b';
+  var muCol=isDk?'#94a3b8':'#475569';
+  var bdCol=isDk?'#2d3450':'#cbd5e1';
+  var mn=['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
+  var mo=parseInt(curYM.substring(5,7))-1;
+  function sparkGrad(ctx,canvas,rgb){var w=canvas.offsetWidth||canvas.clientWidth||280;var g=ctx.createLinearGradient(0,0,w,0);g.addColorStop(0,'rgba('+rgb+',.02)');g.addColorStop(1,'rgba('+rgb+',.25)');return g;}
+  VERS_DEV.forEach(function(ver,i){
+    var canvas=document.getElementById('pv-dev-spark-'+i);
+    if(!canvas) return;
+    var rows=getDevRows(ver).filter(function(r){return r.date.startsWith(curYM);}).sort(function(a,b){return a.date<b.date?-1:1;});
+    var labels=rows.map(function(r){return parseInt(r.date.substring(8,10),10)+'';});
+    var data=rows.map(function(r){return +(r.pv_total/1e6).toFixed(2);});
+    var col=DEV_COLS[i];
+    var ctx2=canvas.getContext('2d');
+    pvDevSparkCharts.push(new Chart(ctx2,{type:'line',
+      data:{labels:labels,datasets:[{data:data,borderColor:col.line,backgroundColor:sparkGrad(ctx2,canvas,col.rgb),
+        borderWidth:1.5,pointRadius:0,pointHoverRadius:4,fill:true,tension:0.4,spanGaps:true}]},
+      options:{responsive:false,animation:false,
+        interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false},tooltip:{enabled:true,
+          backgroundColor:bgCol,titleColor:txCol,bodyColor:muCol,borderColor:bdCol,borderWidth:1,padding:6,
+          callbacks:{title:function(it){return curYM+'-'+(it[0].label.length<2?'0':'')+it[0].label;},
+            label:function(it){return it.parsed.y!=null?it.parsed.y.toFixed(2)+'M':null;}}}},
+        scales:{
+          x:{display:true,ticks:{font:{size:9},color:tickCol,maxRotation:0,autoSkip:false,
+            callback:function(val,idx){var d=parseInt(labels[idx],10);var n=labels.length;
+              if(n<=7) return d+' '+mn[mo];
+              if(n<=15) return idx%2===0?d+' '+mn[mo]:'';
+              return (d===1||d%5===0)?d+' '+mn[mo]:'';
+            }},grid:{display:false}},
+          y:{display:true,position:'right',
+            ticks:{font:{size:11,weight:'600'},color:tickCol,maxTicksLimit:3,
+              callback:function(v){return v.toFixed(0)+'M';}},
+            grid:{color:gridCol,drawBorder:false},
+            afterDataLimits:function(ax){var r=ax.max-ax.min||1;ax.min-=r*.1;ax.max+=r*.1;}}
+        }}}));
+  });
 }
 
 var pvSparkCharts = [];
@@ -61977,7 +62081,7 @@ function renderTcfScatter() {
     buildRankTabs(); renderRanking();
     buildHmTabs(); renderHeatmap();
     buildPvTrendTabs(); buildPvTrendYearPills(); renderPvTrend();
-    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar();
+    buildPvSourceFilters(); buildPvYearFilters(); buildPvTabs(); renderPvDevKPIs(); renderPvKPIs(); renderPV(); renderPvTable(); renderPvDecomp(); renderPvYoyBar();
     buildPvDailyTabs(); renderPvDaily();
     // renderTcfRevenue(); renderTcfYoy(); renderTcfScatter(); // UKRYTY (zakomentowany na 2026-03-26)
   }catch(e){
