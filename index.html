@@ -178,6 +178,8 @@ html{scroll-padding-top:50px}
 #dash-nav a[data-c]:hover:not(.soon){background:var(--nc);color:#fff;border-bottom:none!important}
 #dash-nav a:not([data-c]):hover:not(.soon){color:var(--accent);border-bottom-color:var(--accent)}
 #dash-nav a.soon{opacity:.4;cursor:default}
+#dash-nav .nav-meta{margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap;padding:0 12px;flex-shrink:0}
+#dash-nav .nav-meta b{color:var(--accent)}
 /* KPI group labels */
 .kpi-group-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:4px 0 8px}
 /* Section dividers */
@@ -209,6 +211,9 @@ html{scroll-padding-top:50px}
   <a href="#sec-pv-ostatnie" data-c="4">PV — Ostatnie dni</a>
   <a href="#sec-boty" class="soon">Boty 🔜</a>
   <a href="#sec-skutecznosc" class="soon">Skuteczność plansz 🔜</a>
+  <div class="nav-meta">Dane do: <b id="upd">&#8212;</b> &bull; <span id="refreshAge"></span></div>
+  <button class="btn-copy" id="btnCopy" onclick="copySpLink()">Link GitHub</button>
+  <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Zmien motyw">&#9728;</button>
 </nav>
 <div class="wrap">
   <div id="loading">Inicjalizacja&#8230;</div>
@@ -220,11 +225,6 @@ html{scroll-padding-top:50px}
           <h1>WPM Analytics &mdash; TCF &amp; PageViews</h1>
           <span class="subtitle">Zgody TCF 2.0 &bull; PageViews WPM &bull; Ruch bez bot&oacute;w i robot&oacute;w</span>
         </div>
-      </div>
-      <div class="hdr-right">
-        <div class="meta">Dane do: <b id="upd">&#8212;</b> &bull; <span class="refresh-age" id="refreshAge"></span></div>
-        <button class="btn-copy" id="btnCopy" onclick="copySpLink()">Link GitHub</button>
-        <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Zmien motyw">&#9728;</button>
       </div>
     </div>
 
