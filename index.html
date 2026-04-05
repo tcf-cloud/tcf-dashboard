@@ -60881,8 +60881,7 @@ function renderPvSparklines(filtered) {
               var mo=parseInt(curYM.substring(5,7))-1;
               if(n<=7) return d+' '+mn[mo];
               if(n<=15) return idx%2===0?d+' '+mn[mo]:'';
-              if(d===1) return d+' '+mn[mo];
-              return d%5===0?d+'':'';
+              return (d===1||d%5===0)?d+' '+mn[mo]:'';
             }}, grid:{display:false}},
           y:{display:true, position:'right',
             ticks:{font:{size:11,weight:'600'}, color:tickCol, maxTicksLimit:3,
