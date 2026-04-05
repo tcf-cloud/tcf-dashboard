@@ -184,8 +184,16 @@ html{scroll-padding-top:50px}
 .kpi-group-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:4px 0 8px}
 /* Section dividers */
 .sec-hdr{display:flex;align-items:center;gap:12px;margin:32px 0 16px;scroll-margin-top:54px}
-.sec-hdr::after{content:'';flex:1;height:2px;background:var(--accent)}
+.sec-hdr::after{content:'';flex:1;height:1px;background:var(--border)}
 .sec-hdr span{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);white-space:nowrap}
+#sec-tcf-zgody span{color:#3b82f6}
+#sec-tcf-rr span{color:#a855f7}
+#sec-pv-historia span{color:#f59e0b}
+#sec-pv-ostatnie span{color:#10b981}
+#sec-tcf-zgody::after{background:#3b82f6;opacity:.3}
+#sec-tcf-rr::after{background:#a855f7;opacity:.3}
+#sec-pv-historia::after{background:#f59e0b;opacity:.3}
+#sec-pv-ostatnie::after{background:#10b981;opacity:.3}
 /* Placeholder panels */
 .panel-placeholder{display:flex;align-items:center;justify-content:center;min-height:90px;
                    color:var(--muted);font-size:13px;font-style:italic;gap:8px}
