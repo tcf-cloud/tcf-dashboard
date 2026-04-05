@@ -60339,8 +60339,8 @@ function renderSparklines(){
     var isDark=document.documentElement.getAttribute('data-theme')==='dark';
     var tickCol=isDark?'#c8d2e1':'#334155';
     var gridCol=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.12)';
-    sparkCharts.push(new Chart(canvas.getContext('2d'),{type:'line',
-      data:{labels:dates,datasets:[{data:data,borderColor:col.line,backgroundColor:col.fill,
+    var tctx=canvas.getContext('2d'); sparkCharts.push(new Chart(tctx,{type:'line',
+      data:{labels:dates,datasets:[{data:data,borderColor:col.line,backgroundColor:(function(){var m=col.fill.match(/rgba\((\d+,\d+,\d+)/);var rgb=m?m[1]:'59,130,246';var w=canvas.offsetWidth||canvas.clientWidth||280;var g=tctx.createLinearGradient(0,0,w,0);g.addColorStop(0,'rgba('+rgb+',.02)');g.addColorStop(1,'rgba('+rgb+',.25)');return g;})(),
         borderWidth:1.5,pointRadius:0,pointHoverRadius:4,fill:true,tension:0.4,spanGaps:true}]},
       options:{responsive:false,animation:false,
         interaction:{mode:'index',intersect:false},
@@ -60840,17 +60840,24 @@ function renderPvSparklines(filtered) {
   var txCol   = isDk?'#e2e8f0':'#1e293b';
   var muCol   = isDk?'#94a3b8':'#475569';
   var bdCol   = isDk?'#2d3450':'#cbd5e1';
+  function sparkGrad(ctx, canvas, rgb){
+    var w = canvas.offsetWidth||canvas.clientWidth||280;
+    var g = ctx.createLinearGradient(0,0,w,0);
+    g.addColorStop(0,'rgba('+rgb+',.02)');
+    g.addColorStop(1,'rgba('+rgb+',.25)');
+    return g;
+  }
   var series = [
-    {data: dates.map(function(d){return +(byDate[d].pv_total/1e6).toFixed(2);}),  col:{line:'#3b82f6',fill:'rgba(59,130,246,.15)'},  isPct:false},
-    {data: dates.map(function(d){return +(byDate[d].pv_zgoda/1e6).toFixed(2);}),  col:{line:'#10b981',fill:'rgba(16,185,129,.15)'},  isPct:false},
-    {data: dates.map(function(d){var t=byDate[d].pv_total; return t>0?+(byDate[d].pv_zgoda/t*100).toFixed(3):null;}), col:{line:'#f59e0b',fill:'rgba(245,158,11,.15)'}, isPct:true}
+    {data: dates.map(function(d){return +(byDate[d].pv_total/1e6).toFixed(2);}),  col:{line:'#3b82f6',rgb:'59,130,246'},  isPct:false},
+    {data: dates.map(function(d){return +(byDate[d].pv_zgoda/1e6).toFixed(2);}),  col:{line:'#10b981',rgb:'16,185,129'},  isPct:false},
+    {data: dates.map(function(d){var t=byDate[d].pv_total; return t>0?+(byDate[d].pv_zgoda/t*100).toFixed(3):null;}), col:{line:'#f59e0b',rgb:'245,158,11'}, isPct:true}
   ];
   series.forEach(function(s, i){
     var canvas = document.getElementById('pv-spark-'+i);
     if (!canvas) return;
     var isPct = s.isPct;
-    pvSparkCharts.push(new Chart(canvas.getContext('2d'), {type:'line',
-      data:{labels:labels, datasets:[{data:s.data, borderColor:s.col.line, backgroundColor:s.col.fill,
+    var ctx2=canvas.getContext('2d'); pvSparkCharts.push(new Chart(ctx2, {type:'line',
+      data:{labels:labels, datasets:[{data:s.data, borderColor:s.col.line, backgroundColor:sparkGrad(ctx2,canvas,s.col.rgb),
         borderWidth:1.5, pointRadius:0, pointHoverRadius:4, fill:true, tension:0.4, spanGaps:true}]},
       options:{responsive:false, animation:false,
         interaction:{mode:'index', intersect:false},
