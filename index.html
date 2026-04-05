@@ -60826,10 +60826,10 @@ function renderPvDevKPIs() {
   });
   html+='</div>';
   document.getElementById('pvDevKPIs').innerHTML=html;
-  renderPvDevSparklines(curYM);
+  renderPvDevSparklines();
 }
 
-function renderPvDevSparklines(curYM) {
+function renderPvDevSparklines() {
   pvDevSparkCharts.forEach(function(c){c.destroy();}); pvDevSparkCharts=[];
   var VERS_DEV=['Desktop + mob','Desktop','Mobile'];
   var DEV_COLS=[{line:'#3b82f6',rgb:'59,130,246'},{line:'#10b981',rgb:'16,185,129'},{line:'#f59e0b',rgb:'245,158,11'}];
@@ -60841,13 +60841,17 @@ function renderPvDevSparklines(curYM) {
   var muCol=isDk?'#94a3b8':'#475569';
   var bdCol=isDk?'#2d3450':'#cbd5e1';
   var mn=['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
-  var mo=parseInt(curYM.substring(5,7))-1;
+  // ostatnie 21 dni od najnowszej daty w danych
+  var allDates=(window.PV_DATA||[]).map(function(r){return r.date;}).sort();
+  var latestDate=allDates[allDates.length-1]||new Date().toISOString().substring(0,10);
+  var cutoff=new Date(latestDate+'T12:00:00'); cutoff.setDate(cutoff.getDate()-20);
+  var cutoffStr=cutoff.toISOString().substring(0,10);
   function sparkGrad(ctx,canvas,rgb){var w=canvas.offsetWidth||canvas.clientWidth||280;var g=ctx.createLinearGradient(0,0,w,0);g.addColorStop(0,'rgba('+rgb+',.02)');g.addColorStop(1,'rgba('+rgb+',.25)');return g;}
   VERS_DEV.forEach(function(ver,i){
     var canvas=document.getElementById('pv-dev-spark-'+i);
     if(!canvas) return;
-    var rows=getDevRows(ver).filter(function(r){return r.date.startsWith(curYM);}).sort(function(a,b){return a.date<b.date?-1:1;});
-    var labels=rows.map(function(r){return parseInt(r.date.substring(8,10),10)+'';});
+    var rows=getDevRows(ver).filter(function(r){return r.date>=cutoffStr;}).sort(function(a,b){return a.date<b.date?-1:1;});
+    var labels=rows.map(function(r){return r.date;});
     var data=rows.map(function(r){return +(r.pv_total/1e6).toFixed(2);});
     var col=DEV_COLS[i];
     var ctx2=canvas.getContext('2d');
@@ -60858,14 +60862,18 @@ function renderPvDevSparklines(curYM) {
         interaction:{mode:'index',intersect:false},
         plugins:{legend:{display:false},tooltip:{enabled:true,
           backgroundColor:bgCol,titleColor:txCol,bodyColor:muCol,borderColor:bdCol,borderWidth:1,padding:6,
-          callbacks:{title:function(it){return curYM+'-'+(it[0].label.length<2?'0':'')+it[0].label;},
+          callbacks:{title:function(it){return it[0].label;},
             label:function(it){return it.parsed.y!=null?it.parsed.y.toFixed(2)+'M':null;}}}},
         scales:{
           x:{display:true,ticks:{font:{size:9},color:tickCol,maxRotation:0,autoSkip:false,
-            callback:function(val,idx){var d=parseInt(labels[idx],10);var n=labels.length;
-              if(n<=7) return d+' '+mn[mo];
-              if(n<=15) return idx%2===0?d+' '+mn[mo]:'';
-              return (d===1||d%5===0)?d+' '+mn[mo]:'';
+            callback:function(val,idx){
+              var lbl=labels[idx]; if(!lbl) return '';
+              var d=parseInt(lbl.substring(8,10),10);
+              var mo2=parseInt(lbl.substring(5,7))-1;
+              var n=labels.length;
+              if(n<=7) return d+' '+mn[mo2];
+              if(n<=15) return idx%2===0?d+' '+mn[mo2]:'';
+              return (d===1||d%5===0)?d+' '+mn[mo2]:'';
             }},grid:{display:false}},
           y:{display:true,position:'right',
             ticks:{font:{size:11,weight:'600'},color:tickCol,maxTicksLimit:3,
