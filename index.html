@@ -60961,7 +60961,7 @@ function renderKPIs(){
     var diff=(cur!=null&&prev!=null)?cur-prev:null;
     return '<div class="kpi">'+
       '<div class="kpi-top">'+
-      '<div class="lbl">WPM '+v+' &mdash; '+mLabel+'</div>'+
+      '<div class="lbl">WPM '+v+' &mdash; '+mLabel+' (&#347;r.)</div>'+
       '<div class="val">'+(cur!=null?pct(cur):'&mdash;')+'</div>'+
       (diff!=null?
         '<div class="chg '+(diff>=0?'up':'dn')+'">'+(diff>=0?'&#8593;':'&#8595;')+' '+
